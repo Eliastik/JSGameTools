@@ -23,12 +23,4 @@ import NotificationMessage from "./notificationMessage";
 import DrawUtils from "./drawUtils";
 import Menu from "./menu";
 
-export default {
-    Constants: Constants,
-    Button: Button,
-    ButtonImage: ButtonImage,
-    ImageLoader: ImageLoader,
-    NotificationMessage: NotificationMessage,
-    DrawUtils: DrawUtils,
-    Menu: Menu
-};
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, DrawUtils, Menu };
