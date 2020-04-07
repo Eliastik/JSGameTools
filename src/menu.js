@@ -36,14 +36,15 @@ export default class Menu {
     this.init = this.init == undefined ? false : this.init;
   }
 
-  draw(ctx, func) {
-    var self = this;
-  
+  draw(context) {
+    const canvas = context.canvas;
+    const ctx = canvas.getContext("2d");
+
     if(!this.disabled) {
       if(!this.init) {
-        document.addEventListener("keydown", function(evt) {
-          if(!self.disabled) {
-            self.lastKey = evt.keyCode;
+        document.addEventListener("keydown", event => {
+          if(!this.disabled) {
+            this.lastKey = event.keyCode;
           }
         });
   
@@ -53,12 +54,14 @@ export default class Menu {
       if(this.blurCanvas) {
         DrawUtils.blurCanvas(ctx, 5);
       }
+
+      ctx.save();
   
       ctx.fillStyle = this.backgroundColor;
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
-      var heightText = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
-      var heightButtons = 0;
+      const heightText = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
+      let heightButtons = 0;
     
       if(this.buttons != null) {
         if(this.lastKey == GameConstants.Key.UP) {
@@ -73,7 +76,7 @@ export default class Menu {
           this.selectedButton = this.buttons.length - 1;
         }
     
-        for(var i = 0; i < this.buttons.length; i++) {
+        for(let i = 0; i < this.buttons.length; i++) {
           if(this.buttons[i].autoHeight) {
             heightButtons += DrawUtils.wrapTextLines(ctx, this.buttons[i].text, null, this.buttons[i].getFontSize(ctx))["height"] + 8;
           } else {
@@ -82,14 +85,14 @@ export default class Menu {
         }
       }
     
-      var totalHeight = heightText + heightButtons;
-      var startY = ctx.canvas.height / 2 - totalHeight / 2 + 16;
-      var currentY = startY + heightText;
+      const totalHeight = heightText + heightButtons;
+      const startY = ctx.canvas.height / 2 - totalHeight / 2 + 16;
+      let currentY = startY + heightText;
     
       DrawUtils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);
     
       if(this.buttons != null) {
-        for(var i = 0; i < this.buttons.length; i++) {
+        for(let i = 0; i < this.buttons.length; i++) {
           this.buttons[i].y = currentY;
     
           if(this.selectedButton == i) {
@@ -111,10 +114,8 @@ export default class Menu {
           currentY += this.buttons[i].height + 8;
         }
       }
-    
-      if(func != null) {
-        func(true);
-      }
+      
+      ctx.restore();
     }
   
     this.lastKey = -1;

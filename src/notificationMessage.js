@@ -39,11 +39,12 @@ export default class NotificationMessage {
     this.closeButton = closeButton;
   }
   
-  draw(ctx, closeButton) {
-    var self = this;
-  
+  draw(context, closeButton) {
     if(this.text != null) {
-      var canvas = ctx.canvas;
+      const canvas = context.canvas;
+      const ctx = canvas.getContext("2d");
+
+      ctx.save();
   
       if(!this.init) {
         this.timeLastFrame = Date.now();
@@ -52,25 +53,24 @@ export default class NotificationMessage {
       this.closeButton = closeButton != null ? closeButton : this.closeButton;
       
       if(this.closeButton != null) {
-        this.closeButton.addClickAction(function() {
-          self.close();
+        this.closeButton.addClickAction(() => {
+          this.close();
         });
       }
   
-      var offsetTime = Date.now() - this.timeLastFrame;
+      const offsetTime = Date.now() - this.timeLastFrame;
       this.timeLastFrame = Date.now();
   
       if(this.animationTime >= this.delayBeforeClosing * 1000 && !this.closing && !this.closed) {
         this.close();
       }
   
-      var ctx = canvas.getContext("2d");
       this.fontSize = this.getFontSize(ctx) * 1.25;
   
-      var heightText = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
-      var height = heightText + this.fontSize / 2;
-      var width = canvas.width;
-      var offsetY = 1;
+      const heightText = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
+      const height = heightText + this.fontSize / 2;
+      const width = canvas.width;
+      let offsetY = 1;
   
       if(!this.closing) {
         this.animationTime += offsetTime;
@@ -92,7 +92,7 @@ export default class NotificationMessage {
           offsetY = this.animationTime / this.animationDelay;
         }
   
-        var y = canvas.height - (height * (offsetY <= 1 ? offsetY : 1));
+        const y = canvas.height - (height * (offsetY <= 1 ? offsetY : 1));
   
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, y, width, height);
@@ -111,6 +111,8 @@ export default class NotificationMessage {
       } else {
         this.disableCloseButton();
       }
+
+      ctx.restore();
   
       this.init = true;
     }

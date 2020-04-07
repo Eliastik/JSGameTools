@@ -51,23 +51,23 @@ class Button {
     this.imageLoader = imageLoader;
   }
   
-  draw(ctx) {
-    var canvas = ctx.canvas;
-    var ctx = canvas.getContext("2d");
-    var precFillStyle = ctx.fillStyle;
-    var precFont = ctx.font;
+  draw(context) {
+    const canvas = context.canvas;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+
     this.fontSize = this.getFontSize(ctx);
 
     ctx.font = this.fontSize + "px " + this.fontFamily;
-    var textSize = ctx.measureText(this.text);
+    const textSize = ctx.measureText(this.text);
 
     if(this.imgSrc != null && this.imageLoader != null) {
       this.loadImage(this.imageLoader);
     }
 
     if(this.image != null) {
-      var imgWidth = this.image.width;
-      var imgHeight = this.image.height;
+      let imgWidth = this.image.width;
+      let imgHeight = this.image.height;
 
       if(this.autoWidth) {
         this.width = imgWidth * 1.25;
@@ -77,8 +77,8 @@ class Button {
         this.height = imgHeight * 1.5;
       }
     } else if(this.text != null) {
-      var textWrapped = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize);
-      var heightText = textWrapped["height"];
+      const textWrapped = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize);
+      const heightText = textWrapped["height"];
 
       if(this.autoWidth) {
         this.width = textSize.width + 25;
@@ -90,7 +90,7 @@ class Button {
     }
 
     if(this.alignement == "center") {
-      this.x =  (canvas.width / 2) - (this.width / 2) - this.initialX;
+      this.x = (canvas.width / 2) - (this.width / 2) - this.initialX;
     } else if(this.alignement == "right") {
       this.x = (canvas.width) - (this.width) - 5 - this.initialX;
     } else if(this.alignement == "left") {
@@ -116,8 +116,8 @@ class Button {
     ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
 
     if(this.selected) {
-      var initialStrokeStyle = ctx.strokeStyle;
-      var initialLineWidth = ctx.lineWidth;
+      const initialStrokeStyle = ctx.strokeStyle;
+      const initialLineWidth = ctx.lineWidth;
       
       ctx.strokeStyle = "#a2cdd8";
       ctx.lineWidth = 3;
@@ -129,82 +129,82 @@ class Button {
     }
 
     if(this.image != null) {
+      let imgWidth;
+      let imgHeight;
+      
       if(this.image.width > this.width || this.image.height > this.height) {
-        var aspectRatio = this.image.width / this.image.height;
+        const aspectRatio = this.image.width / this.image.height;
         imgWidth = Math.floor(this.width / 1.25);
         imgHeight = Math.floor(imgWidth / aspectRatio);
       }
       
-      var imgX = this.x + (this.width / 2) - (imgWidth / 2);
-      var imgY = this.y + (this.height / 2) - (imgHeight / 2);
+      const imgX = this.x + (this.width / 2) - (imgWidth / 2);
+      const imgY = this.y + (this.height / 2) - (imgHeight / 2);
       
       ctx.drawImage(this.image, Math.round(imgX), Math.round(imgY), Math.round(imgWidth), Math.round(imgHeight));
     } else if(this.text != null) {
       ctx.fillStyle = this.fontColor;
       
-      var textX = this.x + (this.width / 2) - (textSize.width / 2);
-      var textY = this.y + this.fontSize + this.fontSize / 5;
+      const textX = this.x + (this.width / 2) - (textSize.width / 2);
+      const textY = this.y + this.fontSize + this.fontSize / 5;
       
       DrawUtils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);
     }
-
-    ctx.fillStyle = precFillStyle;
-    ctx.font = precFont;
+    
+    ctx.restore();
 
     if(!this.init && ctx != null) {
-      var self = this;
-      
-      ctx.canvas.addEventListener("mousemove", function mouseOverFunction(evt) {
-        if(!self.disabled) {
-          if(self.isInside(self.getMousePos(ctx.canvas, evt))) {
-            if(self.triggerHover != null && !self.disabled) {
-              self.triggerHover();
+      ctx.canvas.addEventListener("mousemove", event => {
+        if(!this.disabled) {
+          if(this.isInside(this.getMousePos(ctx.canvas, event))) {
+            if(this.triggerHover != null && !this.disabled) {
+              this.triggerHover();
             }
             
-            self.hovered = true;
+            this.hovered = true;
           } else {
-            self.hovered = false;
+            this.hovered = false;
           }
         } else {
-          self.hovered = false;
-          self.clicked = false;
+          this.hovered = false;
+          this.clicked = false;
         }
       }, false);
       
-      ctx.canvas.addEventListener("click", function clickFunction(evt) {
-        if(!self.disabled) {
-          if(self.isInside(self.getMousePos(canvas, evt))) {
-            if(self.triggerClick != null) {
-              self.triggerClick();
+      ctx.canvas.addEventListener("click", event => {
+        if(!this.disabled) {
+          if(this.isInside(this.getMousePos(canvas, event))) {
+            if(this.triggerClick != null) {
+              this.triggerClick();
             }
           } else {
-            self.clicked = false;
+            this.clicked = false;
           }
         } else {
-          self.hovered = false;
-          self.clicked = false;
+          this.hovered = false;
+          this.clicked = false;
         }
       }, false);
       
-      ctx.canvas.addEventListener("mousedown", function clickFunction(evt) {
-        if(!self.disabled) {
-          if(self.isInside(self.getMousePos(canvas, evt))) {
-            if(self.triggerDown != null) {
-              self.triggerDown();
+      ctx.canvas.addEventListener("mousedown", event => {
+        if(!this.disabled) {
+          if(this.isInside(this.getMousePos(canvas, event))) {
+            if(this.triggerDown != null) {
+              this.triggerDown();
             }
             
-            self.clicked = true;
+            this.clicked = true;
           } else {
-            self.clicked = false;
+            this.clicked = false;
           }
         } else {
-          self.hovered = false;
-          self.clicked = false;
+          this.hovered = false;
+          this.clicked = false;
         }
       }, false);
       
-      ctx.canvas.addEventListener("mouseup", function clickFunction(evt) {
-        self.clicked = false;
+      ctx.canvas.addEventListener("mouseup", () => {
+        this.clicked = false;
       }, false);
     }
 
@@ -216,7 +216,7 @@ class Button {
   }
   
   getMousePos(canvas, event) {
-    var rect = canvas.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
 
     return {
       x: event.clientX - rect.left,
@@ -232,24 +232,24 @@ class Button {
     this.triggerClick = trigger;
   }
   
-  removeClickAction(self) {
-    self.triggerClick = null;
+  removeClickAction() {
+    this.triggerClick = null;
   }
   
   addMouseOverAction(trigger) {
     this.triggerHover = trigger;
   }
   
-  removeHoverAction(self) {
-    self.triggerHover = null;
+  removeHoverAction() {
+    this.triggerHover = null;
   }
   
   addMouseDownAction(trigger) {
     this.triggerDown = trigger;
   }
   
-  removeDownAction(self) {
-    self.triggerDown = null;
+  removeDownAction() {
+    this.triggerDown = null;
   }
   
   disable() {

@@ -26,20 +26,18 @@ export default class ImageLoader {
   }
 
   load(img, func, game) {
-    var self = this;
-  
     if(this.firstImage) {
       this.nbImagesToLoad = img.length;
       this.firstImage = false;
     }
   
     if(img.length > 0) {
-      this.loadImage(img[0], function(result) {
+      this.loadImage(img[0], result => {
         if(result == true) {
           img.shift();
-          self.load(img, func, game);
+          this.load(img, func, game);
         } else {
-          self.hasError = true;
+          this.hasError = true;
           return func();
         }
       });
@@ -49,36 +47,34 @@ export default class ImageLoader {
   }
 
   loadImage(src, func) {
-    var self = this;
-    
     this.triedLoading++;
   
-    var image = new Image();
+    const image = new Image();
     image.src = src;
   
-    image.onload = function() {
-      if(self.images != null) {
-        self.images[src] = image;
+    image.onload = () => {
+      if(this.images != null) {
+        this.images[src] = image;
       } else {
         return func(false);
       }
   
-      self.triedLoading = 0;
+      this.triedLoading = 0;
       return func(true);
     };
   
-    image.onerror = function() {
-      if(self.triedLoading >= 5) {
-        if(self.images != null) {
-          self.images[src] = image;
+    image.onerror = () => {
+      if(this.triedLoading >= 5) {
+        if(this.images != null) {
+          this.images[src] = image;
         }
   
-        self.triedLoading = 0;
+        this.triedLoading = 0;
         return func(false);
       }
   
-      setTimeout(function() {
-        self.loadImage(src, func);
+      setTimeout(() => {
+        this.loadImage(src, func);
       }, 250);
     }
   }

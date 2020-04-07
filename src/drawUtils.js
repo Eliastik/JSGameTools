@@ -24,11 +24,11 @@ export default {
   preRenderFont: function(cars, size, color, fontFamily) {
     cars.push("?"); cars.push(" "); cars.push("A");
     
-    for(var i = 0; i < cars.length; i++) {
-      var canvasTmp = document.createElement("canvas");
-      var ctxTmp = canvasTmp.getContext("2d");
+    for(let i = 0; i < cars.length; i++) {
+      const canvasTmp = document.createElement("canvas");
+      const ctxTmp = canvasTmp.getContext("2d");
       ctxTmp.font = size + "px " + fontFamily;
-      var width = ctxTmp.measureText(cars[i]).width;
+      const width = ctxTmp.measureText(cars[i]).width;
       
       canvasTmp.width = width;
       canvasTmp.height = size + (size / 6);
@@ -48,16 +48,16 @@ export default {
     this.drawImageWrapper(ctx, imageData, x, y, width, height, sx, sy, sWidth, sHeight, eraseBelow, degrees);
   },
   drawImageWrapper: function(ctx, image, x, y, width, height, sx, sy, sWidth, sHeight, eraseBelow, degrees) {
-    var x = (x == undefined || isNaN(x)) ? null : Math.round(x);
-    var y = (y == undefined || isNaN(y)) ? null : Math.round(y);
-    var width = (width == undefined || isNaN(width)) ? null : Math.round(width);
-    var height = (height == undefined || isNaN(height)) ? null : Math.round(height);
-    var sx = (sx == undefined || isNaN(sx)) ? null : Math.round(sx);
-    var sy = (sy == undefined || isNaN(sy)) ? null : Math.round(sy);
-    var sWidth = (sWidth == undefined || isNaN(sWidth)) ? null : Math.round(sWidth);
-    var sHeight = (sHeight == undefined || isNaN(sHeight)) ? null : Math.round(sHeight);
-    var eraseBelow = eraseBelow == undefined ? false : eraseBelow;
-    var degrees = (degrees == undefined || isNaN(degrees)) ? null : degrees;
+    x = (x == undefined || isNaN(x)) ? null : Math.round(x);
+    y = (y == undefined || isNaN(y)) ? null : Math.round(y);
+    width = (width == undefined || isNaN(width)) ? null : Math.round(width);
+    height = (height == undefined || isNaN(height)) ? null : Math.round(height);
+    sx = (sx == undefined || isNaN(sx)) ? null : Math.round(sx);
+    sy = (sy == undefined || isNaN(sy)) ? null : Math.round(sy);
+    sWidth = (sWidth == undefined || isNaN(sWidth)) ? null : Math.round(sWidth);
+    sHeight = (sHeight == undefined || isNaN(sHeight)) ? null : Math.round(sHeight);
+    eraseBelow = eraseBelow == undefined ? false : eraseBelow;
+    degrees = (degrees == undefined || isNaN(degrees)) ? null : degrees;
   
     if(degrees != undefined) {
       ctx.save();
@@ -84,9 +84,7 @@ export default {
     }
   },
   drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold) {
-    var precFillStyle = ctx.fillStyle;
-    var precFont = ctx.font;
-    var precFilter = ctx.filter;
+    ctx.save();
 
     if(!Array.isArray(color)) {
       ctx.fillStyle = color;
@@ -99,7 +97,7 @@ export default {
       text = this.wrapTextLines(ctx, text)["text"];
     }
     
-    var lines = text.split("\n");
+    const lines = text.split("\n");
 
     if(verticalAlignement == "center") {
       y = (ctx.canvas.height / 2) - (size * lines.length / 2);
@@ -109,11 +107,11 @@ export default {
       y = (ctx.canvas.height) - (size * lines.length) / 2 - size / 5;
     }
 
-    for(var i = 0; i < lines.length; i++) {
-      var currentText = lines[i];
+    for(let i = 0; i < lines.length; i++) {
+      const currentText = lines[i];
 
       if(Array.isArray(color)) {
-        var colorIndex = i;
+        let colorIndex = i;
 
         if(colorIndex > color.length - 1) {
           colorIndex = color.length - 1;
@@ -133,9 +131,7 @@ export default {
       }
     }
 
-    ctx.fillStyle = precFillStyle;
-    ctx.font = precFont;
-    ctx.filter = precFilter;
+    ctx.restore();
 
     return {
       x: x,
@@ -151,27 +147,28 @@ export default {
     }
 
     if(wrap) {
-      var testCar = bitmapFontSet["A"];
+      const testCar = bitmapFontSet["A"];
       text = this.wrapTextLines(ctx, text, testCar.width * (size / testCar.height), size)["text"];
     }
 
-    var lines = text.split("\n");
-    var currentY = y;
+    const lines = text.split("\n");
+    let currentY = y;
 
-    for(var i = 0; i < lines.length; i++) {
-      var currentText = lines[i];
-      var currentX = x;
+    for(let i = 0; i < lines.length; i++) {
+      const currentText = lines[i];
+      let currentX = x;
 
-      for(var j = 0; j < currentText.length; j++) {
-        var currentCar = currentText.charAt(j);
+      for(let j = 0; j < currentText.length; j++) {
+        const currentCar = currentText.charAt(j);
+        let currentCarBitmap;
 
         if(bitmapFontSet[currentCar] == undefined || bitmapFontSet[currentCar] == null) {
-          var currentCarBitmap = bitmapFontSet["?"];
+          currentCarBitmap = bitmapFontSet["?"];
         } else {
-          var currentCarBitmap = bitmapFontSet[currentCar];
+          currentCarBitmap = bitmapFontSet[currentCar];
         }
 
-        var widthBitmap = currentCarBitmap.width * (size / currentCarBitmap.height);
+        const widthBitmap = currentCarBitmap.width * (size / currentCarBitmap.height);
         DrawUtils.drawImageData(ctx, currentCarBitmap, currentX, currentY, widthBitmap, size, 0, 0, currentCarBitmap.width, currentCarBitmap.height);
         currentX += widthBitmap;
       }
@@ -183,13 +180,13 @@ export default {
   },
   wrapText: function(text, limit) {
     if(text.length > limit) {
-      var p = limit;
+      let p = limit;
 
       for(; p > 0 && text[p] != " "; p--);
 
       if(p > 0) {
-        var left = text.substring(0, p);
-        var right = text.substring(p + 1);
+        const left = text.substring(0, p);
+        const right = text.substring(p + 1);
         return left + "\n" + this.wrapText(right, limit);
       }
     }
@@ -197,21 +194,21 @@ export default {
     return text;
   },
   wrapTextLines: function(ctx, text, width, fontSize) {
-    var lines = text.split("\n");
-    var newText = "";
-    var widthCar = width || ctx.measureText("A").width;
-    var nbCarLine = Math.round(ctx.canvas.width / widthCar);
-    var heightTotal = 0;
+    const lines = text.split("\n");
+    let newText = "";
+    const widthCar = width || ctx.measureText("A").width;
+    const nbCarLine = Math.round(ctx.canvas.width / widthCar);
+    let heightTotal = 0;
 
-    for(var i = 0; i < lines.length; i++) {
-      var lineWrap = this.wrapText(lines[i], nbCarLine);
+    for(let i = 0; i < lines.length; i++) {
+      const lineWrap = this.wrapText(lines[i], nbCarLine);
       newText += lineWrap;
 
       if(i < lines.length - 1) {
         newText += "\n";
       }
 
-      for(var j = 0; j < lineWrap.split("\n").length; j++) {
+      for(let j = 0; j < lineWrap.split("\n").length; j++) {
         heightTotal += parseFloat(fontSize);
       }
     }
@@ -222,20 +219,18 @@ export default {
     };
   },
   drawArrow: function(ctx, fromx, fromy, tox, toy) {
-    var lineCap = ctx.lineCap;
-    var lineWidth = ctx.lineWidth;
-    var strokeStyle = ctx.strokeStyle;
-    var filter = ctx.filter;
+    ctx.save();
+
     ctx.lineCap = "round";
     ctx.lineWidth = 8;
     ctx.strokeStyle = "#FF0000";
     ctx.filter = "";
   
     ctx.beginPath();
-    var headlen = 20;
-    var dx = tox - fromx;
-    var dy = toy - fromy;
-    var angle = Math.atan2(dy, dx);
+    const headlen = 20;
+    const dx = tox - fromx;
+    const dy = toy - fromy;
+    const angle = Math.atan2(dy, dx);
     ctx.moveTo(fromx, fromy);
     ctx.lineTo(tox, toy);
     ctx.moveTo(tox, toy);
@@ -243,25 +238,22 @@ export default {
     ctx.moveTo(tox, toy);
     ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
     ctx.stroke();
-  
-    ctx.lineCap = lineCap;
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = strokeStyle;
-    ctx.filter = filter;
+    
+    ctx.restore();
   },
   clear: function(ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   },
   isFilterHueAvailable: function() {
-    var canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas");
     canvas.width = 5;
     canvas.height = 5;
-    var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
   
     ctx.fillStyle = "#FF0000";
     ctx.filter = "hue-rotate(90deg)";
     ctx.fillRect(0, 0, 5, 5);
-    var color = ctx.getImageData(0, 0, 1, 1).data;
+    const color = ctx.getImageData(0, 0, 1, 1).data;
   
     if(color[0] == 255 && color[1] == 0 && color[2] == 0) {
       return false;
