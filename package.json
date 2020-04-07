@@ -1,0 +1,27 @@
+{
+  "name": "jsgametools",
+  "version": "1.0.0",
+  "description": "A work-in-progress toolkit for JavaScript games.",
+  "main": "lib/JSGameTools.js",
+  "module": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config prod.webpack.config.js",
+    "build-dev": "webpack --config dev.webpack.config.js",
+    "watch": "webpack --config dev.webpack.config.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eliastik/JSGameTools.git"
+  },
+  "author": "Eliastik",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Eliastik/JSGameTools/issues"
+  },
+  "homepage": "https://github.com/Eliastik/JSGameTools#readme",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
