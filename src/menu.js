@@ -129,7 +129,11 @@ export default class Menu {
   }
 
   set(buttons, text, colors, alignement, x) {
-    Menu.apply(this, [buttons, text, colors, this.fontSize, this.fontFamily, alignement, x, this.backgroundColor, this.blurCanvas]);
+    this.buttons = buttons;
+    this.text = text;
+    this.colors = colors;
+    this.alignement = alignement || "center";
+    this.x = x || 0;
     this.enable();
   }
 }
