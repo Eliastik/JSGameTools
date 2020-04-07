@@ -25,7 +25,7 @@ export default class ImageLoader {
     this.firstImage = true;
   }
 
-  load(img, func, game) {
+  load(img, func) {
     if(this.firstImage) {
       this.nbImagesToLoad = img.length;
       this.firstImage = false;
@@ -35,7 +35,7 @@ export default class ImageLoader {
       this.loadImage(img[0], result => {
         if(result == true) {
           img.shift();
-          this.load(img, func, game);
+          this.load(img, func);
         } else {
           this.hasError = true;
           return func();

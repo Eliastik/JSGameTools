@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import GameConstants from "./constants";
+import Constants from "./constants";
 import DrawUtils from "./drawUtils";
 
 export default class Menu {
@@ -24,8 +24,8 @@ export default class Menu {
     this.buttons = buttons;
     this.text = text;
     this.colors = colors;
-    this.fontSize = fontSize || Math.floor(GameConstants.Setting.FONT_SIZE / 1.25);
-    this.fontFamily = fontFamily || GameConstants.Setting.FONT_FAMILY;
+    this.fontSize = fontSize || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
+    this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.alignement = alignement || "center";
     this.x = x || 0;
     this.backgroundColor = backgroundColor == undefined ? "rgba(44, 62, 80, 0.75)" : backgroundColor;
@@ -64,9 +64,9 @@ export default class Menu {
       let heightButtons = 0;
     
       if(this.buttons != null) {
-        if(this.lastKey == GameConstants.Key.UP) {
+        if(this.lastKey == Constants.Key.UP) {
           this.selectedButton--;
-        } else if(this.lastKey == GameConstants.Key.BOTTOM) {
+        } else if(this.lastKey == Constants.Key.BOTTOM) {
           this.selectedButton++;
         }
     
@@ -104,7 +104,7 @@ export default class Menu {
           this.buttons[i].enable();
           this.buttons[i].draw(ctx);
     
-          if(this.selectedButton == i && this.lastKey == GameConstants.Key.ENTER && this.buttons[i].triggerClick != null && !this.buttons[i].disabled) {
+          if(this.selectedButton == i && this.lastKey == Constants.Key.ENTER && this.buttons[i].triggerClick != null && !this.buttons[i].disabled) {
             this.lastKey = -1;
             this.selectedButton = 0;
             this.buttons[i].triggerClick();

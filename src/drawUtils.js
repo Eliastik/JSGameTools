@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import GameConstants from "./constants";
+import Constants from "./constants";
 
 export default {
   preRenderedFont: {},
@@ -142,7 +142,7 @@ export default {
   drawTextBitmap: function(ctx, bitmapFontSet, text, size, x, y, wrap) {
     if(bitmapFontSet == undefined || bitmapFontSet == null) {
       this.preRenderedFont = {};
-      DrawUtils.preRenderFont(GameConstants.Setting.CARS_TO_PRERENDER, GameConstants.Setting.FONT_SIZE * 2, "white", GameConstants.Setting.FONT_FAMILY);
+      DrawUtils.preRenderFont(Constants.Setting.CARS_TO_PRERENDER, Constants.Setting.FONT_SIZE * 2, "white", Constants.Setting.FONT_FAMILY);
       bitmapFontSet = this.preRenderedFont;
     }
 

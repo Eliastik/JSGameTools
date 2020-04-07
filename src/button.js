@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import GameConstants from "./constants";
+import Constants from "./constants";
 import DrawUtils from "./drawUtils";
 
 class Button {
@@ -32,8 +32,8 @@ class Button {
     this.clicked = false;
     this.hovered = false;
     this.text = text;
-    this.fontSize = fontSize || Math.floor(GameConstants.Setting.FONT_SIZE / 1.25);
-    this.fontFamily = fontFamily || GameConstants.Setting.FONT_FAMILY;
+    this.fontSize = fontSize || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
+    this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.fontColor = fontColor || "white";
     this.color = color || "rgba(0, 0, 0, 0)";
     this.colorHover = colorHover || "#95a5a6";

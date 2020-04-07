@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import GameConstants from "./constants";
+import Constants from "./constants";
 import { Button } from "./button";
 import DrawUtils from "./drawUtils";
 
@@ -26,8 +26,8 @@ export default class NotificationMessage {
     this.textColor = textColor == undefined ? "rgba(255, 255, 255, 0.75)" : textColor;
     this.backgroundColor = backgroundColor == undefined ? "rgba(46, 204, 113, 0.5)" : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
-    this.fontSize = fontSize == undefined ? Math.floor(GameConstants.Setting.FONT_SIZE / 1.25) : fontSize;
-    this.fontFamily = fontFamily == undefined ? GameConstants.Setting.FONT_FAMILY : fontFamily;
+    this.fontSize = fontSize == undefined ? Math.floor(Constants.Setting.FONT_SIZE / 1.25) : fontSize;
+    this.fontFamily = fontFamily == undefined ? Constants.Setting.FONT_FAMILY : fontFamily;
     this.animationDelay = animationDelay == undefined ? 500 : animationDelay;
     this.foreGround = foreGround == undefined ? false : foreGround;
     this.timeLastFrame = 0;
@@ -99,7 +99,7 @@ export default class NotificationMessage {
   
         DrawUtils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y + this.fontSize, true);
   
-        if(this.close != null) {
+        if(this.close != null && this.closeButton != null) {
           this.closeButton.y = y + 5;
         }
   
