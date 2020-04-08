@@ -23,14 +23,14 @@ export default class Menu {
   constructor(buttons, text, colors, fontSize, fontFamily, alignement, x, backgroundColor, blurCanvas) {
     this.buttons = buttons;
     this.text = text;
-    this.colors = colors;
+    this.colors = colors || "#FFFFFF";
     this.fontSize = fontSize || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.alignement = alignement || "center";
     this.x = x || 0;
     this.backgroundColor = backgroundColor == undefined ? "rgba(44, 62, 80, 0.75)" : backgroundColor;
     this.blurCanvas = blurCanvas == undefined ? false : blurCanvas;
-    this.disabled = false;
+    this.disabled = true;
     this.lastKey = this.lastKey == undefined ? -1 : this.lastKey;
     this.selectedButton = this.selectedButton == undefined ? 0 : this.selectedButton;
     this.init = this.init == undefined ? false : this.init;

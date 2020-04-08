@@ -25,8 +25,28 @@ const buttonText2 = new JSGameTools.Button("Long text button ............... Thi
 const buttonImage = new JSGameTools.ButtonImage("pause.png", 5, 50, null, null, 64, 64);
 const notification = new JSGameTools.NotificationMessage("A notification");
 
+const buttonMenu1 = new JSGameTools.Button("A button, aligned to the left", 5, 5, "left", "#2ecc71", "#1abc9c", "#16a085");
+const buttonMenu5 = new JSGameTools.Button("Display a notification", 5, 5, null, "#2ecc71", "#1abc9c", "#16a085");
+const buttonMenu2 = new JSGameTools.Button("Another button, aligned to the right", 5, 5, "right", "#2ecc71", "#1abc9c", "#16a085");
+const buttonMenu3 = new JSGameTools.Button("A long buttonnnnnnnnnnnnnnnnnnnnnnnnnn", 5, 5, "right", "#2ecc71", "#1abc9c", "#16a085");
+const buttonMenu4 = new JSGameTools.Button("Close (centered)", 5, 5, "center", "#CC2F2F", "#F23838", "#A62626");
+const menu = new JSGameTools.Menu([buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4], "Pause menu\nYou can use the arrow keys, press enter to select");
+const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)");
+
 buttonText.addClickAction(() => {
   notification.open();
+});
+
+buttonImage.addClickAction(() => {
+  menu.enable();
+});
+
+buttonMenu4.addClickAction(() => {
+  menu.disable();
+});
+
+buttonMenu5.addClickAction(() => {
+  notification2.open();
 });
 
 function draw() {
@@ -38,6 +58,18 @@ function draw() {
     buttonText2.draw(ctx);
     buttonImage.draw(ctx);
     notification.draw(ctx);
+    menu.draw(ctx);
+    notification2.draw(ctx);
+
+    if(!menu.disabled) {
+      buttonText.disable();
+      buttonText2.disable();
+      buttonImage.disable();
+    } else {
+      buttonText.enable();
+      buttonText2.enable();
+      buttonImage.enable();
+    }
 
     draw();
   });
