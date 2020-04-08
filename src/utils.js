@@ -271,32 +271,26 @@ export default {
     return Math.floor(parseInt(ctx.font.match(/\d+/), 10) / 1.25);
   },
   autoResizeCanvas: function(canvas, initialWidth, initialHeight) {
-    if(canvas && canvas.getAttribute("autoresize-canvas-event") != "true") {
-      window.addEventListener("resize", () => {
-        canvas.setAttribute("autoresize-canvas-event", "true");
-
-        if(!document.fullscreenElement) {
-          if(initialWidth >= document.documentElement.clientWidth * 0.85) {
-            var ratio = initialWidth / initialHeight;
-            canvas.width = document.documentElement.clientWidth * 0.85;
-            canvas.height = canvas.width / ratio;
-          } else {
-            canvas.width = initialWidth;
-            canvas.height = initialHeight;
-          }
-        } else if(document.fullscreenElement == canvas) {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        } else {
-          canvas.width = initialWidth;
-          canvas.height = initialHeight;
-        }
-      });
+    if(!document.fullscreenElement) {
+      if(initialWidth >= document.documentElement.clientWidth * 0.85) {
+        var ratio = initialWidth / initialHeight;
+        canvas.width = document.documentElement.clientWidth * 0.85;
+        canvas.height = canvas.width / ratio;
+      } else {
+        canvas.width = initialWidth;
+        canvas.height = initialHeight;
+      }
+    } else if(document.fullscreenElement == canvas) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    } else {
+      canvas.width = initialWidth;
+      canvas.height = initialHeight;
     }
   },
   enableAutoResizeCanvas: function(canvas, initialWidth, initialHeight) {
     this.autoResizeCanvas(canvas, initialWidth, initialHeight);
-    
+
     if(canvas && canvas.getAttribute("autoresize-canvas-event") != "true") {
       window.addEventListener("resize", () => {
         canvas.setAttribute("autoresize-canvas-event", "true");
