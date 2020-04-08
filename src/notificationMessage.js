@@ -33,7 +33,7 @@ export default class NotificationMessage {
     this.timeLastFrame = 0;
     this.animationTime = 0;
     this.init = false;
-    this.closed = false;
+    this.closed = true;
     this.closing = false;
     this.disableAnimation = disableAnimation == undefined ? false : disableAnimation;
     this.closeButton = closeButton;

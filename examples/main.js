@@ -24,7 +24,6 @@ const buttonText = new JSGameTools.Button("Show a notification", 5, 5, null, "#2
 const buttonText2 = new JSGameTools.Button("Long text button ............... This should be on next line", 5, 250, null, "#2ecc71", "#1abc9c", "#16a085");
 const buttonImage = new JSGameTools.ButtonImage("pause.png", 5, 50, null, null, 64, 64);
 const notification = new JSGameTools.NotificationMessage("A notification");
-notification.closed = true;
 
 buttonText.addClickAction(() => {
   notification.open();
