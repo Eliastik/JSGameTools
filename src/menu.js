@@ -17,7 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Constants from "./constants";
-import DrawUtils from "./drawUtils";
+import Utils from "./utils";
 
 export default class Menu {
   constructor(buttons, text, colors, fontSize, fontFamily, alignement, x, backgroundColor, blurCanvas) {
@@ -52,7 +52,7 @@ export default class Menu {
       }
   
       if(this.blurCanvas) {
-        DrawUtils.blurCanvas(ctx, 5);
+        Utils.blurCanvas(ctx, 5);
       }
 
       ctx.save();
@@ -60,7 +60,7 @@ export default class Menu {
       ctx.fillStyle = this.backgroundColor;
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
-      const heightText = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
+      const heightText = Utils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
       let heightButtons = 0;
     
       if(this.buttons != null) {
@@ -78,7 +78,7 @@ export default class Menu {
     
         for(let i = 0; i < this.buttons.length; i++) {
           if(this.buttons[i].autoHeight) {
-            heightButtons += DrawUtils.wrapTextLines(ctx, this.buttons[i].text, null, this.buttons[i].getFontSize(ctx))["height"] + 8;
+            heightButtons += Utils.wrapTextLines(ctx, this.buttons[i].text, null, Utils.getFontSize(ctx))["height"] + 8;
           } else {
             heightButtons += this.buttons[i].height + 5;
           }
@@ -89,7 +89,7 @@ export default class Menu {
       const startY = ctx.canvas.height / 2 - totalHeight / 2 + 16;
       let currentY = startY + heightText;
     
-      DrawUtils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);
+      Utils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);
     
       if(this.buttons != null) {
         for(let i = 0; i < this.buttons.length; i++) {

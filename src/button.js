@@ -17,7 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Constants from "./constants";
-import DrawUtils from "./drawUtils";
+import Utils from "./utils";
 
 class Button {
   constructor(text, x, y, alignement, color, colorHover, colorDown, width, height, fontSize, fontFamily, fontColor, imgSrc, imageLoader, verticalAlignement) {
@@ -56,7 +56,7 @@ class Button {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    this.fontSize = this.getFontSize(ctx);
+    this.fontSize = Utils.getFontSize(ctx);
 
     ctx.font = this.fontSize + "px " + this.fontFamily;
     const textSize = ctx.measureText(this.text);
@@ -77,7 +77,7 @@ class Button {
         this.height = imgHeight * 1.5;
       }
     } else if(this.text != null) {
-      const textWrapped = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize);
+      const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize);
       const heightText = textWrapped["height"];
 
       if(this.autoWidth) {
@@ -148,7 +148,7 @@ class Button {
       const textX = this.x + (this.width / 2) - (textSize.width / 2);
       const textY = this.y + this.fontSize + this.fontSize / 5;
       
-      DrawUtils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);
+      Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);
     }
     
     ctx.restore();
@@ -209,10 +209,6 @@ class Button {
     }
 
     this.init = true;
-  }
-  
-  getFontSize(ctx) {
-    return Math.floor(parseInt(ctx.font.match(/\d+/), 10) / 1.25);
   }
   
   getMousePos(canvas, event) {

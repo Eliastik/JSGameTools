@@ -142,7 +142,7 @@ export default {
   drawTextBitmap: function(ctx, bitmapFontSet, text, size, x, y, wrap) {
     if(bitmapFontSet == undefined || bitmapFontSet == null) {
       this.preRenderedFont = {};
-      DrawUtils.preRenderFont(Constants.Setting.CARS_TO_PRERENDER, Constants.Setting.FONT_SIZE * 2, "white", Constants.Setting.FONT_FAMILY);
+      this.preRenderFont(Constants.Setting.CARS_TO_PRERENDER, Constants.Setting.FONT_SIZE * 2, "white", Constants.Setting.FONT_FAMILY);
       bitmapFontSet = this.preRenderedFont;
     }
 
@@ -169,7 +169,7 @@ export default {
         }
 
         const widthBitmap = currentCarBitmap.width * (size / currentCarBitmap.height);
-        DrawUtils.drawImageData(ctx, currentCarBitmap, currentX, currentY, widthBitmap, size, 0, 0, currentCarBitmap.width, currentCarBitmap.height);
+        this.drawImageData(ctx, currentCarBitmap, currentX, currentY, widthBitmap, size, 0, 0, currentCarBitmap.width, currentCarBitmap.height);
         currentX += widthBitmap;
       }
 
@@ -266,5 +266,105 @@ export default {
     ctx.filter = "blur(" + length  + "px)";
     this.drawImageData(ctx, ctx.canvas, 0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.restore();
+  },
+  getFontSize: function(ctx) {
+    return Math.floor(parseInt(ctx.font.match(/\d+/), 10) / 1.25);
+  },
+  autoResizeCanvas: function(canvas, initialWidth, initialHeight) {
+    if(canvas && canvas.getAttribute("autoresize-canvas-event") != "true") {
+      window.addEventListener("resize", () => {
+        canvas.setAttribute("autoresize-canvas-event", "true");
+
+        if(!document.fullscreenElement) {
+          if(initialWidth >= document.documentElement.clientWidth * 0.85) {
+            var ratio = initialWidth / initialHeight;
+            canvas.width = document.documentElement.clientWidth * 0.85;
+            canvas.height = canvas.width / ratio;
+          } else {
+            canvas.width = initialWidth;
+            canvas.height = initialHeight;
+          }
+        } else if(document.fullscreenElement == canvas) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        } else {
+          canvas.width = initialWidth;
+          canvas.height = initialHeight;
+        }
+      });
+    }
+  },
+  enableAutoResizeCanvas: function(canvas, initialWidth, initialHeight) {
+    this.autoResizeCanvas(canvas, initialWidth, initialHeight);
+    
+    if(canvas && canvas.getAttribute("autoresize-canvas-event") != "true") {
+      window.addEventListener("resize", () => {
+        canvas.setAttribute("autoresize-canvas-event", "true");
+        this.autoResizeCanvas(canvas, initialWidth, initialHeight);
+      });
+    }
+  },
+  autoResizeCanvasFullscreen: function(canvas) {
+    if(document.fullscreenElement == canvas) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+  },
+  enableAutoResizeCanvasFullscreen: function(canvas) {
+    this.autoResizeCanvasFullscreen(canvas);
+
+    if(canvas && canvas.getAttribute("autoresizefullscreen-canvas-event") != "true") {
+      window.addEventListener("resize", () => {
+        canvas.setAttribute("autoresizefullscreen-canvas-event", "true");
+        this.autoResizeCanvasFullscreen(canvas);
+      });
+    }
+  },
+  toggleFullscreen: function(canvas) {
+    if(canvas) {
+      const initialWidth = canvas.width;
+      const initialHeight = canvas.height;
+
+      if(!document.fullscreenElement) {
+        if(canvas.requestFullscreen) {
+          canvas.requestFullscreen();
+        } else if(canvas.mozRequestFullScreen) {
+          canvas.mozRequestFullScreen();
+        } else if(canvas.webkitRequestFullscreen) {
+          canvas.webkitRequestFullscreen();
+        } else if(canvas.msRequestFullscreen) {
+          canvas.msRequestFullscreen();
+        } else if(canvas.oRequestFullscreen) {
+          canvas.oRequestFullscreen();
+        }
+      } else {
+        if(document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+
+      this.enableAutoResizeCanvasFullscreen(canvas);
+
+      if(canvas.getAttribute("fullscreenchange-canvas-event") != "true") {
+        canvas.setAttribute("fullscreenchange-canvas-event", "true");
+
+        const onfullscreenchange = () => {
+          canvas.width = initialWidth;
+          canvas.height = initialHeight;
+        };
+    
+        if(typeof(document.onfullscreenchange) !== "undefined") {
+          document.onfullscreenchange = onfullscreenchange;
+        } else if(typeof(document.onmsfullscreenchange) !== "undefined") {
+          document.onmsfullscreenchange = onfullscreenchange;
+        } else if(typeof(document.onmozfullscreenchange) !== "undefined") {
+          document.onmozfullscreenchange = onfullscreenchange;
+        } else if(typeof(document.onwebkitfullscreenchange) !== "undefined") {
+          document.onwebkitfullscreenchange = onfullscreenchange;
+        } else if(typeof(document.onokitfullscreenchange) !== "undefined") {
+          document.onofullscreenchange = onfullscreenchange;
+        }
+      }
+    }
   }
 };

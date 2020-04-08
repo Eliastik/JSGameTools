@@ -23,6 +23,7 @@ const imageLoader = new JSGameTools.ImageLoader();
 const buttonText = new JSGameTools.Button("Show a notification", 5, 5, null, "#2ecc71", "#1abc9c", "#16a085");
 const buttonText2 = new JSGameTools.Button("Long text button ............... This should be on next line", 5, 250, null, "#2ecc71", "#1abc9c", "#16a085");
 const buttonImage = new JSGameTools.ButtonImage("pause.png", 5, 50, null, null, 64, 64);
+const buttonTextFullscreen = new JSGameTools.Button("Toggle fullscreen", 5, 150, null, "#2ecc71", "#1abc9c", "#16a085");
 const notification = new JSGameTools.NotificationMessage("A notification");
 
 const buttonMenu1 = new JSGameTools.Button("A button, aligned to the left", 5, 5, "left", "#2ecc71", "#1abc9c", "#16a085");
@@ -35,6 +36,10 @@ const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46,
 
 buttonText.addClickAction(() => {
   notification.open();
+});
+
+buttonTextFullscreen.addClickAction(() => {
+  JSGameTools.Utils.toggleFullscreen(canvas);
 });
 
 buttonImage.addClickAction(() => {
@@ -56,6 +61,7 @@ function draw() {
 
     buttonText.draw(ctx);
     buttonText2.draw(ctx);
+    buttonTextFullscreen.draw(ctx);
     buttonImage.draw(ctx);
     notification.draw(ctx);
     menu.draw(ctx);

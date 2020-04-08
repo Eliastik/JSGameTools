@@ -20,7 +20,7 @@ import Constants from "./constants";
 import { Button, ButtonImage } from "./button";
 import ImageLoader from "./imageLoader";
 import NotificationMessage from "./notificationMessage";
-import DrawUtils from "./drawUtils";
+import Utils from "./utils";
 import Menu from "./menu";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, DrawUtils, Menu };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu };

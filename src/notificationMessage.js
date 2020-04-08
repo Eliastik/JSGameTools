@@ -18,7 +18,7 @@
  */
 import Constants from "./constants";
 import { Button } from "./button";
-import DrawUtils from "./drawUtils";
+import Utils from "./utils";
 
 export default class NotificationMessage {
   constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation, closeButton) {
@@ -65,9 +65,9 @@ export default class NotificationMessage {
         this.close();
       }
   
-      this.fontSize = this.getFontSize(ctx) * 1.25;
+      this.fontSize = Utils.getFontSize(ctx) * 1.25;
   
-      const heightText = DrawUtils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
+      const heightText = Utils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
       const height = heightText + this.fontSize / 2;
       const width = canvas.width;
       let offsetY = 1;
@@ -97,7 +97,7 @@ export default class NotificationMessage {
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, y, width, height);
   
-        DrawUtils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y + this.fontSize, true);
+        Utils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y + this.fontSize, true);
   
         if(this.close != null && this.closeButton != null) {
           this.closeButton.y = y + 5;
@@ -149,9 +149,5 @@ export default class NotificationMessage {
   
   copy() {
     return new NotificationMessage(this.text, this.textColor, this.backgroundColor, this.delayBeforeClosing, this.animationDelay, this.fontSize, this.fontFamily, this.foreGround);
-  }
-  
-  getFontSize(ctx) {
-    return Math.floor(parseInt(ctx.font.match(/\d+/), 10) / 1.25);
   }
 }
