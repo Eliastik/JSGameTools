@@ -21,7 +21,7 @@ const ctx = canvas.getContext("2d");
 
 const imageLoader = new JSGameTools.ImageLoader();
 const buttonText = new JSGameTools.Button("Show a notification", 5, 5, null, "#2ecc71", "#1abc9c", "#16a085");
-const buttonText2 = new JSGameTools.Button("Long text button ............... This should be on next line", 5, 250, null, "#2ecc71", "#1abc9c", "#16a085");
+const buttonText2 = new JSGameTools.Button("Long text button ............... This should be on next line", 5, 250, "right", "#2ecc71", "#1abc9c", "#16a085");
 const buttonImage = new JSGameTools.ButtonImage("pause.png", 5, 50, null, null, 64, 64);
 const buttonTextFullscreen = new JSGameTools.Button("Toggle fullscreen", 5, 150, "center", "#2ecc71", "#1abc9c", "#16a085");
 const notification = new JSGameTools.NotificationMessage("A notification");
@@ -33,6 +33,7 @@ const buttonMenu3 = new JSGameTools.Button("A long buttonnnnnnnnnnnnnnnnnnnnnnnn
 const buttonMenu4 = new JSGameTools.Button("Close (centered)", 5, 5, "center", "#CC2F2F", "#F23838", "#A62626");
 const menu = new JSGameTools.Menu([buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4], "Pause menu\nYou can use the arrow keys, press enter to select");
 const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)");
+const textField = new JSGameTools.Input(5, 250, 150);
 
 buttonText.addClickAction(() => {
   notification.open();
@@ -66,6 +67,7 @@ function draw() {
     notification.draw(ctx);
     menu.draw(ctx);
     notification2.draw(ctx);
+    textField.draw(ctx);
 
     if(!menu.disabled) {
       buttonText.disable();

@@ -18,19 +18,13 @@
  */
 import Constants from "./constants";
 import Utils from "./utils";
+import ClickableComponent from "./clickableComponent";
 
-class Button {
+class Button extends ClickableComponent {
   constructor(text, x, y, alignement, color, colorHover, colorDown, width, height, fontSize, fontFamily, fontColor, imgSrc, imageLoader, verticalAlignement) {
-    this.x = x || 0;
-    this.y = y || 0;
-    this.initialX = x;
-    this.initialY = y;
-    this.width = width || "auto";
-    this.height = height || "auto";
-    this.autoWidth = (this.width == "auto" ? true : false);
-    this.autoHeight = (this.height == "auto" ? true : false);
-    this.clicked = false;
-    this.hovered = false;
+    super(x, y, width, height);
+    this.autoWidth = (this.width == undefined ? true : false);
+    this.autoHeight = (this.height == undefined ? true : false);
     this.text = text;
     this.fontSizeInitial = fontSize;
     this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
@@ -39,20 +33,17 @@ class Button {
     this.color = color || "rgba(0, 0, 0, 0)";
     this.colorHover = colorHover || "#95a5a6";
     this.colorDown = colorDown || "#727F80"
-    this.triggerClick;
-    this.triggerHover;
-    this.triggerDown;
-    this.init = false;
     this.disabled = false;
     this.alignement = alignement || "default";
     this.image;
     this.imgSrc = imgSrc;
     this.verticalAlignement = verticalAlignement || "default";
-    this.selected = false;
     this.imageLoader = imageLoader;
   }
   
   draw(context) {
+    super.draw(context);
+
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
@@ -153,100 +144,6 @@ class Button {
     }
     
     ctx.restore();
-
-    if(!this.init && ctx != null) {
-      ctx.canvas.addEventListener("mousemove", event => {
-        if(!this.disabled) {
-          if(this.isInside(this.getMousePos(ctx.canvas, event))) {
-            if(this.triggerHover != null && !this.disabled) {
-              this.triggerHover();
-            }
-            
-            this.hovered = true;
-          } else {
-            this.hovered = false;
-          }
-        } else {
-          this.hovered = false;
-          this.clicked = false;
-        }
-      }, false);
-      
-      ctx.canvas.addEventListener("click", event => {
-        if(!this.disabled) {
-          if(this.isInside(this.getMousePos(canvas, event))) {
-            if(this.triggerClick != null) {
-              this.triggerClick();
-            }
-          } else {
-            this.clicked = false;
-          }
-        } else {
-          this.hovered = false;
-          this.clicked = false;
-        }
-      }, false);
-      
-      ctx.canvas.addEventListener("mousedown", event => {
-        if(!this.disabled) {
-          if(this.isInside(this.getMousePos(canvas, event))) {
-            if(this.triggerDown != null) {
-              this.triggerDown();
-            }
-            
-            this.clicked = true;
-          } else {
-            this.clicked = false;
-          }
-        } else {
-          this.hovered = false;
-          this.clicked = false;
-        }
-      }, false);
-      
-      ctx.canvas.addEventListener("mouseup", () => {
-        this.clicked = false;
-      }, false);
-    }
-
-    this.init = true;
-  }
-  
-  getMousePos(canvas, event) {
-    const rect = canvas.getBoundingClientRect();
-
-    return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-    };
-  }
-  
-  isInside(pos) {
-    return pos.x > this.x && pos.x < this.x + this.width && pos.y < this.y + this.height && pos.y > this.y;
-  }
-  
-  addClickAction(trigger) {
-    this.triggerClick = trigger;
-  }
-  
-  removeClickAction() {
-    this.triggerClick = null;
-  }
-  
-  addMouseOverAction(trigger) {
-    this.triggerHover = trigger;
-  }
-  
-  removeHoverAction() {
-    this.triggerHover = null;
-  }
-  
-  addMouseDownAction(trigger) {
-    this.triggerDown = trigger;
-  }
-  
-  removeDownAction() {
-    this.triggerDown = null;
   }
   
   disable() {

@@ -22,5 +22,6 @@ import ImageLoader from "./imageLoader";
 import NotificationMessage from "./notificationMessage";
 import Utils from "./utils";
 import Menu from "./menu";
+import Input from "./input";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input };
