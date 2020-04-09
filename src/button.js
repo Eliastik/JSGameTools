@@ -60,7 +60,10 @@ class Button {
     this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
 
     ctx.font = this.fontSize + "px " + this.fontFamily;
-    const textSize = ctx.measureText(this.text);
+
+    const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily);
+    const heightText = textWrapped["height"];
+    const widthText = textWrapped["width"];
 
     if(this.imgSrc != null && this.imageLoader != null) {
       this.loadImage(this.imageLoader);
@@ -78,11 +81,8 @@ class Button {
         this.height = imgHeight * 1.5;
       }
     } else if(this.text != null) {
-      const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily);
-      const heightText = textWrapped["height"];
-
       if(this.autoWidth) {
-        this.width = textSize.width + 25;
+        this.width = widthText + textWrapped["carWidth"] * 2;
       }
 
       if(this.autoHeight) {
@@ -146,7 +146,7 @@ class Button {
     } else if(this.text != null) {
       ctx.fillStyle = this.fontColor;
       
-      const textX = this.x + (this.width / 2) - (textSize.width / 2);
+      const textX = this.x + (this.width / 2) - (widthText / 2);
       const textY = this.y + this.fontSize + this.fontSize / 5;
       
       Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);

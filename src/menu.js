@@ -88,7 +88,7 @@ export default class Menu {
       }
     
       const totalHeight = heightText + heightButtons;
-      const startY = (ctx.canvas.height - totalHeight) / 2;
+      const startY = (ctx.canvas.height - totalHeight) / 2 + 8;
       let currentY = startY + heightText;
     
       Utils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);

@@ -194,34 +194,49 @@ export default {
     return text;
   },
   wrapTextLines: function(ctx, text, width, fontSize, fontFamily) {
-    ctx.save();
-    ctx.font = fontSize + "px " + fontFamily;
-
-    const lines = text.split("\n");
-    let newText = "";
-    const widthCar = width || ctx.measureText("A").width;
-    const nbCarLine = Math.round(ctx.canvas.width / widthCar);
-    let heightTotal = 0;
-
-    for(let i = 0; i < lines.length; i++) {
-      const lineWrap = this.wrapText(lines[i], nbCarLine);
-      newText += lineWrap;
-
-      if(i < lines.length - 1) {
-        newText += "\n";
+    if(ctx && text) {
+      ctx.save();
+      ctx.font = fontSize + "px " + fontFamily;
+  
+      const lines = text.split("\n");
+      let newText = "";
+      const widthCar = width || ctx.measureText("A").width;
+      const nbCarLine = Math.round(ctx.canvas.width / widthCar);
+  
+      let heightTotal = 0;
+      let maxWidth = 0;
+  
+      for(let i = 0; i < lines.length; i++) {
+        const lineWrap = this.wrapText(lines[i], nbCarLine);
+        newText += lineWrap;
+  
+        if(i < lines.length - 1) {
+          newText += "\n";
+        }
+  
+        for(let j = 0; j < lineWrap.split("\n").length; j++) {
+          const widthText = ctx.measureText(lineWrap.split("\n")[j]).width;
+          heightTotal += parseFloat(fontSize);
+          if(widthText > maxWidth) maxWidth = widthText;
+        }
       }
+  
+      ctx.restore();
 
-      for(let j = 0; j < lineWrap.split("\n").length; j++) {
-        heightTotal += parseFloat(fontSize);
-      }
+      return {
+        text: newText,
+        height: heightTotal,
+        width: maxWidth,
+        carWidth: widthCar
+      };
+    } else {
+      return {
+        text: "",
+        height: 0,
+        width: 0,
+        carWidth: 0
+      };
     }
-
-    ctx.restore();
-
-    return {
-      text: newText,
-      height: heightTotal
-    };
   },
   drawArrow: function(ctx, fromx, fromy, tox, toy) {
     ctx.save();
