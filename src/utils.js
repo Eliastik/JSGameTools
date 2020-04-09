@@ -289,9 +289,9 @@ export default {
     }
   },
   enableAutoResizeCanvas: function(canvas, initialWidth, initialHeight) {
-    this.autoResizeCanvas(canvas, initialWidth, initialHeight);
-
     if(canvas && canvas.getAttribute("autoresize-canvas-event") != "true") {
+      this.autoResizeCanvas(canvas, initialWidth, initialHeight);
+  
       window.addEventListener("resize", () => {
         canvas.setAttribute("autoresize-canvas-event", "true");
         this.autoResizeCanvas(canvas, initialWidth, initialHeight);
@@ -305,9 +305,9 @@ export default {
     }
   },
   enableAutoResizeCanvasFullscreen: function(canvas) {
-    this.autoResizeCanvasFullscreen(canvas);
-
     if(canvas && canvas.getAttribute("autoresizefullscreen-canvas-event") != "true") {
+      this.autoResizeCanvasFullscreen(canvas);
+  
       window.addEventListener("resize", () => {
         canvas.setAttribute("autoresizefullscreen-canvas-event", "true");
         this.autoResizeCanvasFullscreen(canvas);
@@ -343,8 +343,10 @@ export default {
         canvas.setAttribute("fullscreenchange-canvas-event", "true");
 
         const onfullscreenchange = () => {
-          canvas.width = initialWidth;
-          canvas.height = initialHeight;
+          if(document.fullscreenElement != canvas) {
+            canvas.width = initialWidth;
+            canvas.height = initialHeight;
+          }
         };
     
         if(typeof(document.onfullscreenchange) !== "undefined") {
