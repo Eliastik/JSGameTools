@@ -80,7 +80,7 @@ export default class Menu {
     
         for(let i = 0; i < this.buttons.length; i++) {
           if(this.buttons[i].autoHeight) {
-            heightButtons += Utils.wrapTextLines(ctx, this.buttons[i].text, null, this.fontSize, this.fontFamily)["height"] + 8;
+            heightButtons += Utils.wrapTextLines(ctx, this.buttons[i].text, null, this.fontSize, this.fontFamily)["height"] + 16;
           } else {
             heightButtons += this.buttons[i].height + 5;
           }
@@ -88,7 +88,7 @@ export default class Menu {
       }
     
       const totalHeight = heightText + heightButtons;
-      const startY = (ctx.canvas.height - totalHeight) / 2 + 16;
+      const startY = (ctx.canvas.height - totalHeight) / 2;
       let currentY = startY + heightText;
     
       Utils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);
