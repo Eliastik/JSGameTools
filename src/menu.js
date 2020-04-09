@@ -24,7 +24,8 @@ export default class Menu {
     this.buttons = buttons;
     this.text = text;
     this.colors = colors || "#FFFFFF";
-    this.fontSize = fontSize || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
+    this.fontSizeInitial = fontSize;
+    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.alignement = alignement || "center";
     this.x = x || 0;
@@ -57,10 +58,11 @@ export default class Menu {
 
       ctx.save();
   
+      ctx.font = this.fontSize + "px " + this.fontFamily;
       ctx.fillStyle = this.backgroundColor;
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
-      const heightText = Utils.wrapTextLines(ctx, this.text, null, this.fontSize)["height"];
+      const heightText = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily)["height"];
       let heightButtons = 0;
     
       if(this.buttons != null) {
@@ -78,7 +80,7 @@ export default class Menu {
     
         for(let i = 0; i < this.buttons.length; i++) {
           if(this.buttons[i].autoHeight) {
-            heightButtons += Utils.wrapTextLines(ctx, this.buttons[i].text, null, Utils.getFontSize(ctx))["height"] + 8;
+            heightButtons += Utils.wrapTextLines(ctx, this.buttons[i].text, null, this.fontSize, this.fontFamily)["height"] + 8;
           } else {
             heightButtons += this.buttons[i].height + 5;
           }
@@ -86,7 +88,7 @@ export default class Menu {
       }
     
       const totalHeight = heightText + heightButtons;
-      const startY = ctx.canvas.height / 2 - totalHeight / 2 + 16;
+      const startY = (ctx.canvas.height - totalHeight) / 2 + 16;
       let currentY = startY + heightText;
     
       Utils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);

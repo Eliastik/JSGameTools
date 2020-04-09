@@ -71,10 +71,12 @@ function draw() {
       buttonText.disable();
       buttonText2.disable();
       buttonImage.disable();
+      buttonTextFullscreen.disable();
     } else {
       buttonText.enable();
       buttonText2.enable();
       buttonImage.enable();
+      buttonTextFullscreen.enable();
     }
 
     draw();
@@ -82,7 +84,6 @@ function draw() {
 }
 
 imageLoader.load(["pause.png"], () => {
-  ctx.font = "32px sans-serif";
   buttonImage.loadImage(imageLoader);
   draw();
 });

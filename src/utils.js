@@ -193,7 +193,10 @@ export default {
 
     return text;
   },
-  wrapTextLines: function(ctx, text, width, fontSize) {
+  wrapTextLines: function(ctx, text, width, fontSize, fontFamily) {
+    ctx.save();
+    ctx.font = fontSize + "px " + fontFamily;
+
     const lines = text.split("\n");
     let newText = "";
     const widthCar = width || ctx.measureText("A").width;
@@ -212,6 +215,8 @@ export default {
         heightTotal += parseFloat(fontSize);
       }
     }
+
+    ctx.restore();
 
     return {
       text: newText,

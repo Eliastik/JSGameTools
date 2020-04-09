@@ -32,7 +32,8 @@ class Button {
     this.clicked = false;
     this.hovered = false;
     this.text = text;
-    this.fontSize = fontSize || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
+    this.fontSizeInitial = fontSize;
+    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.fontColor = fontColor || "white";
     this.color = color || "rgba(0, 0, 0, 0)";
@@ -56,7 +57,7 @@ class Button {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    this.fontSize = Utils.getFontSize(ctx);
+    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
 
     ctx.font = this.fontSize + "px " + this.fontFamily;
     const textSize = ctx.measureText(this.text);
@@ -77,7 +78,7 @@ class Button {
         this.height = imgHeight * 1.5;
       }
     } else if(this.text != null) {
-      const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize);
+      const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily);
       const heightText = textWrapped["height"];
 
       if(this.autoWidth) {
