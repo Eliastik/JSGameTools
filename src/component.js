@@ -109,6 +109,10 @@ export default class ClickableComponent {
   isInside(pos) {
     return pos.x > this.x && pos.x < this.x + this.width && pos.y < this.y + this.height && pos.y > this.y;
   }
+
+  setClickAction(trigger) {
+    this.triggersClick = [trigger];
+  }
   
   addClickAction(trigger) {
     this.triggersClick.push(trigger);
@@ -121,8 +125,12 @@ export default class ClickableComponent {
   removeAllClickActions() {
     this.triggersClick = [];
   }
+
+  setHoverAction(trigger) {
+    this.triggersHover = [trigger];
+  }
   
-  addMouseOverAction(trigger) {
+  addHoverAction(trigger) {
     this.triggersHover.push(trigger);
   }
   
@@ -133,8 +141,12 @@ export default class ClickableComponent {
   removeAllHoverActions() {
     this.triggersHover = [];
   }
+
+  setDownAction(trigger) {
+    this.triggersDown = [trigger];
+  }
   
-  addMouseDownAction(trigger) {
+  addDownAction(trigger) {
     this.triggersDown.push(trigger);
   }
   
