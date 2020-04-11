@@ -21,7 +21,7 @@ import Utils from "./utils";
 import Component from "./component";
 
 export default class Label extends Component {
-  constructor(text, x, y, color, size, fontFamily, alignement, verticalAlignement, wrap, bold, underline) {
+  constructor(text, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
     super(x, y, 0, 0);
 
     this.text = text;
@@ -45,7 +45,7 @@ export default class Label extends Component {
     const sizes = Utils.drawText(ctx, this.text, this.color, this.size, this.fontFamily, this.alignement, this.verticalAlignement, this.initialX, this.initialY, this.wrap, this.bold, this.underline);
 
     this.x = sizes["x"];
-    this.y = sizes["y"];
+    this.y = sizes["y"] - this.size;
     this.height = sizes["height"];
     this.width = sizes["width"];
 

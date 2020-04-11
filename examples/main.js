@@ -57,6 +57,10 @@ buttonMenu5.addClickAction(() => {
   notification2.open();
 });
 
+link1.addClickAction(() => {
+  notification.open();
+});
+
 function draw() {
   requestAnimationFrame(() => {
     ctx.fillStyle = "#888888";
@@ -66,10 +70,10 @@ function draw() {
     buttonText2.draw(ctx);
     buttonTextFullscreen.draw(ctx);
     buttonImage.draw(ctx);
-    notification.draw(ctx);
     textField.draw(ctx);
     label1.draw(ctx);
     link1.draw(ctx);
+    notification.draw(ctx);
     menu.draw(ctx);
     notification2.draw(ctx);
 

@@ -19,10 +19,11 @@
 import Label from "./label";
 
 export default class Link extends Label {
-  constructor(text, x, y, color, colorHover, size, fontFamily, alignement, verticalAlignement, wrap, bold, underline) {
-    super(text, x, y, color || "#0000EE", size, fontFamily, alignement, verticalAlignement, wrap, bold, underline || true);
-    
+  constructor(text, x, y, size, fontFamily, color, colorHover, colorDown, alignement, verticalAlignement, wrap, bold, underline) {
+    super(text, x, y, size, fontFamily, color || "#0000EE", alignement, verticalAlignement, wrap, bold, underline || true);
+
     this.colorHover = colorHover || "#4D4DFF";
+    this.colorDown = colorDown || "#EE7700";
     this.initialColor = this.color;
     this.initialUnderline = this.underline;
   }
@@ -32,7 +33,11 @@ export default class Link extends Label {
 
     const canvas = context.canvas;
 
-    if(this.hovered) {
+    if(this.clicked) {
+      this.underline = false;
+      this.color = this.colorDown;
+      canvas.style.cursor = "pointer";
+    } else if(this.hovered) {
       this.underline = false;
       this.color = this.colorHover;
       canvas.style.cursor = "pointer";

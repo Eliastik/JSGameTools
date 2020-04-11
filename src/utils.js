@@ -88,6 +88,7 @@ export default {
 
     if(!Array.isArray(color)) {
       ctx.fillStyle = color;
+      ctx.strokeStyle = color;
     }
 
     ctx.font = (bold ? "bold " : "") + size + "px " + fontFamily;
