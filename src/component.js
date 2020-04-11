@@ -35,6 +35,8 @@ export default class Component {
     this.clicked = false;
     this.hovered = false;
     this.disabled = false;
+
+    this.tooltip;
   }
 
   draw(context) {
@@ -42,24 +44,33 @@ export default class Component {
     const ctx = canvas.getContext("2d");
 
     if(!this.initEvent && ctx != null) {
-      ctx.canvas.addEventListener("mousemove", event => {
+      canvas.addEventListener("mousemove", event => {
         if(!this.disabled) {
-          if(this.isInside(this.getMousePos(ctx.canvas, event))) {
+          if(this.isInside(this.getMousePos(canvas, event))) {
             if(this.triggersHover != null && !this.disabled) {
               this.triggersHover.forEach(trigger => trigger());
+            }
+
+            if(this.tooltip) {
+              const mousePosition = this.getMousePos(canvas, event);
+              this.tooltip.x = mousePosition.x;
+              this.tooltip.y = mousePosition.y;
+              this.tooltip.disabled = false;
             }
             
             this.hovered = true;
           } else {
             this.hovered = false;
+            if(this.tooltip) this.tooltip.disabled = true;
           }
         } else {
           this.hovered = false;
           this.clicked = false;
+          if(this.tooltip) this.tooltip.disabled = true;
         }
       }, false);
       
-      ctx.canvas.addEventListener("click", event => {
+      canvas.addEventListener("click", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(canvas, event))) {
             if(this.triggersClick != null) {
@@ -77,7 +88,7 @@ export default class Component {
         }
       }, false);
       
-      ctx.canvas.addEventListener("mousedown", event => {
+      canvas.addEventListener("mousedown", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(canvas, event))) {
             if(this.triggersDown != null) {
@@ -94,7 +105,7 @@ export default class Component {
         }
       }, false);
       
-      ctx.canvas.addEventListener("mouseup", () => {
+      canvas.addEventListener("mouseup", () => {
         this.clicked = false;
       }, false);
     }

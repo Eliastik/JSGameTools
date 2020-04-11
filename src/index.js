@@ -25,5 +25,6 @@ import Menu from "./menu";
 import Input from "./input";
 import Label from "./label";
 import Link from "./link";
+import Tooltip from "./tooltip";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip };

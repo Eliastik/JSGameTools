@@ -35,7 +35,9 @@ const menu = new JSGameTools.Menu([buttonMenu1, buttonMenu5, buttonMenu2, button
 const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)");
 const textField = new JSGameTools.Input(5, 250, 150);
 const label1 = new JSGameTools.Label("A label", 5, 325);
-const link1 = new JSGameTools.Link("A link", 5, 375);
+const link1 = new JSGameTools.Link("A long link", 5, 375);
+const tooltip1 = new JSGameTools.Tooltip("Test\nSecond line");
+label1.tooltip = tooltip1;
 
 buttonText.addClickAction(() => {
   notification.open();
@@ -74,6 +76,7 @@ function draw() {
     label1.draw(ctx);
     link1.draw(ctx);
     notification.draw(ctx);
+    tooltip1.draw(ctx);
     menu.draw(ctx);
     notification2.draw(ctx);
 
