@@ -53,8 +53,8 @@ export default class Component {
 
             if(this.tooltip) {
               const mousePosition = this.getMousePos(canvas, event);
-              this.tooltip.x = mousePosition.x;
-              this.tooltip.y = mousePosition.y;
+              this.tooltip.x = mousePosition.x + 10;
+              this.tooltip.y = mousePosition.y + 10;
               this.tooltip.disabled = false;
             }
             

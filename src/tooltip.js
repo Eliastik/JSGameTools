@@ -21,15 +21,17 @@ import Utils from "./utils";
 import Component from "./component";
 
 export default class Tooltip extends Component {
-  constructor(text, backgroundColor, fontColor, fontSize, fontFamily, wrap) {
+  constructor(text, fontSize, fontFamily, backgroundColor, fontColor, wrap, bold, underline) {
     super(0, 0, 0, 0);
 
     this.text = text;
-    this.backgroundColor = backgroundColor || "rgba(255, 255, 255, 0.15)";
+    this.backgroundColor = backgroundColor || "rgba(255, 255, 255, 0.25)";
     this.fontColor = fontColor || "#FFFFFF";
     this.fontSize = fontSize || Constants.Setting.FONT_SIZE;
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.wrap = wrap || true;
+    this.bold = bold || false;
+    this.underline = underline || false;
     this.disabled = true;
   }
 
@@ -40,11 +42,19 @@ export default class Tooltip extends Component {
       const canvas = context.canvas;
       const ctx = canvas.getContext("2d");
       ctx.save();
+
+      if(this.x + this.width + 10 > canvas.width) {
+        this.x -= (this.width + 10);
+      }
+
+      if(this.y + this.height + 10 > canvas.height) {
+        this.y -= (this.height + 10);
+      }
   
       ctx.fillStyle = this.backgroundColor;
-      ctx.fillRect(this.x, this.y - this.fontSize, this.width + 10, this.height + 10);
+      ctx.fillRect(this.x, this.y, this.width + 10, this.height + 10);
   
-      const sizes = Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, null, null, this.x + 5, this.y, this.wrap);
+      const sizes = Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, null, null, this.x + 5, this.y + this.fontSize, this.wrap, this.bold, this.underline);
       this.width = sizes["width"];
       this.height = sizes["height"];
   

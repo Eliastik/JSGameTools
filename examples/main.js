@@ -36,7 +36,7 @@ const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46,
 const textField = new JSGameTools.Input(5, 250, 150);
 const label1 = new JSGameTools.Label("A label", 5, 325);
 const link1 = new JSGameTools.Link("A long link", 5, 375);
-const tooltip1 = new JSGameTools.Tooltip("Test\nSecond line");
+const tooltip1 = new JSGameTools.Tooltip("A tooltip\nSecond line");
 label1.tooltip = tooltip1;
 
 buttonText.addClickAction(() => {
