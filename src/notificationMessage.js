@@ -19,9 +19,12 @@
 import Constants from "./constants";
 import { Button } from "./button";
 import Utils from "./utils";
+import Component from "./component";
 
-export default class NotificationMessage {
+export default class NotificationMessage extends Component {
   constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation, closeButton) {
+    super(0, 0, 0, 0);
+
     this.text = text;
     this.textColor = textColor == undefined ? "rgba(255, 255, 255, 0.75)" : textColor;
     this.backgroundColor = backgroundColor == undefined ? "rgba(46, 204, 113, 0.5)" : backgroundColor;
@@ -33,7 +36,6 @@ export default class NotificationMessage {
     this.foreGround = foreGround == undefined ? false : foreGround;
     this.timeLastFrame = 0;
     this.animationTime = 0;
-    this.init = false;
     this.closed = true;
     this.closing = false;
     this.disableAnimation = disableAnimation == undefined ? false : disableAnimation;
@@ -42,6 +44,8 @@ export default class NotificationMessage {
   
   draw(context, closeButton) {
     if(this.text != null) {
+      super.draw(context);
+
       const canvas = context.canvas;
       const ctx = canvas.getContext("2d");
 

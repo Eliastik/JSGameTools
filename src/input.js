@@ -18,9 +18,9 @@
  */
 import Constants from "./constants";
 import Utils from "./utils";
-import ClickableComponent from "./clickableComponent";
+import Component from "./component";
 
-export default class Input extends ClickableComponent {
+export default class Input extends Component {
   constructor(x, y, width, height, fontSize, fontFamily, backgroundColor, borderColor, fontColor, defaultText) {
     super(x, y, width, height);
     
@@ -58,7 +58,7 @@ export default class Input extends ClickableComponent {
     ctx.lineWidth = 3;
     ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
       
-    Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, "default", "default", this.x + 5, this.y + this.fontSize, true);
+    Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, "default", "default", this.x + 5, this.y + this.fontSize, false);
 
     ctx.restore();
   }

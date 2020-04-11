@@ -25,9 +25,10 @@ export default class ClickableComponent {
     this.width = width;
     this.height = height;
     
-    this.triggerClick;
-    this.triggerHover;
-    this.triggerDown;
+    this.triggersClick = [];
+    this.triggersHover = [];
+    this.triggersDown = [];
+    this.initEvents = false;
     this.selected = false;
     this.clicked = false;
     this.hovered = false;
@@ -38,12 +39,12 @@ export default class ClickableComponent {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
 
-    if(!this.init && ctx != null) {
+    if(!this.initEvent && ctx != null) {
       ctx.canvas.addEventListener("mousemove", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(ctx.canvas, event))) {
-            if(this.triggerHover != null && !this.disabled) {
-              this.triggerHover();
+            if(this.triggersHover != null && !this.disabled) {
+              this.triggersHover.forEach(trigger => trigger());
             }
             
             this.hovered = true;
@@ -59,8 +60,8 @@ export default class ClickableComponent {
       ctx.canvas.addEventListener("click", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(canvas, event))) {
-            if(this.triggerClick != null) {
-              this.triggerClick();
+            if(this.triggersClick != null) {
+              this.triggersClick.forEach(trigger => trigger());
             }
           } else {
             this.clicked = false;
@@ -74,8 +75,8 @@ export default class ClickableComponent {
       ctx.canvas.addEventListener("mousedown", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(canvas, event))) {
-            if(this.triggerDown != null) {
-              this.triggerDown();
+            if(this.triggersDown != null) {
+              this.triggersDown.forEach(trigger => trigger());
             }
             
             this.clicked = true;
@@ -93,7 +94,7 @@ export default class ClickableComponent {
       }, false);
     }
 
-    this.init = true;
+    this.initEvent = true;
   }
   
   getMousePos(canvas, event) {
@@ -110,26 +111,38 @@ export default class ClickableComponent {
   }
   
   addClickAction(trigger) {
-    this.triggerClick = trigger;
+    this.triggersClick.push(trigger);
   }
   
-  removeClickAction() {
-    this.triggerClick = null;
+  removeClickAction(trigger) {
+    this.triggersClick = this.triggersClick.filter(elem => elem != trigger);
+  }
+
+  removeAllClickActions() {
+    this.triggersClick = [];
   }
   
   addMouseOverAction(trigger) {
-    this.triggerHover = trigger;
+    this.triggersHover.push(trigger);
   }
   
-  removeHoverAction() {
-    this.triggerHover = null;
+  removeHoverAction(trigger) {
+    this.triggersHover = this.triggersHover.filter(elem => elem != trigger);
+  }
+
+  removeAllHoverActions() {
+    this.triggersHover = [];
   }
   
   addMouseDownAction(trigger) {
-    this.triggerDown = trigger;
+    this.triggersDown.push(trigger);
   }
   
-  removeDownAction() {
-    this.triggerDown = null;
+  removeDownAction(trigger) {
+    this.triggersDown = this.triggersDown.filter(elem => elem != trigger);
+  }
+
+  removeAllDownActions() {
+    this.triggersDown = [];
   }
 }

@@ -18,9 +18,9 @@
  */
 import Constants from "./constants";
 import Utils from "./utils";
-import ClickableComponent from "./clickableComponent";
+import Component from "./component";
 
-class Button extends ClickableComponent {
+class Button extends Component {
   constructor(text, x, y, alignement, color, colorHover, colorDown, width, height, fontSize, fontFamily, fontColor, imgSrc, imageLoader, verticalAlignement) {
     super(x, y, width, height);
     this.autoWidth = (this.width == undefined ? true : false);

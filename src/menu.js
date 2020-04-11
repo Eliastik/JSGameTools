@@ -18,9 +18,12 @@
  */
 import Constants from "./constants";
 import Utils from "./utils";
+import Component from "./component";
 
-export default class Menu {
+export default class Menu extends Component {
   constructor(buttons, text, colors, fontSize, fontFamily, alignement, x, backgroundColor, blurCanvas) {
+    super(0, 0, 0, 0);
+
     this.buttons = buttons;
     this.text = text;
     this.colors = colors || "#FFFFFF";
@@ -34,10 +37,11 @@ export default class Menu {
     this.disabled = true;
     this.lastKey = this.lastKey == undefined ? -1 : this.lastKey;
     this.selectedButton = this.selectedButton == undefined ? 0 : this.selectedButton;
-    this.init = this.init == undefined ? false : this.init;
   }
 
   draw(context) {
+    super.draw(context);
+
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
 
@@ -106,10 +110,10 @@ export default class Menu {
           this.buttons[i].enable();
           this.buttons[i].draw(ctx);
     
-          if(this.selectedButton == i && this.lastKey == Constants.Key.ENTER && this.buttons[i].triggerClick != null && !this.buttons[i].disabled) {
+          if(this.selectedButton == i && this.lastKey == Constants.Key.ENTER && this.buttons[i].triggersClick != null && this.buttons[i].triggersClick.length > 0 && !this.buttons[i].disabled) {
             this.lastKey = -1;
             this.selectedButton = 0;
-            this.buttons[i].triggerClick();
+            this.buttons[i].triggersClick.forEach(trigger => trigger());
             break;
           }
     
