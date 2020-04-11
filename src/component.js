@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-export default class ClickableComponent {
+export default class Component {
   constructor(x, y, width, height) {
     this.x = x || 0;
     this.y = y || 0;
@@ -28,11 +28,13 @@ export default class ClickableComponent {
     this.triggersClick = [];
     this.triggersHover = [];
     this.triggersDown = [];
+
+    this.init = false;
     this.initEvents = false;
     this.selected = false;
     this.clicked = false;
     this.hovered = false;
-    this.init = false;
+    this.disabled = false;
   }
 
   draw(context) {
@@ -63,8 +65,11 @@ export default class ClickableComponent {
             if(this.triggersClick != null) {
               this.triggersClick.forEach(trigger => trigger());
             }
+
+            this.selected = true;
           } else {
             this.clicked = false;
+            this.selected = false;
           }
         } else {
           this.hovered = false;
@@ -108,6 +113,14 @@ export default class ClickableComponent {
   
   isInside(pos) {
     return pos.x > this.x && pos.x < this.x + this.width && pos.y < this.y + this.height && pos.y > this.y;
+  }
+  
+  disable() {
+    this.disabled = true;
+  }
+  
+  enable() {
+    this.disabled = false;
   }
 
   setClickAction(trigger) {

@@ -34,6 +34,8 @@ const buttonMenu4 = new JSGameTools.Button("Close (centered)", 5, 5, "center", "
 const menu = new JSGameTools.Menu([buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4], "Pause menu\nYou can use the arrow keys, press enter to select");
 const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)");
 const textField = new JSGameTools.Input(5, 250, 150);
+const label1 = new JSGameTools.Label("A label", 5, 325);
+const link1 = new JSGameTools.Link("A link", 5, 375);
 
 buttonText.addClickAction(() => {
   notification.open();
@@ -65,20 +67,24 @@ function draw() {
     buttonTextFullscreen.draw(ctx);
     buttonImage.draw(ctx);
     notification.draw(ctx);
+    textField.draw(ctx);
+    label1.draw(ctx);
+    link1.draw(ctx);
     menu.draw(ctx);
     notification2.draw(ctx);
-    textField.draw(ctx);
 
     if(!menu.disabled) {
       buttonText.disable();
       buttonText2.disable();
       buttonImage.disable();
       buttonTextFullscreen.disable();
+      textField.disable();
     } else {
       buttonText.enable();
       buttonText2.enable();
       buttonImage.enable();
       buttonTextFullscreen.enable();
+      textField.enable();
     }
 
     draw();

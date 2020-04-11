@@ -23,5 +23,7 @@ import NotificationMessage from "./notificationMessage";
 import Utils from "./utils";
 import Menu from "./menu";
 import Input from "./input";
+import Label from "./label";
+import Link from "./link";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link };

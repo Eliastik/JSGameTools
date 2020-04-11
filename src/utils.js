@@ -83,7 +83,7 @@ export default {
       ctx.restore();
     }
   },
-  drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold) {
+  drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold, underline) {
     ctx.save();
 
     if(!Array.isArray(color)) {
@@ -98,6 +98,9 @@ export default {
     }
     
     const lines = text.split("\n");
+    let maxWidth = 0;
+    let xCurrent = 0;
+    let yFirst = 0;
 
     if(verticalAlignement == "center") {
       y = (ctx.canvas.height / 2) - (size * lines.length / 2);
@@ -109,6 +112,8 @@ export default {
 
     for(let i = 0; i < lines.length; i++) {
       const currentText = lines[i];
+      const currentWidth = ctx.measureText(currentText).width;
+      let yCurrent = 0;
 
       if(Array.isArray(color)) {
         let colorIndex = i;
@@ -118,25 +123,44 @@ export default {
         }
 
         ctx.fillStyle = color[colorIndex];
+        ctx.strokeStyle = color[colorIndex];
       }
 
       if(alignement == "center") {
-        ctx.fillText(currentText, Math.round((ctx.canvas.width / 2) - (ctx.measureText(currentText).width / 2)), Math.round(y + (size * i)));
+        xCurrent = Math.round((ctx.canvas.width / 2) - (ctx.measureText(currentText).width / 2));
+        yCurrent = Math.round(y + (size * i));
       } else if(alignement == "right") {
-        ctx.fillText(currentText, Math.round((ctx.canvas.width) - (ctx.measureText(currentText).width) - 15), Math.round(y + (size * i)));
+        xCurrent = Math.round((ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
+        yCurrent = Math.round(y + (size * i));
       } else if(alignement == "left") {
-        ctx.fillText(currentText, 5, Math.round(y + (size * i)));
+        xCurrent = 5;
+        yCurrent = Math.round(y + (size * i));
       } else {
-        ctx.fillText(currentText, Math.round(x), Math.round(y + (size * i)));
+        xCurrent = Math.round(x);
+        yCurrent = Math.round(y + (size * i));
       }
+
+      ctx.fillText(currentText, xCurrent, yCurrent);
+
+      if(underline) {
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(xCurrent, yCurrent + 3);
+        ctx.lineTo(Math.round(xCurrent + currentWidth), yCurrent + 3);
+        ctx.stroke();
+      }
+
+      if(currentWidth > maxWidth) maxWidth = currentWidth;
+      if(i == 0) yFirst = yCurrent;
     }
 
     ctx.restore();
 
     return {
-      x: x,
-      y: y,
-      height: size * lines.length
+      x: xCurrent,
+      y: yFirst,
+      height: size * lines.length,
+      width: maxWidth
     };
   },
   drawTextBitmap: function(ctx, bitmapFontSet, text, size, x, y, wrap) {

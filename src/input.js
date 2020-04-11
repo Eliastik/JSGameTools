@@ -21,7 +21,7 @@ import Utils from "./utils";
 import Component from "./component";
 
 export default class Input extends Component {
-  constructor(x, y, width, height, fontSize, fontFamily, backgroundColor, borderColor, fontColor, defaultText) {
+  constructor(x, y, width, height, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, defaultText) {
     super(x, y, width, height);
     
     this.text = defaultText || "";
@@ -32,6 +32,8 @@ export default class Input extends Component {
     this.fontColor = fontColor || "#000000";
     this.backgroundColor = backgroundColor || "#ffffff";
     this.borderColor = borderColor || "#000000";
+    this.borderColorHover = borderColorHover || "#a2cdd8";
+    this.borderSize = borderSize || 3;
     this.disabled = false;
 
     this.input = document.createElement("input");
@@ -41,7 +43,7 @@ export default class Input extends Component {
     this.input.addEventListener("input", () => this.text = this.input.value);
     document.body.appendChild(this.input);
 
-    super.triggerClick = this.click;
+    super.addClickAction(() => this.click());
   }
 
   draw(context) {
@@ -54,8 +56,8 @@ export default class Input extends Component {
     ctx.fillStyle = this.backgroundColor;
     ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
       
-    ctx.strokeStyle = this.borderColor;
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = this.selected ? this.borderColorHover : this.borderColor;
+    ctx.lineWidth = this.borderSize;
     ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
       
     Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, "default", "default", this.x + 5, this.y + this.fontSize, false);
