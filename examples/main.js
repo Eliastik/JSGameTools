@@ -32,12 +32,16 @@ const buttonMenu2 = new JSGameTools.Button("Another button, aligned to the right
 const buttonMenu3 = new JSGameTools.Button("A long buttonnnnnnnnnnnnnnnnnnnnnnnnnn", 5, 5, "right", "#2ecc71", "#1abc9c", "#16a085");
 const buttonMenu4 = new JSGameTools.Button("Close (centered)", 5, 5, "center", "#CC2F2F", "#F23838", "#A62626");
 const menu = new JSGameTools.Menu([buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4], "Pause menu\nYou can use the arrow keys, press enter to select");
-const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)");
+const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)", null, null, null, null, true);
 const textField = new JSGameTools.Input(5, 250, 150);
 const label1 = new JSGameTools.Label("A label", 5, 325);
 const link1 = new JSGameTools.Link("A long link", 5, 375);
 const tooltip1 = new JSGameTools.Tooltip("A tooltip\nSecond line");
 label1.tooltip = tooltip1;
+const tooltip2 = new JSGameTools.Tooltip("A tooltip .... .. .. ...... Autowrap\nNew line");
+buttonText2.tooltip = tooltip2;
+
+const scene = new JSGameTools.Scene(buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2);
 
 buttonText.addClickAction(() => {
   notification.open();
@@ -67,33 +71,7 @@ function draw() {
   requestAnimationFrame(() => {
     ctx.fillStyle = "#888888";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    buttonText.draw(ctx);
-    buttonText2.draw(ctx);
-    buttonTextFullscreen.draw(ctx);
-    buttonImage.draw(ctx);
-    textField.draw(ctx);
-    label1.draw(ctx);
-    link1.draw(ctx);
-    notification.draw(ctx);
-    tooltip1.draw(ctx);
-    menu.draw(ctx);
-    notification2.draw(ctx);
-
-    if(!menu.disabled) {
-      buttonText.disable();
-      buttonText2.disable();
-      buttonImage.disable();
-      buttonTextFullscreen.disable();
-      textField.disable();
-    } else {
-      buttonText.enable();
-      buttonText2.enable();
-      buttonImage.enable();
-      buttonTextFullscreen.enable();
-      textField.enable();
-    }
-
+    scene.draw(ctx);
     draw();
   });
 }
