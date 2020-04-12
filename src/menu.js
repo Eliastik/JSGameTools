@@ -21,22 +21,18 @@ import Utils from "./utils";
 import Component from "./component";
 
 export default class Menu extends Component {
-  constructor(buttons, text, colors, fontSize, fontFamily, alignement, x, backgroundColor, blurCanvas) {
+  #components = [];
+
+  constructor(backgroundColor, blurCanvas, ...components) {
     super(0, 0, 0, 0);
 
-    this.buttons = buttons;
-    this.text = text;
-    this.colors = colors || "#FFFFFF";
-    this.fontSizeInitial = fontSize;
-    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
-    this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
-    this.alignement = alignement || "center";
-    this.x = x || 0;
-    this.backgroundColor = backgroundColor == undefined ? "rgba(44, 62, 80, 0.75)" : backgroundColor;
-    this.blurCanvas = blurCanvas == undefined ? false : blurCanvas;
-    this.disabled = true;
+    this.addAll(...components);
+    this.backgroundColor = backgroundColor || "rgba(44, 62, 80, 0.75)";
+    this.blurCanvas = blurCanvas || false;
     this.lastKey = this.lastKey == undefined ? -1 : this.lastKey;
-    this.selectedButton = this.selectedButton == undefined ? 0 : this.selectedButton;
+    this.selectedComponent = this.selectedComponent == undefined ? 0 : this.selectedComponent;
+
+    this.disable();
   }
 
   draw(context) {
@@ -66,75 +62,90 @@ export default class Menu extends Component {
       ctx.fillStyle = this.backgroundColor;
       ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
-      const heightText = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily)["height"];
-      let heightButtons = 0;
+      let totalHeight = 0;
     
-      if(this.buttons != null) {
+      if(this.#components != null) {
         if(this.lastKey == Constants.Key.UP) {
-          this.selectedButton--;
+          this.selectedComponent--;
         } else if(this.lastKey == Constants.Key.BOTTOM) {
-          this.selectedButton++;
+          this.selectedComponent++;
         }
     
-        if(this.selectedButton >= this.buttons.length) {
-          this.selectedButton = 0;
-        } else if(this.selectedButton < 0) {
-          this.selectedButton = this.buttons.length - 1;
+        if(this.selectedComponent >= this.#components.length) {
+          this.selectedComponent = 0;
+        } else if(this.selectedComponent < 0) {
+          this.selectedComponent = this.#components.length - 1;
         }
     
-        for(let i = 0; i < this.buttons.length; i++) {
-          if(this.buttons[i].autoHeight) {
-            heightButtons += Utils.wrapTextLines(ctx, this.buttons[i].text, null, this.fontSize, this.fontFamily)["height"] + 16;
-          } else {
-            heightButtons += this.buttons[i].height + 5;
+        this.#components.forEach(component => totalHeight += component.height + 8);
+    
+        const startY = (ctx.canvas.height - (totalHeight || 0)) / 2 + 8;
+        let currentY = startY || 0;
+
+        this.#components.forEach((component, i) => {
+          if(component instanceof Component) {
+            component.y = currentY;
+      
+            if(this.selectedComponent == i) {
+              component.selected = true;
+            } else {
+              component.selected = false;
+            }
+            
+            component.enable();
+            component.draw(ctx);
+      
+            if(this.selectedComponent == i && this.lastKey == Constants.Key.ENTER && component.triggersClick != null && component.triggersClick.length > 0 && !component.disabled) {
+              this.lastKey = -1;
+              this.selectedComponent = 0;
+              component.triggersClick.forEach(trigger => trigger());
+              return;
+            }
+      
+            currentY += component.height + 8;
           }
-        }
-      }
-    
-      const totalHeight = heightText + heightButtons;
-      const startY = (ctx.canvas.height - totalHeight) / 2 + 8;
-      let currentY = startY + heightText;
-    
-      Utils.drawText(ctx, this.text, this.colors, this.fontSize, this.fontFamily, this.alignement, "default", this.x, startY, true);
-    
-      if(this.buttons != null) {
-        for(let i = 0; i < this.buttons.length; i++) {
-          this.buttons[i].y = currentY;
-    
-          if(this.selectedButton == i) {
-            this.buttons[i].selected = true;
-          } else {
-            this.buttons[i].selected = false;
-          }
-    
-          this.buttons[i].enable();
-          this.buttons[i].draw(ctx);
-    
-          if(this.selectedButton == i && this.lastKey == Constants.Key.ENTER && this.buttons[i].triggersClick != null && this.buttons[i].triggersClick.length > 0 && !this.buttons[i].disabled) {
-            this.lastKey = -1;
-            this.selectedButton = 0;
-            this.buttons[i].triggersClick.forEach(trigger => trigger());
-            break;
-          }
-    
-          currentY += this.buttons[i].height + 8;
-        }
+        });
       }
       
       ctx.restore();
-    } else {
-      this.buttons.forEach(button => button.disable());
     }
   
     this.lastKey = -1;
   }
 
-  set(buttons, text, colors, alignement, x) {
-    this.buttons = buttons;
-    this.text = text;
-    this.colors = colors;
-    this.alignement = alignement || "center";
-    this.x = x || 0;
+  set(...components) {
+    this.clearComponents();
+    this.addAll(...components);
     this.enable();
+  }
+
+  add(component) {
+    this.addAll(component);
+  }
+
+  addAll(...components) {
+    components.forEach(component => this.#components.push(component));
+  }
+
+  remove(component) {
+    this.#components = this.#components.filter(current => component != current);
+  }
+
+  removeAll(...components) {
+    components.forEach(component => this.remove(component));
+  }
+
+  clear() {
+    this.#components = [];
+  }
+
+  disable() {
+    super.disable();
+    this.#components.forEach(component => component && component.disable && component.disable());
+  }
+
+  enable() {
+    super.enable();
+    this.#components.forEach(component => component && component.enable && component.enable());
   }
 }

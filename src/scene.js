@@ -50,9 +50,6 @@ export default class Scene extends Component {
       componentsBackground && componentsBackground.forEach(component => component.disable());
     } else {
       componentsBackground && componentsBackground.forEach(component => component.enable());
-      menus && menus.forEach(menu => {
-        menu.buttons.forEach(button => button.disable());
-      });
     }
 
     // Draw background components, background notifications and tooltips
@@ -81,5 +78,9 @@ export default class Scene extends Component {
 
   removeAll(...components) {
     components.forEach(component => this.remove(component));
+  }
+
+  clear() {
+    this.#components = [];
   }
 }
