@@ -44,7 +44,6 @@ export default class Link extends Label {
     } else {
       this.underline = this.initialUnderline;
       this.color = this.initialColor;
-      canvas.style.cursor = "default";
     }
 
     this.init = true;

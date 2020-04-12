@@ -36,6 +36,8 @@ export default class Scene extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
+    canvas.style.cursor = "default";
+
     const componentsBackground = this.#components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
     const menus = this.#components.filter(component => component  && component instanceof Menu)
     const menuOpened = menus.filter(menu => !menu.disabled)[0];

@@ -40,8 +40,9 @@ const tooltip1 = new JSGameTools.Tooltip("A tooltip\nSecond line");
 label1.tooltip = tooltip1;
 const tooltip2 = new JSGameTools.Tooltip("A tooltip .... .. .. ...... Autowrap\nNew line");
 buttonText2.tooltip = tooltip2;
+const fpsMeter = new JSGameTools.FPSMeter(false, null, null, null, null, null, "right", "bottom");
 
-const scene = new JSGameTools.Scene(buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2);
+const scene = new JSGameTools.Scene(buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2, fpsMeter);
 
 buttonText.addClickAction(() => {
   notification.open();

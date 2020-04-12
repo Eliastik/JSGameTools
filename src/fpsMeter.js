@@ -16,17 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Constants from "./constants";
-import { Button, ButtonImage } from "./button";
-import ImageLoader from "./imageLoader";
-import NotificationMessage from "./notificationMessage";
-import Utils from "./utils";
-import Menu from "./menu";
-import Input from "./input";
 import Label from "./label";
-import Link from "./link";
-import Tooltip from "./tooltip";
-import Scene from "./scene";
-import FPSMeter from "./fpsMeter";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter };
+export default class FPSMeter extends Label {
+  constructor(displayFrames, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
+    super(null, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline);
+
+    this.displayFrames = displayFrames || false;
+    this.frames = 0;
+    this.lastFrame = 0;
+    this.currentFPS = 0;
+
+    this.intervalCountFPS = setInterval(() => this.countFPS(), 1000);
+  }
+
+  draw(context) {
+    this.text = "FPS: " + this.currentFPS + (this.displayFrames ? " / Frames: " + this.frames : "");
+    super.draw(context);
+    this.frames++;
+  }
+
+  countFPS() {
+    if(this.lastFrame > 0) this.currentFPS = this.frames - this.lastFrame;
+    this.lastFrame = this.frames;
+  }
+}

@@ -62,6 +62,10 @@ export default class Input extends Component {
       
     Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, "default", "default", this.x + 5, this.y + this.fontSize, false);
 
+    if(this.hovered || this.clicked) {
+      canvas.style.cursor = "text";
+    }
+
     ctx.restore();
   }
 
