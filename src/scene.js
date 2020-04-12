@@ -37,7 +37,8 @@ export default class Scene extends Component {
     ctx.save();
 
     const componentsBackground = this.#components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
-    const menuOpened = this.#components.filter(component => component && component instanceof Menu && !component.disabled)[0];
+    const menus = this.#components.filter(component => component  && component instanceof Menu)
+    const menuOpened = menus.filter(menu => !menu.disabled)[0];
     const tooltips = this.#components.filter(component => component && component instanceof Tooltip);
     const notificationsBackground = this.#components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
     const notificationsForeground = this.#components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
@@ -47,6 +48,9 @@ export default class Scene extends Component {
       componentsBackground && componentsBackground.forEach(component => component.disable());
     } else {
       componentsBackground && componentsBackground.forEach(component => component.enable());
+      menus && menus.forEach(menu => {
+        menu.buttons.forEach(button => button.disable());
+      });
     }
 
     // Draw background components, background notifications and tooltips

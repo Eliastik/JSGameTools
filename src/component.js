@@ -110,6 +110,13 @@ export default class Component {
       }, false);
     }
 
+    if(this.disabled) {
+      this.selected = false;
+      this.clicked = false;
+      this.hovered = false;
+      if(this.tooltip) this.tooltip.disabled = true;
+    }
+
     this.initEvent = true;
   }
   

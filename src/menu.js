@@ -122,17 +122,11 @@ export default class Menu extends Component {
       }
       
       ctx.restore();
+    } else {
+      this.buttons.forEach(button => button.disable());
     }
   
     this.lastKey = -1;
-  }
-
-  disable() {
-    this.disabled = true;
-  }
-  
-  enable() {
-    this.disabled = false;
   }
 
   set(buttons, text, colors, alignement, x) {
