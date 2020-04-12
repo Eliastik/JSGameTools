@@ -22,10 +22,10 @@ import NotificationMessage from "./notificationMessage";
 import Tooltip from "./tooltip";
 
 export default class Scene extends Component {
+  #components = [];
+
   constructor(...components) {
     super(0, 0, 0, 0);
-
-    this.components = [];
     this.addAll(...components);
   }
 
@@ -36,11 +36,11 @@ export default class Scene extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    const componentsBackground = this.components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
-    const menuOpened = this.components.filter(component => component && component instanceof Menu && !component.disabled)[0];
-    const tooltips = this.components.filter(component => component && component instanceof Tooltip);
-    const notificationsBackground = this.components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
-    const notificationsForeground = this.components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
+    const componentsBackground = this.#components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
+    const menuOpened = this.#components.filter(component => component && component instanceof Menu && !component.disabled)[0];
+    const tooltips = this.#components.filter(component => component && component instanceof Tooltip);
+    const notificationsBackground = this.#components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
+    const notificationsForeground = this.#components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
 
     // Disable background components if a menu is opened
     if(menuOpened) {
@@ -66,6 +66,14 @@ export default class Scene extends Component {
   }
 
   addAll(...components) {
-    components.forEach(component => this.components.push(component));
+    components.forEach(component => this.#components.push(component));
+  }
+
+  remove(component) {
+    this.#components = this.#components.filter(current => component != current);
+  }
+
+  removeAll(...components) {
+    components.forEach(component => this.remove(component));
   }
 }
