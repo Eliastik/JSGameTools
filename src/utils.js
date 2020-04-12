@@ -16,8 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Constants from "./constants";
-
 export default {
   preRenderedFont: {},
   lastKey: -1,
@@ -163,45 +161,6 @@ export default {
       height: size * lines.length,
       width: maxWidth
     };
-  },
-  drawTextBitmap: function(ctx, bitmapFontSet, text, size, x, y, wrap) {
-    if(bitmapFontSet == undefined || bitmapFontSet == null) {
-      this.preRenderedFont = {};
-      this.preRenderFont(Constants.Setting.CARS_TO_PRERENDER, Constants.Setting.FONT_SIZE * 2, "white", Constants.Setting.FONT_FAMILY);
-      bitmapFontSet = this.preRenderedFont;
-    }
-
-    if(wrap) {
-      const testCar = bitmapFontSet["A"];
-      text = this.wrapTextLines(ctx, text, testCar.width * (size / testCar.height), size)["text"];
-    }
-
-    const lines = text.split("\n");
-    let currentY = y;
-
-    for(let i = 0; i < lines.length; i++) {
-      const currentText = lines[i];
-      let currentX = x;
-
-      for(let j = 0; j < currentText.length; j++) {
-        const currentCar = currentText.charAt(j);
-        let currentCarBitmap;
-
-        if(bitmapFontSet[currentCar] == undefined || bitmapFontSet[currentCar] == null) {
-          currentCarBitmap = bitmapFontSet["?"];
-        } else {
-          currentCarBitmap = bitmapFontSet[currentCar];
-        }
-
-        const widthBitmap = currentCarBitmap.width * (size / currentCarBitmap.height);
-        this.drawImageData(ctx, currentCarBitmap, currentX, currentY, widthBitmap, size, 0, 0, currentCarBitmap.width, currentCarBitmap.height);
-        currentX += widthBitmap;
-      }
-
-      if(currentText.length > 0) {
-        currentY += size;
-      }
-    }
   },
   wrapText: function(text, limit) {
     if(text.length > limit) {
