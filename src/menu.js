@@ -19,6 +19,7 @@
 import Constants from "./constants";
 import Utils from "./utils";
 import Component from "./component";
+import Label from "./label";
 
 export default class Menu extends Component {
   #components = [];
@@ -115,9 +116,15 @@ export default class Menu extends Component {
   }
 
   set(...components) {
-    this.clear();
-    this.addAll(...components);
-    this.enable();
+    if(Array.isArray(components[0])) {
+      this.clear();
+      this.addAll(new Label(components[1] || "", components[3], null, null, null, components[2], components[4] || "center"), ...components[0]);
+      this.enable();
+    } else {
+      this.clear();
+      this.addAll(...components);
+      this.enable();
+    }
   }
 
   add(component) {
