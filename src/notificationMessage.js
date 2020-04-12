@@ -17,12 +17,12 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Constants from "./constants";
-import { Button } from "./button";
+import { Button, ButtonImage } from "./button";
 import Utils from "./utils";
 import Component from "./component";
 
 export default class NotificationMessage extends Component {
-  constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation, closeButton) {
+  constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation) {
     super(0, 0, 0, 0);
 
     this.text = text;
@@ -39,10 +39,13 @@ export default class NotificationMessage extends Component {
     this.closed = true;
     this.closing = false;
     this.disableAnimation = disableAnimation == undefined ? false : disableAnimation;
-    this.closeButton = closeButton;
+
+    this.closeButton = new ButtonImage(null, null, 5, "right", null, 32, 32);
+    this.closeButton.image = new Image();
+    this.closeButton.image.src = Constants.Setting.CLOSE_ICON;
   }
   
-  draw(context, closeButton) {
+  draw(context) {
     if(this.text != null) {
       super.draw(context);
 
@@ -54,11 +57,9 @@ export default class NotificationMessage extends Component {
       if(!this.init) {
         this.timeLastFrame = Date.now();
       }
-  
-      this.closeButton = closeButton != null ? closeButton : this.closeButton;
       
       if(this.closeButton != null) {
-        this.closeButton.addClickAction(() => {
+        this.closeButton.setClickAction(() => {
           this.close();
         });
       }
@@ -104,15 +105,12 @@ export default class NotificationMessage extends Component {
   
         Utils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y + this.fontSize, true);
   
-        if(this.close != null && this.closeButton != null) {
-          this.closeButton.y = y + 5;
-        }
-  
         if(this.closeButton != null) {
+          this.closeButton.y = y + 5;
           this.closeButton.draw(ctx);
         }
   
-        this.disableCloseButton();
+        this.enableCloseButton();
       } else {
         this.disableCloseButton();
       }

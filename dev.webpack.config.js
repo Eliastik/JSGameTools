@@ -22,6 +22,14 @@ const config = {
             plugins: ["@babel/plugin-proposal-class-properties", "@babel/plugin-transform-runtime"]
           }
         }
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader'
+          },
+        ],
       }
     ]
   }

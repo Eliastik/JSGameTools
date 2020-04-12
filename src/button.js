@@ -132,7 +132,7 @@ class Button extends Component {
       const imgX = this.x + (this.width / 2) - (imgWidth / 2);
       const imgY = this.y + (this.height / 2) - (imgHeight / 2);
       
-      ctx.drawImage(this.image, Math.round(imgX), Math.round(imgY), Math.round(imgWidth), Math.round(imgHeight));
+      Utils.drawImage(ctx, this.image, Math.round(imgX), Math.round(imgY), Math.round(imgWidth), Math.round(imgHeight));
     } else if(this.text != null) {
       ctx.fillStyle = this.fontColor;
       
