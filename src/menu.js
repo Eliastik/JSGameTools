@@ -77,14 +77,15 @@ export default class Menu extends Component {
           this.selectedComponent = this.#components.length - 1;
         }
     
-        this.#components.forEach(component => totalHeight += component.height + 8);
+        this.#components.forEach(component => totalHeight += component.height);
     
-        const startY = (ctx.canvas.height - (totalHeight || 0)) / 2 + 8;
+        const startY = (ctx.canvas.height - (totalHeight || 0)) / 2;
         let currentY = startY || 0;
 
         this.#components.forEach((component, i) => {
           if(component instanceof Component) {
             component.y = currentY;
+            component.initialY = currentY;
       
             if(this.selectedComponent == i) {
               component.selected = true;
@@ -114,7 +115,7 @@ export default class Menu extends Component {
   }
 
   set(...components) {
-    this.clearComponents();
+    this.clear();
     this.addAll(...components);
     this.enable();
   }
