@@ -116,15 +116,9 @@ export default class Menu extends Component {
   }
 
   set(...components) {
-    if(Array.isArray(components[0])) {
-      this.clear();
-      this.addAll(new Label(components[1] || "", components[3], null, null, null, components[2], components[4] || "center"), ...components[0]);
-      this.enable();
-    } else {
-      this.clear();
-      this.addAll(...components);
-      this.enable();
-    }
+    this.clear();
+    this.addAll(...components);
+    this.enable();
   }
 
   add(component) {
