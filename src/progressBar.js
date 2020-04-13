@@ -65,11 +65,30 @@ export default class ProgressBar extends Component {
       this.lastTime = 0;
     }
 
+    let x = this.x;
+    let y = this.y;
+
+    if(this.alignement == "center") {
+      x = Math.round((ctx.canvas.width / 2) - (this.width / 2));
+    } else if(this.alignement == "right") {
+      x = Math.round((ctx.canvas.width) - (this.width - 15));
+    } else if(this.alignement == "left") {
+      x = 5;
+    }
+
+    if(this.verticalAlignement == "center") {
+      y = Math.round((ctx.canvas.height / 2) - (this.height / 2));
+    } else if(this.verticalAlignement == "top") {
+      y = 5;
+    } else if(this.verticalAlignement == "bottom") {
+      y = Math.round(ctx.canvas.height - this.height - 5);
+    }
+
     ctx.fillStyle = this.backgroundColor;
-    ctx.fillRect(this.x, this.y, this.width, this.height); // Background
+    ctx.fillRect(x, y, this.width, this.height); // Background
 
     ctx.fillStyle = this.foregroundColor;
-    ctx.fillRect(this.x, this.y, widthForeground, this.height); // Foreground
+    ctx.fillRect(x, y, widthForeground, this.height); // Foreground
 
     ctx.restore();
   }

@@ -102,11 +102,11 @@ export default {
     let yFirst = 0;
 
     if(verticalAlignement == "center") {
-      y = (ctx.canvas.height / 2) - (size * lines.length / 2);
+      y = Math.round((ctx.canvas.height / 2) - (size * lines.length / 2));
     } else if(verticalAlignement == "top") {
       y = 5;
     } else if(verticalAlignement == "bottom") {
-      y = (ctx.canvas.height) - (size * lines.length) / 2 - size / 5;
+      y = Math.round((ctx.canvas.height) - (size * lines.length) / 2 - size / 5);
     }
 
     for(let i = 0; i < lines.length; i++) {
