@@ -38,14 +38,17 @@ export default class Input extends Component {
     this.positionStart = 0;
     this.positionEnd = 0;
     this.offsetX = 0;
+    this.lastTime = 0;
+    this.totalTime = 0;
 
     this.input = document.createElement("input");
     this.input.setAttribute("type", "text");
     this.input.style.position = "absolute";
     this.input.style.left = "-9999px";
+    this.input.addEventListener("input", () => this.totalTime = 0);
     this.input.addEventListener("blur", () => this.selected = false);
     this.input.addEventListener("focus", () => this.selected = true);
-    document.body.appendChild(this.input);
+    document.body.appendChild(this.input); // TODO: fix input focus in fullscreen mode
 
     super.addClickAction(() => this.click());
   }
@@ -57,9 +60,18 @@ export default class Input extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
+    if(this.input.selectionEnd != this.positionEnd) this.totalTime = 0;
+
     this.text = this.input.value;
     this.positionStart = this.input.selectionStart;
     this.positionEnd = this.input.selectionEnd;
+
+    const time = Date.now();
+    let offsetTime = 0;
+
+    if(this.lastTime > 0) offsetTime = time - this.lastTime;
+    this.lastTime = time;
+    this.totalTime += offsetTime;
 
     ctx.fillStyle = this.backgroundColor;
     ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
@@ -82,12 +94,17 @@ export default class Input extends Component {
       }
 
       if(this.positionEnd == i + 1 && this.selected) {
-        ctxText.strokeStyle = this.borderColor;
-        ctxText.lineWidth = 1;
-        ctxText.beginPath();
-        ctxText.moveTo(currentX - this.offsetX, this.y + 3);
-        ctxText.lineTo(currentX - this.offsetX, this.y + this.fontSize);
-        ctxText.stroke();
+        if(this.totalTime <= 500) {
+          ctxText.strokeStyle = this.borderColor;
+          ctxText.lineWidth = 1;
+          ctxText.beginPath();
+          ctxText.moveTo(currentX - this.offsetX, this.y + 3);
+          ctxText.lineTo(currentX - this.offsetX, this.y + this.fontSize);
+          ctxText.stroke();
+        } else if(this.totalTime > 1000) {
+          this.totalTime = 0;
+        }
+
         this.offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
       }
     }
@@ -96,6 +113,10 @@ export default class Input extends Component {
 
     if(this.hovered || this.clicked) {
       canvas.style.cursor = "text";
+    }
+
+    if(!this.selected) {
+      this.totalTime = 0;
     }
 
     ctx.restore();
