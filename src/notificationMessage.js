@@ -23,7 +23,7 @@ import Component from "./component";
 
 export default class NotificationMessage extends Component {
   constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation) {
-    super(0, 0, 0, 0);
+    super(0, 0, 0, 0, disableAnimation);
 
     this.text = text;
     this.textColor = textColor == undefined ? "rgba(255, 255, 255, 0.75)" : textColor;
@@ -38,7 +38,6 @@ export default class NotificationMessage extends Component {
     this.animationTime = 0;
     this.closed = true;
     this.closing = false;
-    this.disableAnimation = disableAnimation == undefined ? false : disableAnimation;
 
     this.closeButton = new ButtonImage(null, null, 5, "right", null, 32, 32);
     this.closeButton.image = new Image();

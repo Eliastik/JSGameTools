@@ -19,7 +19,6 @@
 import Constants from "./constants";
 import Utils from "./utils";
 import Component from "./component";
-import Label from "./label";
 
 export default class Menu extends Component {
   #components = [];

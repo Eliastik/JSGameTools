@@ -41,8 +41,10 @@ label1.tooltip = tooltip1;
 const tooltip2 = new JSGameTools.Tooltip("A tooltip .... .. .. ...... Autowrap\nNew line");
 buttonText2.tooltip = tooltip2;
 const fpsMeter = new JSGameTools.FPSMeter(false, null, null, null, null, null, "right", "bottom");
+const progress = new JSGameTools.ProgressBar(300, 5, 200, 25, null, null, 0.25);
+progress.percent = 1;
 
-const scene = new JSGameTools.Scene(buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2, fpsMeter);
+const scene = new JSGameTools.Scene(buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2, fpsMeter, progress);
 
 buttonText.addClickAction(() => {
   notification.open();
@@ -80,4 +82,11 @@ function draw() {
 imageLoader.load(["pause.png"], () => {
   buttonImage.loadImage(imageLoader);
   draw();
+  setInterval(() => {
+    if(progress.percent < 1) {
+      progress.percent = 1;
+    } else if(progress.percent >= 1) {
+      progress.percent = 0.25;
+    }
+  }, 3000);
 });
