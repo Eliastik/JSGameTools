@@ -50,6 +50,8 @@ export default class Input extends Component {
     this.input.addEventListener("focus", () => this.selected = true);
     document.body.appendChild(this.input); // TODO: fix input focus in fullscreen mode
 
+    this.canvasTmp = document.createElement("canvas");
+
     super.addClickAction(() => this.click());
   }
 
@@ -80,10 +82,9 @@ export default class Input extends Component {
     ctx.lineWidth = this.borderSize;
     ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
 
-    const canvasText = document.createElement("canvas");
-    canvasText.width = canvas.width;
-    canvasText.height = canvas.height;
-    const ctxText = canvasText.getContext("2d");
+    this.canvasTmp.width = canvas.width;
+    this.canvasTmp.height = canvas.height;
+    const ctxText = this.canvasTmp.getContext("2d");
 
     let currentX = this.x + 5;
 
@@ -109,7 +110,7 @@ export default class Input extends Component {
       }
     }
 
-    Utils.drawImageData(ctx, canvasText, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2);
+    Utils.drawImageData(ctx, this.canvasTmp, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2);
 
     if(this.hovered || this.clicked) {
       canvas.style.cursor = "text";
