@@ -17,13 +17,15 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 export default class Component {
-  constructor(x, y, width, height, disableAnimation) {
+  constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation) {
     this.x = x || 0;
     this.y = y || 0;
     this.initialX = x;
     this.initialY = y;
     this.width = width;
     this.height = height;
+    this.alignement = alignement || "default";
+    this.verticalAlignement = verticalAlignement || "default";
     
     this.triggersClick = [];
     this.triggersHover = [];

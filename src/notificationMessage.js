@@ -23,7 +23,7 @@ import Component from "./component";
 
 export default class NotificationMessage extends Component {
   constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation) {
-    super(0, 0, 0, 0, disableAnimation);
+    super(0, 0, 0, 0, null, null, disableAnimation);
 
     this.text = text;
     this.textColor = textColor == undefined ? "rgba(255, 255, 255, 0.75)" : textColor;

@@ -24,8 +24,8 @@ export default class ProgressBar extends Component {
   #precPercent = 0;
   #animationPercent = 0;
 
-  constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation) {
-    super(x, y, width, height, disableAnimation);
+  constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation, alignement, verticalAlignement) {
+    super(x, y, width, height, alignement, verticalAlignement, disableAnimation);
 
     this.backgroundColor = backgroundColor || "#bdc3c7";
     this.foregroundColor = foregroundColor || "#27ae60";

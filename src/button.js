@@ -22,7 +22,7 @@ import Component from "./component";
 
 class Button extends Component {
   constructor(text, x, y, alignement, color, colorHover, colorDown, width, height, fontSize, fontFamily, fontColor, imgSrc, imageLoader, verticalAlignement) {
-    super(x, y, width, height);
+    super(x, y, width, height, alignement, verticalAlignement);
     this.autoWidth = (this.width == undefined ? true : false);
     this.autoHeight = (this.height == undefined ? true : false);
     this.text = text;
@@ -33,10 +33,8 @@ class Button extends Component {
     this.color = color || "rgba(0, 0, 0, 0)";
     this.colorHover = colorHover || "#95a5a6";
     this.colorDown = colorDown || "#727F80"
-    this.alignement = alignement || "default";
     this.image;
     this.imgSrc = imgSrc;
-    this.verticalAlignement = verticalAlignement || "default";
     this.imageLoader = imageLoader;
   }
   
