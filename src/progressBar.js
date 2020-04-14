@@ -47,7 +47,8 @@ export default class ProgressBar extends Component {
     const time = Date.now();
     let offsetTime = 0;
 
-    const widthForeground = Math.round(Math.min(this.width, this.width * this.percent * (this.#precPercent != this.percent && !this.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1)));
+    const animationPercent = (this.#precPercent != this.percent && !this.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);
+    const widthForeground = Math.round(Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent)));
 
     if(this.#precPercent != this.percent && !this.disableAnimation) {
       if(this.lastTime > 0) offsetTime = time - this.lastTime;
@@ -69,19 +70,19 @@ export default class ProgressBar extends Component {
     let y = this.y;
 
     if(this.alignement == "center") {
-      x = Math.round((ctx.canvas.width / 2) - (this.width / 2));
+      x = Math.round((canvas.width / 2) - (this.width / 2));
     } else if(this.alignement == "right") {
-      x = Math.round((ctx.canvas.width) - (this.width - 15));
+      x = Math.round((canvas.width) - (this.width - 15));
     } else if(this.alignement == "left") {
       x = 5;
     }
 
     if(this.verticalAlignement == "center") {
-      y = Math.round((ctx.canvas.height / 2) - (this.height / 2));
+      y = Math.round((canvas.height / 2) - (this.height / 2));
     } else if(this.verticalAlignement == "top") {
       y = 5;
     } else if(this.verticalAlignement == "bottom") {
-      y = Math.round(ctx.canvas.height - this.height - 5);
+      y = Math.round(canvas.height - this.height - 5);
     }
 
     ctx.fillStyle = this.backgroundColor;
