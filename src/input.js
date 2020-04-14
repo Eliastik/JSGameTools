@@ -48,7 +48,11 @@ export default class Input extends Component {
     this.input.addEventListener("input", () => this.totalTime = 0);
     this.input.addEventListener("blur", () => this.selected = false);
     this.input.addEventListener("focus", () => this.selected = true);
-    document.body.appendChild(this.input); // TODO: fix input focus in fullscreen mode
+    document.body.appendChild(this.input);
+
+    this.canvas;
+    this.appendToCanvas = false;
+    this.noticeLogged = false;
 
     this.canvasTmp = document.createElement("canvas");
 
@@ -63,6 +67,15 @@ export default class Input extends Component {
     ctx.save();
 
     if(this.input.selectionEnd != this.positionEnd) this.totalTime = 0;
+
+    if(this.canvas && !this.appendToCanvas) {
+      document.body.removeChild(this.input);
+      this.canvas.container.appendChild(this.input);
+      this.appendToCanvas = true;
+    } else if(!this.canvas && !this.noticeLogged) {
+      console && console.warn && console.warn("Notice: the use of JSGameTools.Canvas is needed for Input components to properly work in fullscreen mode.");
+      this.noticeLogged = true;
+    }
 
     this.text = this.input.value;
     this.positionStart = this.input.selectionStart;

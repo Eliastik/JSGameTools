@@ -29,5 +29,7 @@ import Tooltip from "./tooltip";
 import Scene from "./scene";
 import FPSMeter from "./fpsMeter";
 import ProgressBar from "./progressBar";
+import Canvas from "./canvas";
+import Component from "./component";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component };

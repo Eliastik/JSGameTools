@@ -302,38 +302,48 @@ export default {
       });
     }
   },
-  autoResizeCanvasFullscreen: function(canvas) {
-    if(document.fullscreenElement == canvas) {
+  autoResizeCanvasFullscreen: function(canvas, container) {
+    if(document.fullscreenElement == (container || canvas)) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      
+      if(container) {
+        container.width = window.innerWidth;
+        container.height = window.innerHeight;
+      }
     }
   },
-  enableAutoResizeCanvasFullscreen: function(canvas) {
+  enableAutoResizeCanvasFullscreen: function(canvas, container) {
     if(canvas && canvas.getAttribute("autoresizefullscreen-canvas-event") != "true") {
-      this.autoResizeCanvasFullscreen(canvas);
+      this.autoResizeCanvasFullscreen(canvas, container);
   
       window.addEventListener("resize", () => {
         canvas.setAttribute("autoresizefullscreen-canvas-event", "true");
-        this.autoResizeCanvasFullscreen(canvas);
+        this.autoResizeCanvasFullscreen(canvas, container);
       });
     }
   },
-  toggleFullscreen: function(canvas) {
+  toggleFullscreen: function(canvas, container) {
     if(canvas) {
       const initialWidth = canvas.width;
       const initialHeight = canvas.height;
 
+      if(container) {
+        container.width = initialWidth;
+        container.height = initialHeight;
+      }
+
       if(!document.fullscreenElement) {
-        if(canvas.requestFullscreen) {
-          canvas.requestFullscreen();
-        } else if(canvas.mozRequestFullScreen) {
-          canvas.mozRequestFullScreen();
-        } else if(canvas.webkitRequestFullscreen) {
-          canvas.webkitRequestFullscreen();
-        } else if(canvas.msRequestFullscreen) {
-          canvas.msRequestFullscreen();
-        } else if(canvas.oRequestFullscreen) {
-          canvas.oRequestFullscreen();
+        if((container || canvas).requestFullscreen) {
+          (container || canvas).requestFullscreen();
+        } else if((container || canvas).mozRequestFullScreen) {
+          (container || canvas).mozRequestFullScreen();
+        } else if((container || canvas).webkitRequestFullscreen) {
+          (container || canvas).webkitRequestFullscreen();
+        } else if((container || canvas).msRequestFullscreen) {
+          (container || canvas).msRequestFullscreen();
+        } else if((container || canvas).oRequestFullscreen) {
+          (container || canvas).oRequestFullscreen();
         }
       } else {
         if(document.exitFullscreen) {
@@ -341,15 +351,20 @@ export default {
         }
       }
 
-      this.enableAutoResizeCanvasFullscreen(canvas);
+      this.enableAutoResizeCanvasFullscreen(canvas, container);
 
       if(canvas.getAttribute("fullscreenchange-canvas-event") != "true") {
         canvas.setAttribute("fullscreenchange-canvas-event", "true");
 
         const onfullscreenchange = () => {
-          if(document.fullscreenElement != canvas) {
+          if(document.fullscreenElement != (container || canvas)) {
             canvas.width = initialWidth;
             canvas.height = initialHeight;
+      
+            if(container) {
+              container.width = initialWidth;
+              container.height = initialHeight;
+            }
           }
         };
     

@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
+// Create components
 const imageLoader = new JSGameTools.ImageLoader();
 const buttonText = new JSGameTools.Button("Show a notification", 5, 5, null, "#2ecc71", "#1abc9c", "#16a085");
 const buttonText2 = new JSGameTools.Button("Long text button ............... This should be on next line", 5, 250, "right", "#2ecc71", "#1abc9c", "#16a085");
@@ -43,15 +41,41 @@ buttonText2.tooltip = tooltip2;
 const fpsMeter = new JSGameTools.FPSMeter(false, null, null, null, null, null, "right", "bottom");
 const progress = new JSGameTools.ProgressBar(300, 5, 200, 25, null, null, 0.25);
 progress.percent = 1;
+const tooltip3 = new JSGameTools.Tooltip("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%");
+progress.tooltip = tooltip3;
 
-const scene = new JSGameTools.Scene(buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2, fpsMeter, progress);
+// Custom component
+class Box extends JSGameTools.Component {
+  constructor() {
+    super();
+  }
 
+  draw(context) {
+    super.draw(context);
+    
+    const canvas = context.canvas;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+
+    ctx.fillStyle = "#888888";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.restore();
+  }
+}
+
+// Create scene (containing components) and canvas
+const scene = new JSGameTools.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3);
+const canvas = new JSGameTools.Canvas(scene, document.getElementById("canvas"));
+canvas.appendTo(document.body);
+
+// Events
 buttonText.addClickAction(() => {
   notification.open();
 });
 
 buttonTextFullscreen.addClickAction(() => {
-  JSGameTools.Utils.toggleFullscreen(canvas);
+  canvas.toggleFullscreen();
 });
 
 buttonImage.addClickAction(() => {
@@ -70,23 +94,19 @@ link1.addClickAction(() => {
   notification.open();
 });
 
-function draw() {
-  requestAnimationFrame(() => {
-    ctx.fillStyle = "#888888";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    scene.draw(ctx);
-    draw();
-  });
-}
-
+// Load pause image and start the canvas rendering
 imageLoader.load(["pause.png"], () => {
   buttonImage.loadImage(imageLoader);
-  draw();
+  canvas.startDraw();
+
+  // Randomly change the progress value
   setInterval(() => {
     if(progress.percent < 1) {
-      progress.percent = 1;
+      progress.percent = Math.random();
     } else if(progress.percent >= 1) {
-      progress.percent = 0.25;
+      progress.percent = Math.random();
     }
+
+    tooltip3.text = "Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%";
   }, 3000);
 });

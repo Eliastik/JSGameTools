@@ -20,6 +20,7 @@ import Component from "./component";
 import Menu from "./menu";
 import NotificationMessage from "./notificationMessage";
 import Tooltip from "./tooltip";
+import Input from "./input";
 
 export default class Scene extends Component {
   #components = [];
@@ -27,6 +28,7 @@ export default class Scene extends Component {
   constructor(...components) {
     super(0, 0, 0, 0);
     this.addAll(...components);
+    this.canvas;
   }
 
   draw(context) {
@@ -42,8 +44,12 @@ export default class Scene extends Component {
     const menus = this.#components.filter(component => component  && component instanceof Menu)
     const menuOpened = menus.filter(menu => !menu.disabled)[0];
     const tooltips = this.#components.filter(component => component && component instanceof Tooltip);
+    const inputs = this.#components.filter(component => component && component instanceof Input);
     const notificationsBackground = this.#components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
     const notificationsForeground = this.#components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
+
+    // Set inputs canvas
+    inputs && inputs.forEach(input => input.canvas = this.canvas);
 
     // Disable background components if a menu is opened
     if(menuOpened) {
