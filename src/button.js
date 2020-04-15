@@ -50,6 +50,7 @@ class Button extends Component {
     ctx.font = this.fontSize + "px " + this.fontFamily;
 
     const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily);
+    const textLines = textWrapped["text"].split("\n").length;
     const heightText = textWrapped["height"];
     const widthText = textWrapped["width"];
 
@@ -132,10 +133,11 @@ class Button extends Component {
       
       Utils.drawImage(ctx, this.image, Math.round(imgX), Math.round(imgY), Math.round(imgWidth), Math.round(imgHeight));
     } else if(this.text != null) {
+      ctx.textBaseline = "middle";
       ctx.fillStyle = this.fontColor;
       
       const textX = this.x + (this.width / 2) - (widthText / 2);
-      const textY = this.y + this.fontSize + this.fontSize / 5;
+      const textY = this.y + (this.height / 2) - (textLines - 1) * (this.fontSize / 2);
       
       Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);
     }

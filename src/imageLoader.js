@@ -30,7 +30,7 @@ export default class ImageLoader {
       this.nbImagesToLoad = img.length;
       this.firstImage = false;
     }
-  
+    
     if(img.length > 0) {
       this.loadImage(img[0], result => {
         if(result == true) {
