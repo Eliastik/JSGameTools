@@ -22,7 +22,7 @@ import Component from "./component";
 
 export default class Label extends Component {
   constructor(text, x, y, fontSize, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
-    super(x, y, 0, 0);
+    super(x, y);
 
     this.text = text;
     this.color = color || "#000000";
@@ -45,7 +45,7 @@ export default class Label extends Component {
     const sizes = Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, this.verticalAlignement, this.initialX, this.initialY, this.wrap, this.bold, this.underline);
 
     this.x = sizes["x"];
-    this.y = sizes["y"] - this.size;
+    this.y = sizes["y"] - this.fontSize;
 
     ctx.restore();
   }
@@ -56,5 +56,13 @@ export default class Label extends Component {
 
   get width() {
     return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily)["width"];
+  }
+
+  set width(width) {
+    super.width = width;
+  }
+
+  set height(height) {
+    super.height = height;
   }
 }
