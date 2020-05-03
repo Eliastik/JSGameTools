@@ -21,12 +21,12 @@ import Utils from "./utils";
 import Component from "./component";
 
 export default class Label extends Component {
-  constructor(text, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
+  constructor(text, x, y, fontSize, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
     super(x, y, 0, 0);
 
     this.text = text;
     this.color = color || "#000000";
-    this.size = size || Constants.Setting.FONT_SIZE;
+    this.fontSize = fontSize || Constants.Setting.FONT_SIZE;
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.alignement = alignement || "default";
     this.verticalAlignement = verticalAlignement || "default";
@@ -42,13 +42,19 @@ export default class Label extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    const sizes = Utils.drawText(ctx, this.text, this.color, this.size, this.fontFamily, this.alignement, this.verticalAlignement, this.initialX, this.initialY, this.wrap, this.bold, this.underline);
+    const sizes = Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, this.verticalAlignement, this.initialX, this.initialY, this.wrap, this.bold, this.underline);
 
     this.x = sizes["x"];
     this.y = sizes["y"] - this.size;
-    this.height = sizes["height"];
-    this.width = sizes["width"];
 
     ctx.restore();
+  }
+
+  get height() {
+    return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily)["height"];
+  }
+
+  get width() {
+    return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily)["width"];
   }
 }

@@ -82,85 +82,87 @@ export default {
     }
   },
   drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold, underline) {
-    ctx.save();
+    if(ctx) {
+      ctx.save();
 
-    if(!Array.isArray(color)) {
-      ctx.fillStyle = color;
-      ctx.strokeStyle = color;
-    }
-
-    ctx.font = (bold ? "bold " : "") + size + "px " + fontFamily;
-    ctx.filter = "none";
-
-    if(wrap) {
-      text = this.wrapTextLines(ctx, text)["text"];
-    }
-    
-    const lines = text.split("\n");
-    let maxWidth = 0;
-    let xCurrent = 0;
-    let yFirst = 0;
-
-    if(verticalAlignement == "center") {
-      y = Math.round((ctx.canvas.height / 2) - (size * lines.length / 2));
-    } else if(verticalAlignement == "top") {
-      y = 5;
-    } else if(verticalAlignement == "bottom") {
-      y = Math.round((ctx.canvas.height) - (size * lines.length) / 2 - size / 5);
-    }
-
-    for(let i = 0; i < lines.length; i++) {
-      const currentText = lines[i];
-      const currentWidth = ctx.measureText(currentText).width;
-      let yCurrent = 0;
-
-      if(Array.isArray(color)) {
-        let colorIndex = i;
-
-        if(colorIndex > color.length - 1) {
-          colorIndex = color.length - 1;
+      if(!Array.isArray(color)) {
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+      }
+  
+      ctx.font = (bold ? "bold " : "") + size + "px " + fontFamily;
+      ctx.filter = "none";
+  
+      if(wrap) {
+        text = this.wrapTextLines(ctx, text)["text"];
+      }
+      
+      const lines = text.split("\n");
+      let maxWidth = 0;
+      let xCurrent = 0;
+      let yFirst = 0;
+  
+      if(verticalAlignement == "center") {
+        y = Math.round((ctx.canvas.height / 2) - (size * lines.length / 2));
+      } else if(verticalAlignement == "top") {
+        y = 5;
+      } else if(verticalAlignement == "bottom") {
+        y = Math.round((ctx.canvas.height) - (size * lines.length) / 2 - size / 5);
+      }
+  
+      for(let i = 0; i < lines.length; i++) {
+        const currentText = lines[i];
+        const currentWidth = ctx.measureText(currentText).width;
+        let yCurrent = 0;
+  
+        if(Array.isArray(color)) {
+          let colorIndex = i;
+  
+          if(colorIndex > color.length - 1) {
+            colorIndex = color.length - 1;
+          }
+  
+          ctx.fillStyle = color[colorIndex];
+          ctx.strokeStyle = color[colorIndex];
         }
-
-        ctx.fillStyle = color[colorIndex];
-        ctx.strokeStyle = color[colorIndex];
+  
+        if(alignement == "center") {
+          xCurrent = Math.round((ctx.canvas.width / 2) - (ctx.measureText(currentText).width / 2));
+          yCurrent = Math.round(y + (size * i));
+        } else if(alignement == "right") {
+          xCurrent = Math.round((ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
+          yCurrent = Math.round(y + (size * i));
+        } else if(alignement == "left") {
+          xCurrent = 5;
+          yCurrent = Math.round(y + (size * i));
+        } else {
+          xCurrent = Math.round(x);
+          yCurrent = Math.round(y + (size * i));
+        }
+  
+        ctx.fillText(currentText, xCurrent, yCurrent);
+  
+        if(underline) {
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(xCurrent, yCurrent + 3);
+          ctx.lineTo(Math.round(xCurrent + currentWidth), yCurrent + 3);
+          ctx.stroke();
+        }
+  
+        if(currentWidth > maxWidth) maxWidth = currentWidth;
+        if(i == 0) yFirst = yCurrent;
       }
-
-      if(alignement == "center") {
-        xCurrent = Math.round((ctx.canvas.width / 2) - (ctx.measureText(currentText).width / 2));
-        yCurrent = Math.round(y + (size * i));
-      } else if(alignement == "right") {
-        xCurrent = Math.round((ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
-        yCurrent = Math.round(y + (size * i));
-      } else if(alignement == "left") {
-        xCurrent = 5;
-        yCurrent = Math.round(y + (size * i));
-      } else {
-        xCurrent = Math.round(x);
-        yCurrent = Math.round(y + (size * i));
-      }
-
-      ctx.fillText(currentText, xCurrent, yCurrent);
-
-      if(underline) {
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(xCurrent, yCurrent + 3);
-        ctx.lineTo(Math.round(xCurrent + currentWidth), yCurrent + 3);
-        ctx.stroke();
-      }
-
-      if(currentWidth > maxWidth) maxWidth = currentWidth;
-      if(i == 0) yFirst = yCurrent;
+  
+      ctx.restore();
+  
+      return {
+        x: xCurrent,
+        y: yFirst,
+        height: size * lines.length,
+        width: maxWidth
+      };
     }
-
-    ctx.restore();
-
-    return {
-      x: xCurrent,
-      y: yFirst,
-      height: size * lines.length,
-      width: maxWidth
-    };
   },
   wrapText: function(text, limit) {
     if(text.length > limit) {
@@ -177,7 +179,7 @@ export default {
 
     return text;
   },
-  wrapTextLines: function(ctx, text, width, fontSize, fontFamily) {
+  wrapTextLines: function(ctx, text, width, fontSize, fontFamily, disableWrap) {
     if(ctx && text) {
       ctx.save();
       ctx.font = fontSize + "px " + fontFamily;
@@ -200,7 +202,7 @@ export default {
   
         for(let j = 0; j < lineWrap.split("\n").length; j++) {
           const widthText = ctx.measureText(lineWrap.split("\n")[j]).width;
-          heightTotal += parseFloat(fontSize);
+          heightTotal += fontSize;
           if(widthText > maxWidth) maxWidth = widthText;
         }
       }

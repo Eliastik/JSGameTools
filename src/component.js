@@ -22,10 +22,11 @@ export default class Component {
     this.y = y || 0;
     this.initialX = x;
     this.initialY = y;
-    this.width = width;
-    this.height = height;
+    this._width = width;
+    this._height = height;
     this.alignement = alignement || "default";
     this.verticalAlignement = verticalAlignement || "default";
+    this.canvasContext2d;
     
     this.triggersClick = [];
     this.triggersHover = [];
@@ -45,6 +46,8 @@ export default class Component {
   draw(context) {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
+
+    this.canvasContext2d = ctx;
 
     if(!this.initEvent && ctx != null) {
       canvas.addEventListener("mousemove", event => {
@@ -190,5 +193,21 @@ export default class Component {
 
   removeAllDownActions() {
     this.triggersDown = [];
+  }
+
+  get height() {
+    return this._height;
+  }
+
+  get width() {
+    return this._width;
+  }
+
+  set width(width) {
+    this._width = width;
+  }
+
+  set height(height) {
+    this._height = height;
   }
 }

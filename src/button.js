@@ -49,34 +49,12 @@ class Button extends Component {
 
     ctx.font = this.fontSize + "px " + this.fontFamily;
 
-    const textWrapped = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily);
+    const textWrapped = this.textWrapped;
     const textLines = textWrapped["text"].split("\n").length;
-    const heightText = textWrapped["height"];
     const widthText = textWrapped["width"];
 
     if(this.imgSrc != null && this.imageLoader != null) {
       this.loadImage(this.imageLoader);
-    }
-
-    if(this.image != null) {
-      let imgWidth = this.image.width;
-      let imgHeight = this.image.height;
-
-      if(this.autoWidth) {
-        this.width = imgWidth * 1.25;
-      }
-
-      if(this.autoHeight) {
-        this.height = imgHeight * 1.5;
-      }
-    } else if(this.text != null) {
-      if(this.autoWidth) {
-        this.width = widthText + textWrapped["carWidth"] * 2;
-      }
-
-      if(this.autoHeight) {
-        this.height = heightText + this.fontSize / 1.5;
-      }
     }
 
     if(this.alignement == "center") {
@@ -143,6 +121,58 @@ class Button extends Component {
     }
     
     ctx.restore();
+  }
+
+  get textWrapped() {
+    return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily);
+  }
+
+  get height() {
+    if(this.image) {
+      let imgHeight = this.image.height;
+
+      if(this.autoHeight) {
+        return imgHeight * 1.5;
+      }
+    } else if(this.text) {
+      const textWrapped = this.textWrapped;
+      const heightText = textWrapped["height"];
+
+      if(this.autoHeight) {
+        return heightText + this.fontSize / 1.5;
+      }
+    }
+
+    return super.height;
+  }
+
+  get width() {
+    if(this.image) {
+      let imgWidth = this.image.width;
+
+      if(this.autoWidth) {
+        return imgWidth * 1.25;
+      }
+    } else if(this.text) {
+      const textWrapped = this.textWrapped;
+      const widthText = textWrapped["width"];
+
+      if(this.autoWidth) {
+        return widthText + textWrapped["carWidth"] * 2;
+      }
+    }
+
+    return super.width;
+  }
+
+  set width(width) {
+    super.width = width;
+    this.autoWidth = false;
+  }
+
+  set height(height) {
+    super.height = height;
+    this.autoHeight = false;
   }
   
   loadImage(imageLoader) {
