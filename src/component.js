@@ -17,7 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 export default class Component {
-  constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation) {
+  constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollDisabled) {
     this.x = x || 0;
     this.y = y || 0;
     this.initialX = x;
@@ -28,10 +28,13 @@ export default class Component {
     this.verticalAlignement = verticalAlignement || "default";
     this.canvasContext2d;
     
+    // Functions triggered by events
     this.triggersClick = [];
     this.triggersHover = [];
     this.triggersDown = [];
+    this.triggersScroll = [];
 
+    // State
     this.init = false;
     this.initEvents = false;
     this.selected = false;
@@ -39,6 +42,16 @@ export default class Component {
     this.hovered = false;
     this.disabled = false;
     this.disableAnimation = disableAnimation || false;
+    this.scrollDisabled = scrollDisabled || false;
+
+    // Scroll state
+    this.offsetScrollX = 0;
+    this.offsetScrollY = 0;
+
+    // Touch events
+    this.touchEventStartX = 0;
+    this.touchEventStartY = 0;
+    this.touchEventStartTimestamp = 0;
 
     this.tooltip;
   }
@@ -114,6 +127,59 @@ export default class Component {
       canvas.addEventListener("mouseup", () => {
         this.clicked = false;
       }, false);
+
+      canvas.addEventListener("wheel", event => {
+        if(this.hovered && !this.disabled && !this.scrollDisabled) {
+          this.offsetScrollX += event.deltaX;
+          this.offsetScrollY += event.deltaY;
+
+          if(this.triggersScroll != null) {
+            this.triggersScroll.forEach(trigger => trigger(event.deltaX, event.deltaY));
+          }
+        }
+      });
+
+      canvas.addEventListener("touchstart", event => {
+        const changedTouches = event.changedTouches[0];
+        const position = this.getMousePos(canvas, changedTouches);
+        
+        if(this.isInside(position)) {
+          this.hovered = true;
+          this.selected = true;
+        } else {
+          this.hovered = false;
+          this.selected = false;
+        }
+
+        if(this.hovered && !this.disabled) {
+          this.touchEventStartX = position.x;
+          this.touchEventStartY = position.y;
+          this.touchEventStartTimestamp = event.timestamp;
+        }
+      });
+
+      const touchScrollEvent =  event => {
+        const changedTouches = event.changedTouches[0];
+        const position = this.getMousePos(canvas, changedTouches);
+
+        if(this.hovered && !this.disabled && !this.scrollDisabled) {
+          this.offsetScrollX += this.touchEventStartX - position.x;
+          this.offsetScrollY += this.touchEventStartY - position.y;
+
+          if(this.triggersScroll != null) {
+            this.triggersScroll.forEach(trigger => trigger(this.touchEventStartX - position.x, this.touchEventStartY - position.y));
+          }
+          
+          this.touchEventStartX = position.x;
+          this.touchEventStartY = position.y;
+        }
+      };
+
+      canvas.addEventListener("touchend", touchScrollEvent);
+      canvas.addEventListener("touchmove", event => {
+        touchScrollEvent(event);
+        event.preventDefault();
+      });
     }
 
     if(this.disabled) {
@@ -193,6 +259,22 @@ export default class Component {
 
   removeAllDownActions() {
     this.triggersDown = [];
+  }
+
+  setScrollAction(trigger) {
+    this.triggersScroll = [trigger];
+  }
+  
+  addScrollAction(trigger) {
+    this.triggersScroll.push(trigger);
+  }
+  
+  removeScrollAction(trigger) {
+    this.triggersScroll = this.triggersScroll.filter(elem => elem != trigger);
+  }
+
+  removeAllScrollActions() {
+    this.triggersScroll = [];
   }
 
   get height() {
