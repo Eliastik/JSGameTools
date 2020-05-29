@@ -7,7 +7,8 @@ const config = {
     path: path.resolve(__dirname, "lib"),
     filename: "JSGameTools.js",
     library: "JSGameTools",
-    libraryTarget: "umd"
+    libraryTarget: "umd",
+    globalObject: "typeof self !== \"undefined\" ? self : this"
   },
   module: {
     rules: [
