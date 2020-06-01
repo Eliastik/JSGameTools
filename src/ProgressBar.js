@@ -43,7 +43,7 @@ export default class ProgressBar extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    const time = Date.now();
+    const time = performance.now();
     let offsetTime = 0;
 
     let animationPercent = (this.#precPercent != this.percent && !this.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);

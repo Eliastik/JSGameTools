@@ -81,7 +81,7 @@ export default class Input extends Component {
     this.positionStart = this.input.selectionStart;
     this.positionEnd = this.input.selectionEnd;
 
-    const time = Date.now();
+    const time = performance.now();
     let offsetTime = 0;
 
     if(this.lastTime > 0) offsetTime = time - this.lastTime;

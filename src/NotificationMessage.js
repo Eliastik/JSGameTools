@@ -55,7 +55,7 @@ export default class NotificationMessage extends Component {
       ctx.save();
   
       if(!this.init) {
-        this.timeLastFrame = Date.now();
+        this.timeLastFrame = performance.now();
       }
       
       if(this.closeButton != null) {
@@ -64,8 +64,8 @@ export default class NotificationMessage extends Component {
         });
       }
   
-      const offsetTime = Date.now() - this.timeLastFrame;
-      this.timeLastFrame = Date.now();
+      const offsetTime = performance.now() - this.timeLastFrame;
+      this.timeLastFrame = performance.now();
   
       if(this.animationTime >= this.delayBeforeClosing * 1000 && !this.closing && !this.closed) {
         this.close();
