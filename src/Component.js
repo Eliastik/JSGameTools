@@ -139,26 +139,7 @@ export default class Component {
         }
       });
 
-      canvas.addEventListener("touchstart", event => {
-        const changedTouches = event.changedTouches[0];
-        const position = this.getMousePos(canvas, changedTouches);
-        
-        if(this.isInside(position)) {
-          this.hovered = true;
-          this.selected = true;
-        } else {
-          this.hovered = false;
-          this.selected = false;
-        }
-
-        if(this.hovered && !this.disabled) {
-          this.touchEventStartX = position.x;
-          this.touchEventStartY = position.y;
-          this.touchEventStartTimestamp = event.timestamp;
-        }
-      });
-
-      const touchScrollEvent =  event => {
+      const touchScrollEvent = event => {
         const changedTouches = event.changedTouches[0];
         const position = this.getMousePos(canvas, changedTouches);
 
@@ -175,7 +156,28 @@ export default class Component {
         }
       };
 
-      canvas.addEventListener("touchend", touchScrollEvent);
+      const touchStartEndEvent = event => {
+        const changedTouches = event.changedTouches[0];
+        const position = this.getMousePos(canvas, changedTouches);
+        
+        if(this.isInside(position)) {
+          this.hovered = true;
+          this.selected = true;
+        } else {
+          this.hovered = false;
+          this.selected = false;
+        }
+
+        if(this.hovered && !this.disabled) {
+          this.touchEventStartX = position.x;
+          this.touchEventStartY = position.y;
+          this.touchEventStartTimestamp = event.timestamp;
+        }
+      };
+
+      canvas.addEventListener("touchstart", touchStartEndEvent);
+      canvas.addEventListener("touchend", touchStartEndEvent);
+
       canvas.addEventListener("touchmove", event => {
         touchScrollEvent(event);
         event.preventDefault();
