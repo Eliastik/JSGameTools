@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Constants from "./constants";
-import Utils from "./utils";
-import Component from "./component";
+import Component from "./Component";
 
 export default class ProgressBar extends Component {
   #precPercent = 0;

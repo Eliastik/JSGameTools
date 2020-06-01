@@ -16,20 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Constants from "./constants";
-import { Button, ButtonImage } from "./button";
-import ImageLoader from "./imageLoader";
-import NotificationMessage from "./notificationMessage";
-import Utils from "./utils";
-import Menu from "./menu";
-import Input from "./input";
-import Label from "./label";
-import Link from "./link";
-import Tooltip from "./tooltip";
-import Scene from "./scene";
-import FPSMeter from "./fpsMeter";
-import ProgressBar from "./progressBar";
-import Canvas from "./canvas";
-import Component from "./component";
+import Constants from "./Constants";
+import { Button, ButtonImage } from "./Button";
+import ImageLoader from "./ImageLoader";
+import NotificationMessage from "./NotificationMessage";
+import Utils from "./Utils";
+import Menu from "./Menu";
+import Input from "./Input";
+import Label from "./Label";
+import Link from "./Link";
+import Tooltip from "./Tooltip";
+import Scene from "./Scene";
+import FPSMeter from "./FPSMeter";
+import ProgressBar from "./ProgressBar";
+import Canvas from "./Canvas";
+import Component from "./Component";
 
 export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component };

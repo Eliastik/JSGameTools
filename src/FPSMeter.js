@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Label from "./label";
+import Label from "./Label";
 
 export default class FPSMeter extends Label {
   constructor(displayFrames, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {

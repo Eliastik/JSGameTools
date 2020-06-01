@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Constants from "./constants";
-import { Button, ButtonImage } from "./button";
-import Utils from "./utils";
-import Component from "./component";
+import Constants from "./Constants";
+import { Button, ButtonImage } from "./Button";
+import Utils from "./Utils";
+import Component from "./Component";
 
 export default class NotificationMessage extends Component {
   constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation) {

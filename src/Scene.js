@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Component from "./component";
-import Menu from "./menu";
-import NotificationMessage from "./notificationMessage";
-import Tooltip from "./tooltip";
-import Input from "./input";
+import Component from "./Component";
+import Menu from "./Menu";
+import NotificationMessage from "./NotificationMessage";
+import Tooltip from "./Tooltip";
+import Input from "./Input";
 
 export default class Scene extends Component {
   #components = [];

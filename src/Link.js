@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Label from "./label";
+import Label from "./Label";
 
 export default class Link extends Label {
   constructor(text, x, y, size, fontFamily, color, colorHover, colorDown, alignement, verticalAlignement, wrap, bold, underline) {
