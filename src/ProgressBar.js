@@ -22,13 +22,14 @@ export default class ProgressBar extends Component {
   #precPercent = 0;
   #animationPercent = 0;
 
-  constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation, alignement, verticalAlignement) {
+  constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation, alignement, verticalAlignement, easingFunction) {
     super(x, y, width, height, alignement, verticalAlignement, disableAnimation);
 
     this.backgroundColor = backgroundColor || "#bdc3c7";
     this.foregroundColor = foregroundColor || "#27ae60";
     this.percent = defaultPercent == undefined ? 0 : defaultPercent;
     this.#precPercent = this.percent;
+    this.easingFunction = easingFunction;
 
     this.animationDuration = animationDuration || 2;
     this.lastTime = 0;
@@ -45,7 +46,12 @@ export default class ProgressBar extends Component {
     const time = Date.now();
     let offsetTime = 0;
 
-    const animationPercent = (this.#precPercent != this.percent && !this.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);
+    let animationPercent = (this.#precPercent != this.percent && !this.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);
+
+    if(this.easingFunction) {
+      animationPercent = this.easingFunction(animationPercent);
+    }
+    
     const widthForeground = Math.round(Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent)));
 
     if(this.#precPercent != this.percent && !this.disableAnimation) {

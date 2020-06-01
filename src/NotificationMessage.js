@@ -22,7 +22,7 @@ import Utils from "./Utils";
 import Component from "./Component";
 
 export default class NotificationMessage extends Component {
-  constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation) {
+  constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation, easingFunction) {
     super(0, 0, 0, 0, null, null, disableAnimation);
 
     this.text = text;
@@ -38,6 +38,7 @@ export default class NotificationMessage extends Component {
     this.animationTime = 0;
     this.closed = true;
     this.closing = false;
+    this.easingFunction = easingFunction;
 
     this.closeButton = new ButtonImage(null, null, 5, "right", null, 32, 32);
     this.closeButton.image = new Image();
@@ -95,6 +96,10 @@ export default class NotificationMessage extends Component {
       if(!this.closed) {
         if(!this.disableAnimation) {
           offsetY = this.animationTime / this.animationDelay;
+        }
+
+        if(this.easingFunction) {
+          offsetY = this.easingFunction(offsetY);
         }
   
         const y = canvas.height - (height * (offsetY <= 1 ? offsetY : 1));

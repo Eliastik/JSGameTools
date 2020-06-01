@@ -31,5 +31,6 @@ import FPSMeter from "./FPSMeter";
 import ProgressBar from "./ProgressBar";
 import Canvas from "./Canvas";
 import Component from "./Component";
+import EasingFunctions from "./EasingFunctions";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions };
