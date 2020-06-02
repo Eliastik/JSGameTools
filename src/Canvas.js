@@ -19,7 +19,9 @@
 import Utils from "./Utils";
 
 export default class Canvas {
-  constructor(scene, canvas, width, height, autoResize) {
+  #lastFrameTime;
+
+  constructor(scene, canvas, width, height, autoResize, maxFPS) {
     this.width = width || 600;
     this.height = height || 400;
     this.scene = scene;
@@ -30,6 +32,8 @@ export default class Canvas {
     this.canvas.height = this.height;
     this.container.appendChild(this.canvas);
     this.started = false;
+    this.maxFPS = maxFPS || -1;
+    this.#lastFrameTime = 0;
     if(autoResize) this.autoResize();
   }
 
@@ -42,9 +46,15 @@ export default class Canvas {
   startDraw() {
     this.started = true;
 
-    requestAnimationFrame(() => {
+    requestAnimationFrame(time => {
       if(this.started) {
-        this.draw();
+        const offsetFrame = time - this.#lastFrameTime;
+
+        if(this.maxFPS < 1 || offsetFrame > 1000 / this.maxFPS) {
+          this.#lastFrameTime = time;
+          this.draw();
+        }
+        
         this.startDraw();
       }
     });
