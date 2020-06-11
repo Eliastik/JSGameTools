@@ -16,9 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
+import Utils from "./Utils";
+
 export default class ImageLoader {
   constructor() {
     this.images = {};
+    this.imagesResized = {};
     this.triedLoading = 0;
     this.hasError = false;
     this.nbImagesToLoad = 1;
@@ -79,9 +82,29 @@ export default class ImageLoader {
     }
   }
 
-  get(src) {
-    if(this.images != null) {
-      return this.images[src];
+  get(src, width, height) {
+    if(this.images != null && this.images.hasOwnProperty(src)) {
+      const image = this.images[src];
+
+      if((width || height) && (image.width != width || image.height != height)) {
+        const w = Math.round(width);
+        const h = Math.round(height);
+        const id = src + "@" + w + "-" + h;
+
+        if(!this.imagesResized.hasOwnProperty(id)) {
+          const canvasTmp = document.createElement("canvas");
+          const ctx = canvasTmp.getContext("2d");
+          canvasTmp.width = w;
+          canvasTmp.height = h;
+
+          Utils.drawImage(ctx, image, 0, 0, w, h, 0, 0, image.width, image.height);
+          this.imagesResized[id] = canvasTmp;
+        }
+
+        return this.imagesResized[id];
+      } else {
+        return image;
+      }
     } else {
       return null;
     }
