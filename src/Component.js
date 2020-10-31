@@ -16,14 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
+import Constants from "./Constants";
+
 export default class Component {
+  #_width = 0;
+  #_height = 0;
+  #_x = 0;
+  #_y = 0;
+
   constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollDisabled) {
-    this.x = x || 0;
-    this.y = y || 0;
+    this.#_x = x || 0;
+    this.#_y = y || 0;
     this.initialX = x;
     this.initialY = y;
-    this._width = width;
-    this._height = height;
+    this.#_width = width;
+    this.#_height = height;
     this.alignement = alignement || "default";
     this.verticalAlignement = verticalAlignement || "default";
     this.canvasContext2d;
@@ -62,7 +69,7 @@ export default class Component {
 
     this.canvasContext2d = ctx;
 
-    if(!this.initEvent && ctx != null) {
+    if(!this.initEvents && ctx != null) {
       canvas.addEventListener("mousemove", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(canvas, event))) {
@@ -191,7 +198,7 @@ export default class Component {
       if(this.tooltip) this.tooltip.disabled = true;
     }
 
-    this.initEvent = true;
+    this.initEvents = true;
   }
   
   getMousePos(canvas, event) {
@@ -280,18 +287,58 @@ export default class Component {
   }
 
   get height() {
-    return this._height;
+    return this.#_height;
   }
 
   get width() {
-    return this._width;
+    return this.#_width;
   }
 
   set width(width) {
-    this._width = width;
+    this.#_width = width;
   }
 
   set height(height) {
-    this._height = height;
+    this.#_height = height;
+  }
+
+  get x() {
+    const canvas = this.canvasContext2d ? this.canvasContext2d.canvas : null;
+
+    if(this.alignement && canvas) {
+      if(this.alignement == Constants.Alignement.CENTER) {
+        return (canvas.width / 2) - (this.width / 2) - this.initialX;
+      } else if(this.alignement == Constants.Alignement.RIGHT) {
+        return (canvas.width) - (this.width) - 5 - this.initialX;
+      } else if(this.alignement == Constants.Alignement.LEFT) {
+        return 5;
+      }
+    }
+    
+    return this.#_x;
+  }
+
+  set x(x) {
+    this.#_x = x;
+  }
+
+  get y() {
+    const canvas = this.canvasContext2d ? this.canvasContext2d.canvas : null;
+
+    if(this.verticalAlignement && canvas) {
+      if(this.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
+        return (canvas.height) - (this.height) - 5 - this.initialY;
+      } else if(this.verticalAlignement == Constants.VerticalAlignement.CENTER) {
+        return (canvas.height / 2) - (this.height / 2) - this.initialY;
+      } else if(this.verticalAlignement == Constants.VerticalAlignement.TOP) {
+        return 15;
+      }
+    }
+    
+    return this.#_y;
+  }
+
+  set y(y) {
+    this.#_y = y;
   }
 }

@@ -30,5 +30,15 @@ export default {
     BOTTOM: 40,
     LEFT: 37,
     ENTER: 13
+  },
+  Alignement: {
+    RIGHT: "right",
+    LEFT: "left",
+    CENTER: "center"
+  },
+  VerticalAlignement: {
+    TOP: "top",
+    CENTER: "center",
+    BOTTOM: "bottom"
   }
 };

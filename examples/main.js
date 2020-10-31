@@ -33,6 +33,7 @@ const menu = new JSGameTools.Menu(null, null, new JSGameTools.Label("Pause menu\
 const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)", null, null, null, null, true);
 const textField = new JSGameTools.Input(5, 250, 150);
 const label1 = new JSGameTools.Label("A label", 5, 325);
+const row1 = new JSGameTools.Row(5, 325, null, null, label1, textField);
 const link1 = new JSGameTools.Link("A long link", 5, 375);
 const tooltip1 = new JSGameTools.Tooltip("A tooltip\nSecond line");
 label1.tooltip = tooltip1;
@@ -65,7 +66,7 @@ class Box extends JSGameTools.Component {
 }
 
 // Create scene (containing components) and canvas
-const scene = new JSGameTools.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, textField, label1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3);
+const scene = new JSGameTools.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3);
 const canvas = new JSGameTools.Canvas(scene, document.getElementById("canvas"));
 canvas.appendTo(document.body);
 

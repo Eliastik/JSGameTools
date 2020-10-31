@@ -57,22 +57,6 @@ class Button extends Component {
       this.loadImage(this.imageLoader);
     }
 
-    if(this.alignement == "center") {
-      this.x = (canvas.width / 2) - (this.width / 2) - this.initialX;
-    } else if(this.alignement == "right") {
-      this.x = (canvas.width) - (this.width) - 5 - this.initialX;
-    } else if(this.alignement == "left") {
-      this.x = 5;
-    }
-
-    if(this.verticalAlignement == "bottom") {
-      this.y = (canvas.height) - (this.height) - 5 - this.initialY;
-    } else if(this.verticalAlignement == "center") {
-      this.y = (canvas.height / 2) - (this.height / 2) - this.initialY;
-    } else if(this.verticalAlignement == "top") {
-      this.y = 15;
-    }
-
     if(this.hovered && this.clicked) {
       ctx.fillStyle = this.colorDown;
     } else if(this.hovered) {

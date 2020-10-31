@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
+import Constants from "./Constants";
+
 export default {
   preRenderedFont: {},
   lastKey: -1,
@@ -102,11 +104,11 @@ export default {
       let xCurrent = 0;
       let yFirst = 0;
   
-      if(verticalAlignement == "center") {
+      if(verticalAlignement == Constants.VerticalAlignement.CENTER) {
         y = Math.round((ctx.canvas.height / 2) - (size * lines.length / 2));
-      } else if(verticalAlignement == "top") {
+      } else if(verticalAlignement == Constants.VerticalAlignement.TOP) {
         y = 5;
-      } else if(verticalAlignement == "bottom") {
+      } else if(verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
         y = Math.round((ctx.canvas.height) - (size * lines.length) / 2 - size / 5);
       }
   
@@ -126,13 +128,13 @@ export default {
           ctx.strokeStyle = color[colorIndex];
         }
   
-        if(alignement == "center") {
+        if(alignement == Constants.Alignement.CENTER) {
           xCurrent = Math.round((ctx.canvas.width / 2) - (ctx.measureText(currentText).width / 2));
           yCurrent = Math.round(y + (size * i));
-        } else if(alignement == "right") {
+        } else if(alignement == Constants.Alignement.RIGHT) {
           xCurrent = Math.round((ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
           yCurrent = Math.round(y + (size * i));
-        } else if(alignement == "left") {
+        } else if(alignement == Constants.Alignement.LEFT) {
           xCurrent = 5;
           yCurrent = Math.round(y + (size * i));
         } else {
