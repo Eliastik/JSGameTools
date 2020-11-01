@@ -23,8 +23,8 @@ import Component from "./Component";
 export default class Input extends Component {
   selectable = true;
 
-  constructor(x, y, width, height, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, defaultText) {
-    super(x, y, width, height);
+  constructor(x, y, width, height, alignement, verticalAlignement, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, defaultText) {
+    super(x, y, width, height, alignement, verticalAlignement);
     
     this.text = defaultText || "";
     this.fontSizeInitial = fontSize;
@@ -76,6 +76,12 @@ export default class Input extends Component {
     } else if(!this.canvas && !this.noticeLogged) {
       console && console.warn && console.warn("Notice: the use of JSGameTools.Canvas is needed for Input components to properly work in fullscreen mode.");
       this.noticeLogged = true;
+    }
+
+    if(this.selected) {
+      this.click();
+    } else {
+      this.blur();
     }
 
     this.text = this.input.value;
@@ -141,12 +147,7 @@ export default class Input extends Component {
     this.input.focus();
   }
 
-  get selected() {
-    return super.selected;
-  }
-
-  set selected(selected) {
-    if(selected) this.click();
-    super.selected = selected;
+  blur() {
+    this.input.blur();
   }
 }

@@ -61,32 +61,35 @@ export default class Menu extends Col {
   
         this.init = true;
       }
+
+      let keyAction = false;
     
       if(this.components != null) {
         if(this.lastKey == Constants.Key.UP) {
-          this.selectedComponent--;
+          this.select(this.selectedComponent - 1);
+          keyAction = true;
         } else if(this.lastKey == Constants.Key.BOTTOM) {
-          this.selectedComponent++;
+          this.select(this.selectedComponent + 1);
+          keyAction = true;
         } else if(this.lastKey == Constants.Key.ECHAP) {
           this.disable();
-        }
-    
-        if(this.selectedComponent >= this.components.length) {
-          this.selectedComponent = 0;
-        } else if(this.selectedComponent < 0) {
-          this.selectedComponent = this.components.length - 1;
+          keyAction = true;
+        } else {
+          this.components.forEach((component, i) => {
+            if(component.selected) this.select(i);
+          });
         }
 
         this.components.forEach((component, i) => {
           if(component instanceof Component) {
-            if(this.selectedComponent == i) {
-              if(!component.selectable) {
-                this.selectedComponent++;
+            if(keyAction) {
+              if(this.selectedComponent == i) {
+                if(component.selectable) {
+                  component.selected = true;
+                }
               } else {
-                component.selected = true;
+                component.selected = false;
               }
-            } else {
-              component.selected = false;
             }
       
             if(this.selectedComponent == i && this.lastKey == Constants.Key.ENTER && component.triggersClick != null && component.triggersClick.length > 0 && !component.disabled) {
@@ -113,5 +116,23 @@ export default class Menu extends Col {
   enable() {
     super.enable();
     this.components.forEach(component => component && component.enable && component.enable());
+  }
+
+  select(index) {
+    this.selectedComponent = index;
+
+    if(this.selectedComponent >= this.components.length) {
+      this.selectedComponent = 0;
+    } else if(this.selectedComponent < 0) {
+      this.selectedComponent = this.components.length - 1;
+    }
+
+    if(this.components[this.selectedComponent] && !this.components[this.selectedComponent].selectable) {
+      if(this.lastKey == Constants.Key.UP) {
+        return this.select(this.selectedComponent - 1);
+      } else if(this.lastKey == Constants.Key.BOTTOM) {
+        return this.select(this.selectedComponent + 1);
+      }
+    }
   }
 }
