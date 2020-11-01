@@ -19,19 +19,14 @@
 import Constants from "./Constants";
 import { Button, ButtonImage } from "./Button";
 import Utils from "./Utils";
-import Component from "./Component";
+import Col from "./Col";
 
-export default class NotificationMessage extends Component {
-  constructor(text, textColor, backgroundColor, delayBeforeClosing, animationDelay, fontSize, fontFamily, foreGround, disableAnimation, easingFunction) {
-    super(0, 0, 0, 0, null, null, disableAnimation);
+export default class NotificationMessage extends Col {
+  constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, ...components) {
+    super(0, 0, Constants.Alignement.CENTER, null, disableAnimation, ...components);
 
-    this.text = text;
-    this.textColor = textColor == undefined ? "rgba(255, 255, 255, 0.75)" : textColor;
     this.backgroundColor = backgroundColor == undefined ? "rgba(46, 204, 113, 0.5)" : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
-    this.fontSizeInitial = fontSize;
-    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
-    this.fontFamily = fontFamily == undefined ? Constants.Setting.FONT_FAMILY : fontFamily;
     this.animationDelay = animationDelay == undefined ? 500 : animationDelay;
     this.foreGround = foreGround == undefined ? false : foreGround;
     this.timeLastFrame = 0;
@@ -49,83 +44,74 @@ export default class NotificationMessage extends Component {
   draw(context) {
     this.closeButton.canvas = this.canvas;
 
-    if(this.text != null) {
-      super.draw(context);
+    const canvas = context.canvas;
+    const ctx = canvas.getContext("2d");
 
-      const canvas = context.canvas;
-      const ctx = canvas.getContext("2d");
+    ctx.save();
 
-      ctx.save();
-  
-      if(!this.init) {
-        this.timeLastFrame = performance.now();
-      }
-      
-      if(this.closeButton != null) {
-        this.closeButton.setClickAction(() => {
-          this.close();
-        });
-      }
-  
-      const offsetTime = performance.now() - this.timeLastFrame;
+    if(!this.init) {
       this.timeLastFrame = performance.now();
-  
-      if(this.animationTime >= this.delayBeforeClosing * 1000 && !this.closing && !this.closed) {
-        this.close();
-      }
-  
-      this.fontSize = this.fontSizeInitial || Constants.Setting.FONT_SIZE;
-  
-      const heightText = Utils.wrapTextLines(ctx, this.text, null, this.fontSize, this.fontFamily)["height"];
-      const height = heightText + this.fontSize / 2;
-      const width = canvas.width;
-      let offsetY = 1;
-  
-      if(!this.closing) {
-        this.animationTime += offsetTime;
-      } else {
-        if(this.disableAnimation) {
-          this.animationTime = -1;
-        } else {
-          this.animationTime -= offsetTime;
-        }
-      }
-  
-      if(this.animationTime < 0) {
-        this.closed = true;
-        this.closing = false;
-      }
-  
-      if(!this.closed) {
-        if(!this.disableAnimation) {
-          offsetY = this.animationTime / this.animationDelay;
-        }
-
-        if(this.easingFunction) {
-          offsetY = this.easingFunction(offsetY);
-        }
-  
-        const y = canvas.height - (height * (offsetY <= 1 ? offsetY : 1));
-  
-        ctx.fillStyle = this.backgroundColor;
-        ctx.fillRect(0, y, width, height);
-  
-        Utils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y, true);
-  
-        if(this.closeButton != null) {
-          this.closeButton.y = y + 5;
-          this.closeButton.draw(ctx);
-        }
-  
-        this.enableCloseButton();
-      } else {
-        this.disableCloseButton();
-      }
-
-      ctx.restore();
-  
-      this.init = true;
     }
+    
+    if(this.closeButton != null) {
+      this.closeButton.setClickAction(() => {
+        this.close();
+      });
+    }
+
+    const offsetTime = performance.now() - this.timeLastFrame;
+    this.timeLastFrame = performance.now();
+
+    if(this.animationTime >= this.delayBeforeClosing * 1000 && !this.closing && !this.closed) {
+      this.close();
+    }
+
+    let offsetY = 1;
+
+    if(!this.closing) {
+      this.animationTime += offsetTime;
+    } else {
+      if(this.disableAnimation) {
+        this.animationTime = -1;
+      } else {
+        this.animationTime -= offsetTime;
+      }
+    }
+
+    if(this.animationTime < 0) {
+      this.closed = true;
+      this.closing = false;
+    }
+
+    if(!this.closed) {
+      if(!this.disableAnimation) {
+        offsetY = this.animationTime / this.animationDelay;
+      }
+
+      if(this.easingFunction) {
+        offsetY = this.easingFunction(offsetY);
+      }
+
+      this.y = canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
+
+      ctx.fillStyle = this.backgroundColor;
+      ctx.fillRect(0, this.y, this.width, this.height);
+
+      super.draw(ctx);
+
+      if(this.closeButton != null) {
+        this.closeButton.y = this.y + 5;
+        this.closeButton.draw(ctx);
+      }
+
+      this.enableCloseButton();
+    } else {
+      this.disableCloseButton();
+    }
+
+    ctx.restore();
+
+    this.init = true;
   }
   
   close() {
@@ -159,5 +145,13 @@ export default class NotificationMessage extends Component {
   
   copy() {
     return new NotificationMessage(this.text, this.textColor, this.backgroundColor, this.delayBeforeClosing, this.animationDelay, this.fontSize, this.fontFamily, this.foreGround);
+  }
+
+  get width() {
+    return this.canvas ? this.canvas.width : null;
+  }
+
+  get height() {
+    return super.height + 8;
   }
 }

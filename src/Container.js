@@ -21,8 +21,8 @@ import Component from "./Component";
 export default class Container extends Component {
   #components = [];
 
-  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, ...components) {
-    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement);
+  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation, ...components) {
+    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation);
     this.addAll(...components);
     this.canvasTmp = document.createElement("canvas");
   }

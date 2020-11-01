@@ -23,7 +23,7 @@ import Col from "./Col";
 
 export default class Menu extends Col {
   constructor(backgroundColor, blurCanvas, ...components) {
-    super(0, 0, null, Constants.VerticalAlignement.CENTER, ...components);
+    super(0, 0, null, Constants.VerticalAlignement.CENTER, false, ...components);
 
     this.backgroundColor = backgroundColor || "rgba(44, 62, 80, 0.75)";
     this.blurCanvas = blurCanvas || false;

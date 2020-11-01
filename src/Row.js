@@ -20,9 +20,8 @@ import Component from "./Component";
 import Container from "./Container";
 
 export default class Row extends Container {
-  constructor(x, y, alignement, verticalAlignement, ...components) {
-    super(x, y, null, null, alignement, verticalAlignement);
-    this.addAll(...components);
+  constructor(x, y, alignement, verticalAlignement, disableAnimation, ...components) {
+    super(x, y, null, null, alignement, verticalAlignement, disableAnimation, ...components);
   }
 
   draw(context) {
