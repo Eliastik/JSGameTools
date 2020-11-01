@@ -20,6 +20,8 @@ import Component from "./Component";
 import Container from "./Container";
 
 export default class Col extends Container {
+  selectable = false;
+
   constructor(x, y, alignement, verticalAlignement, disableAnimation, ...components) {
     super(x, y, null, null, alignement, verticalAlignement, disableAnimation, ...components);
   }

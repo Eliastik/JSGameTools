@@ -19,6 +19,7 @@
 import Component from "./Component";
 
 export default class Container extends Component {
+  selectable = false;
   #components = [];
 
   constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation, ...components) {

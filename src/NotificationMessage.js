@@ -18,10 +18,11 @@
  */
 import Constants from "./Constants";
 import { Button, ButtonImage } from "./Button";
-import Utils from "./Utils";
 import Col from "./Col";
 
 export default class NotificationMessage extends Col {
+  selectable = false;
+
   constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, ...components) {
     super(0, 0, Constants.Alignement.CENTER, null, disableAnimation, ...components);
 

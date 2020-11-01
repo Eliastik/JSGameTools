@@ -19,6 +19,8 @@
 import Col from "./Col";
 
 export default class Tooltip extends Col {
+  selectable = false;
+  
   constructor(backgroundColor, ...components) {
     super(0, 0, 0, 0);
 
@@ -33,16 +35,16 @@ export default class Tooltip extends Col {
       const ctx = canvas.getContext("2d");
       ctx.save();
 
-      if(this.x + this.width + 10 > canvas.width) {
-        this.x -= (this.width + 10);
+      if(this.x + this.width + 15 > canvas.width) {
+        this.x -= (this.width + 15);
       }
 
-      if(this.y + this.height + 10 > canvas.height) {
-        this.y -= (this.height + 10);
+      if(this.y + this.height + 15 > canvas.height) {
+        this.y -= (this.height + 15);
       }
   
       ctx.fillStyle = this.backgroundColor;
-      ctx.fillRect(this.x, this.y, this.width + 10, this.height + 10);
+      ctx.fillRect(this.x, this.y, this.width + 15, this.height + 15);
       super.draw(ctx);
       
       ctx.restore();

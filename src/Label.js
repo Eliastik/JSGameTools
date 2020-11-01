@@ -21,6 +21,8 @@ import Utils from "./Utils";
 import Component from "./Component";
 
 export default class Label extends Component {
+  selectable = false;
+
   constructor(text, x, y, fontSize, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
     super(x, y);
 

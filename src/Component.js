@@ -19,6 +19,7 @@
 import Constants from "./Constants";
 
 export default class Component {
+  selectable = true;
   #_width = 0;
   #_height = 0;
   #_x = 0;

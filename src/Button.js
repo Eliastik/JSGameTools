@@ -21,6 +21,8 @@ import Utils from "./Utils";
 import Component from "./Component";
 
 class Button extends Component {
+  selectable = true;
+
   constructor(text, x, y, alignement, color, colorHover, colorDown, width, height, fontSize, fontFamily, fontColor, imgSrc, imageLoader, verticalAlignement) {
     super(x, y, width, height, alignement, verticalAlignement);
     this.autoWidth = (this.width == undefined ? true : false);

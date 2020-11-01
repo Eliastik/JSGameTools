@@ -19,6 +19,8 @@
 import Label from "./Label";
 
 export default class Link extends Label {
+  selectable = true;
+
   constructor(text, x, y, size, fontFamily, color, colorHover, colorDown, alignement, verticalAlignement, wrap, bold, underline) {
     super(text, x, y, size, fontFamily, color || "#0000EE", alignement, verticalAlignement, wrap, bold, underline || true);
 

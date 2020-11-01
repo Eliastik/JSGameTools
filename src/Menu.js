@@ -22,6 +22,8 @@ import Component from "./Component";
 import Col from "./Col";
 
 export default class Menu extends Col {
+  selectable = false;
+
   constructor(backgroundColor, blurCanvas, ...components) {
     super(0, 0, null, Constants.VerticalAlignement.CENTER, false, ...components);
 
@@ -78,7 +80,11 @@ export default class Menu extends Col {
         this.components.forEach((component, i) => {
           if(component instanceof Component) {
             if(this.selectedComponent == i) {
-              component.selected = true;
+              if(!component.selectable) {
+                this.selectedComponent++;
+              } else {
+                component.selected = true;
+              }
             } else {
               component.selected = false;
             }

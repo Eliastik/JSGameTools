@@ -20,7 +20,7 @@ import Component from "./Component";
 
 export default class ProgressBar extends Component {
   #precPercent = 0;
-  #animationPercent = 0;
+  selectable = false;
 
   constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation, alignement, verticalAlignement, easingFunction) {
     super(x, y, width, height, alignement, verticalAlignement, disableAnimation);

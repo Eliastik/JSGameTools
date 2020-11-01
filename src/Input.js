@@ -21,6 +21,8 @@ import Utils from "./Utils";
 import Component from "./Component";
 
 export default class Input extends Component {
+  selectable = true;
+
   constructor(x, y, width, height, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, defaultText) {
     super(x, y, width, height);
     
@@ -137,5 +139,14 @@ export default class Input extends Component {
 
   click() {
     this.input.focus();
+  }
+
+  get selected() {
+    return super.selected;
+  }
+
+  set selected(selected) {
+    if(selected) this.click();
+    super.selected = selected;
   }
 }
