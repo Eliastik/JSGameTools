@@ -50,7 +50,6 @@ export default class Input extends Component {
     this.input.addEventListener("focus", () => this.selected = true);
     document.body.appendChild(this.input);
 
-    this.canvas;
     this.appendToCanvas = false;
     this.noticeLogged = false;
 
@@ -68,7 +67,7 @@ export default class Input extends Component {
 
     if(this.input.selectionEnd != this.positionEnd) this.totalTime = 0;
 
-    if(this.canvas && !this.appendToCanvas) {
+    if(this.canvas && this.canvas.container && !this.appendToCanvas) {
       document.body.removeChild(this.input);
       this.canvas.container.appendChild(this.input);
       this.appendToCanvas = true;
@@ -103,7 +102,7 @@ export default class Input extends Component {
 
     for(let i = -1; i < this.text.length; i++) {
       if(i > -1) {
-        const sizes = Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y + this.fontSize, false);
+        const sizes = Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y, false);
         currentX += sizes["width"] + 1;
       }
 

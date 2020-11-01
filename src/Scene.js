@@ -21,14 +21,12 @@ import Menu from "./Menu";
 import NotificationMessage from "./NotificationMessage";
 import Tooltip from "./Tooltip";
 import Input from "./Input";
+import Container from "./Container";
 
-export default class Scene extends Component {
-  #components = [];
-
+export default class Scene extends Container {
   constructor(...components) {
     super(0, 0, 0, 0);
     this.addAll(...components);
-    this.canvas;
   }
 
   draw(context) {
@@ -40,13 +38,13 @@ export default class Scene extends Component {
 
     canvas.style.cursor = "default";
 
-    const componentsBackground = this.#components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
-    const menus = this.#components.filter(component => component  && component instanceof Menu)
+    const componentsBackground = super.components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
+    const menus = super.components.filter(component => component  && component instanceof Menu)
     const menuOpened = menus.filter(menu => !menu.disabled)[0];
-    const tooltips = this.#components.filter(component => component && component instanceof Tooltip);
-    const inputs = this.#components.filter(component => component && component instanceof Input);
-    const notificationsBackground = this.#components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
-    const notificationsForeground = this.#components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
+    const tooltips = super.components.filter(component => component && component instanceof Tooltip);
+    const inputs = super.components.filter(component => component && component instanceof Input);
+    const notificationsBackground = super.components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
+    const notificationsForeground = super.components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
 
     // Set inputs canvas
     inputs && inputs.forEach(input => input.canvas = this.canvas);
@@ -68,25 +66,5 @@ export default class Scene extends Component {
     notificationsForeground && notificationsForeground.forEach(notification => notification.draw(ctx));
 
     ctx.restore();
-  }
-
-  add(component) {
-    this.addAll(component);
-  }
-
-  addAll(...components) {
-    components.forEach(component => this.#components.push(component));
-  }
-
-  remove(component) {
-    this.#components = this.#components.filter(current => component != current);
-  }
-
-  removeAll(...components) {
-    components.forEach(component => this.remove(component));
-  }
-
-  clear() {
-    this.#components = [];
   }
 }

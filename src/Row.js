@@ -38,8 +38,7 @@ export default class Row extends Container {
       super.components.forEach(component => {
         if(component instanceof Component) {
           component.x = currentX;
-          if(this.y) component.y = this.y;
-          component.initialX = currentX;
+          if(this.y) component.y = this.y + 5;
           component.enable();
           component.draw(ctx);
           currentX += component.width + 8;

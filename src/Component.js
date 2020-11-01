@@ -27,13 +27,12 @@ export default class Component {
   constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollDisabled) {
     this.#_x = x || 0;
     this.#_y = y || 0;
-    this.initialX = x;
-    this.initialY = y;
     this.#_width = width;
     this.#_height = height;
     this.alignement = alignement || "default";
     this.verticalAlignement = verticalAlignement || "default";
-    this.canvasContext2d;
+    this.canvas;
+    this.parent;
     
     // Functions triggered by events
     this.triggersClick = [];
@@ -66,8 +65,6 @@ export default class Component {
   draw(context) {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
-
-    this.canvasContext2d = ctx;
 
     if(!this.initEvents && ctx != null) {
       canvas.addEventListener("mousemove", event => {
@@ -303,13 +300,11 @@ export default class Component {
   }
 
   get x() {
-    const canvas = this.canvasContext2d ? this.canvasContext2d.canvas : null;
-
-    if(this.alignement && canvas) {
+    if(this.alignement && this.canvas) {
       if(this.alignement == Constants.Alignement.CENTER) {
-        return (canvas.width / 2) - (this.width / 2) - this.initialX;
+        return (this.canvas.width / 2) - (this.width / 2);
       } else if(this.alignement == Constants.Alignement.RIGHT) {
-        return (canvas.width) - (this.width) - 5 - this.initialX;
+        return (this.canvas.width) - (this.width) - 5;
       } else if(this.alignement == Constants.Alignement.LEFT) {
         return 5;
       }
@@ -323,13 +318,11 @@ export default class Component {
   }
 
   get y() {
-    const canvas = this.canvasContext2d ? this.canvasContext2d.canvas : null;
-
-    if(this.verticalAlignement && canvas) {
+    if(this.verticalAlignement && this.canvas) {
       if(this.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        return (canvas.height) - (this.height) - 5 - this.initialY;
+        return (this.canvas.height) - (this.height) - 5;
       } else if(this.verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        return (canvas.height / 2) - (this.height / 2) - this.initialY;
+        return (this.canvas.height / 2) - (this.height / 2);
       } else if(this.verticalAlignement == Constants.VerticalAlignement.TOP) {
         return 15;
       }

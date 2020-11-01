@@ -33,16 +33,16 @@ const menu = new JSGameTools.Menu(null, null, new JSGameTools.Label("Pause menu\
 const notification2 = new JSGameTools.NotificationMessage("Hi!", null, "rgba(46, 204, 225, 0.85)", null, null, null, null, true);
 const textField = new JSGameTools.Input(5, 250, 150);
 const label1 = new JSGameTools.Label("A label", 5, 325);
-const row1 = new JSGameTools.Row(5, 325, null, null, label1, textField);
-const link1 = new JSGameTools.Link("A long link", 5, 375);
-const tooltip1 = new JSGameTools.Tooltip("A tooltip\nSecond line");
+const row1 = new JSGameTools.Row(5, 250, null, null, label1, textField);
+const link1 = new JSGameTools.Link("A long link", 5, 300);
+const tooltip1 = new JSGameTools.Tooltip(null, new JSGameTools.Label("A tooltip\nSecond line", null, null, null, null, "white"));
 label1.tooltip = tooltip1;
-const tooltip2 = new JSGameTools.Tooltip("A tooltip .... .. .. ...... Autowrap\nNew line");
+const tooltip2 = new JSGameTools.Tooltip(null, new JSGameTools.Label("A tooltip .... .. .. ...... Autowrap\nNew line", null, null, null, null, "white"));
 buttonText2.tooltip = tooltip2;
 const fpsMeter = new JSGameTools.FPSMeter(false, null, null, null, null, null, "right", "bottom");
 const progress = new JSGameTools.ProgressBar(300, 5, 200, 25, null, null, 0.25);
 progress.percent = 1;
-const tooltip3 = new JSGameTools.Tooltip("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%");
+const tooltip3 = new JSGameTools.Tooltip(null, new JSGameTools.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, null, null, "white"));
 progress.tooltip = tooltip3;
 
 // Custom component
@@ -108,6 +108,6 @@ imageLoader.load(["pause.png"], () => {
       progress.percent = Math.random();
     }
 
-    tooltip3.text = "Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%";
+    tooltip3.components[0].text = "Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%";
   }, 3000);
 });

@@ -103,6 +103,7 @@ export default {
       let maxWidth = 0;
       let xCurrent = 0;
       let yFirst = 0;
+      y += size;
   
       if(verticalAlignement == Constants.VerticalAlignement.CENTER) {
         y = Math.round((ctx.canvas.height / 2) - (size * lines.length / 2));
@@ -141,7 +142,7 @@ export default {
           xCurrent = Math.round(x);
           yCurrent = Math.round(y + (size * i));
         }
-  
+
         ctx.fillText(currentText, xCurrent, yCurrent);
   
         if(underline) {

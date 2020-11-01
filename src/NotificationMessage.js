@@ -43,9 +43,12 @@ export default class NotificationMessage extends Component {
     this.closeButton = new ButtonImage(null, null, 5, "right", null, 32, 32);
     this.closeButton.image = new Image();
     this.closeButton.image.src = Constants.Setting.CLOSE_ICON;
+    this.closeButton.canvas = this.canvas;
   }
   
   draw(context) {
+    this.closeButton.canvas = this.canvas;
+
     if(this.text != null) {
       super.draw(context);
 
@@ -107,7 +110,7 @@ export default class NotificationMessage extends Component {
         ctx.fillStyle = this.backgroundColor;
         ctx.fillRect(0, y, width, height);
   
-        Utils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y + this.fontSize, true);
+        Utils.drawText(ctx, this.text, this.textColor, this.fontSize, this.fontFamily, "center", "default", null, y, true);
   
         if(this.closeButton != null) {
           this.closeButton.y = y + 5;

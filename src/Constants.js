@@ -29,7 +29,8 @@ export default {
     RIGHT: 39,
     BOTTOM: 40,
     LEFT: 37,
-    ENTER: 13
+    ENTER: 13,
+    ECHAP: 27
   },
   Alignement: {
     RIGHT: "right",

@@ -37,9 +37,8 @@ export default class Col extends Container {
 
       super.components.forEach(component => {
         if(component instanceof Component) {
-          if(this.x) component.x = this.x;
+          if(this.x) component.x = this.x + 5;
           component.y = currentY;
-          component.initialY = currentY;
           component.enable();
           component.draw(ctx);
           currentY += component.height + 8;

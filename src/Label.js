@@ -41,28 +41,17 @@ export default class Label extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
-
-    const sizes = Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, this.verticalAlignement, this.initialX, this.initialY, this.wrap, this.bold, this.underline);
-
-    this.x = sizes["x"];
-    this.y = sizes["y"] - this.fontSize;
+    
+    Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, this.verticalAlignement, this.x, this.y, this.wrap, this.bold, this.underline);
 
     ctx.restore();
   }
 
   get height() {
-    return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily)["height"];
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily)["height"];
   }
 
   get width() {
-    return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily)["width"];
-  }
-
-  set width(width) {
-    super.width = width;
-  }
-
-  set height(height) {
-    super.height = height;
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily)["width"];
   }
 }

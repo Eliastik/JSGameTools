@@ -24,6 +24,15 @@ export default class Container extends Component {
   constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, ...components) {
     super(x, y, maxWidth, maxHeight, alignement, verticalAlignement);
     this.addAll(...components);
+    this.canvasTmp = document.createElement("canvas");
+  }
+
+  draw(context) {
+    this.components.forEach(component => {
+      if(this.canvas) component.canvas = this.canvas;
+    });
+
+    super.draw(context);
   }
 
   set(...components) {
@@ -37,7 +46,11 @@ export default class Container extends Component {
   }
 
   addAll(...components) {
-    components.forEach(component => this.#components.push(component));
+    components.forEach(component => {
+      this.#components.push(component);
+      component.parent = this;
+      if(this.canvas) component.canvas = this.canvas;
+    });
   }
 
   remove(component) {

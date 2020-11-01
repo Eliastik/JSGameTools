@@ -99,7 +99,7 @@ class Button extends Component {
       ctx.fillStyle = this.fontColor;
       
       const textX = this.x + (this.width / 2) - (widthText / 2);
-      const textY = this.y + (this.height / 2) - (textLines - 1) * (this.fontSize / 2);
+      const textY = this.y + (this.height / 2) - (textLines - 1) * (this.fontSize / 2) - this.fontSize;
       
       Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);
     }
@@ -108,7 +108,7 @@ class Button extends Component {
   }
 
   get textWrapped() {
-    return Utils.wrapTextLines(this.canvasContext2d, this.text, null, this.fontSize, this.fontFamily);
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily);
   }
 
   get height() {
