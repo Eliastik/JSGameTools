@@ -23,7 +23,7 @@ import Component from "./Component";
 export default class Input extends Component {
   selectable = true;
 
-  constructor(x, y, width, height, alignement, verticalAlignement, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, defaultText) {
+  constructor(x, y, width, height, alignement, verticalAlignement, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, selectColor, defaultText) {
     super(x, y, width, height, alignement, verticalAlignement);
     
     this.text = defaultText || "";
@@ -34,6 +34,7 @@ export default class Input extends Component {
     this.backgroundColor = backgroundColor || "#ffffff";
     this.borderColor = borderColor || "#000000";
     this.borderColorHover = borderColorHover || "#a2cdd8";
+    this.selectColor = selectColor || "#2980b9";
     this.borderSize = borderSize || 3;
     this.height = this.height == undefined ? this.fontSize + this.borderSize * 2 : this.height;
 
@@ -110,7 +111,14 @@ export default class Input extends Component {
 
     for(let i = -1; i < this.text.length; i++) {
       if(i > -1) {
-        const sizes = Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y, false);
+        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily);
+
+        if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
+          ctxText.fillStyle = this.selectColor;
+          ctxText.fillRect(currentX - this.offsetX, this.y + this.borderSize, sizes["width"] + 2, this.height - this.borderSize * 2);
+        }
+        
+        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y, false);
         currentX += sizes["width"] + 1;
       }
 
