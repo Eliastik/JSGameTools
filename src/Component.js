@@ -24,6 +24,7 @@ export default class Component {
   #_height = 0;
   #_x = 0;
   #_y = 0;
+  #_disabled = false;
 
   constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollDisabled) {
     this.#_x = x || 0;
@@ -47,7 +48,7 @@ export default class Component {
     this.selected = false;
     this.clicked = false;
     this.hovered = false;
-    this.disabled = false;
+    this.#_disabled = false;
     this.disableAnimation = disableAnimation || false;
     this.scrollDisabled = scrollDisabled || false;
 
@@ -218,6 +219,14 @@ export default class Component {
   
   enable() {
     this.disabled = false;
+  }
+
+  get disabled() {
+    return this.#_disabled || (this.parent && this.parent.disabled);
+  }
+
+  set disabled(disabled) {
+    this.#_disabled = disabled;
   }
 
   setClickAction(trigger) {
