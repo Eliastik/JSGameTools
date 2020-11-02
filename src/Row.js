@@ -34,7 +34,7 @@ export default class Row extends Container {
     ctx.save();
   
     if(super.components != null) {
-      let currentX = this.x || 0;
+      let currentX = this.x + this.padding || this.padding;
 
       super.components.forEach(component => {
         if(component instanceof Component) {
@@ -53,12 +53,12 @@ export default class Row extends Container {
   get height() {
     let maxHeight = 0;
     super.components.forEach(component => { if(component.height > maxHeight) maxHeight = component.height; });
-    return maxHeight + this.padding * super.components.length;
+    return maxHeight + this.padding;
   }
 
   get width() {
     let totalWidth = 0;
     super.components.forEach(component => totalWidth += component.width);
-    return totalWidth + this.spaceBetweenComponents;
+    return totalWidth + this.spaceBetweenComponents * (super.components.length - 1) + this.padding;
   }
 }

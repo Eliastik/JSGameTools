@@ -26,7 +26,7 @@ export default class Container extends Component {
   constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
     super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation);
     this.addAll(...components);
-    this.padding = padding ? padding : Constants.Setting.DEFAULT_PADDING;
+    this.padding = padding ? padding : 0;
     this.spaceBetweenComponents = spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING;
     this.canvasTmp = document.createElement("canvas");
   }

@@ -26,7 +26,7 @@ export default class NotificationMessage extends Col {
   selectable = false;
 
   constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
-    super(0, 0, Constants.Alignement.CENTER, null, padding, spaceBetweenComponents, disableAnimation, ...components);
+    super(0, 0, Constants.Alignement.CENTER, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING, disableAnimation, ...components);
 
     this.backgroundColor = backgroundColor == undefined ? Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
@@ -159,6 +159,6 @@ export default class NotificationMessage extends Col {
   }
 
   get height() {
-    return super.height + this.padding * 2 - this.closeButton.height;
+    return super.height - this.closeButton.height;
   }
 }

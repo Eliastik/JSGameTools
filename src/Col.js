@@ -34,7 +34,7 @@ export default class Col extends Container {
     ctx.save();
   
     if(super.components != null) {
-      let currentY = this.y + this.spaceBetweenComponents || this.spaceBetweenComponents;
+      let currentY = this.y + this.padding || this.padding;
 
       super.components.forEach(component => {
         if(component instanceof Component) {
@@ -53,12 +53,12 @@ export default class Col extends Container {
   get height() {
     let totalHeight = 0;
     super.components.forEach(component => totalHeight += component.height);
-    return totalHeight + this.spaceBetweenComponents;
+    return totalHeight + this.spaceBetweenComponents * (super.components.length - 1) + this.padding;
   }
 
   get width() {
     let maxWidth = 0;
     super.components.forEach(component => { if(component.width > maxWidth) maxWidth = component.width; });
-    return maxWidth + this.padding * super.components.length;
+    return maxWidth + this.padding;
   }
 }

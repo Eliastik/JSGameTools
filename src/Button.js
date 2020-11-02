@@ -24,7 +24,7 @@ class Button extends Col {
   selectable = true;
 
   constructor(x, y, maxWidth, maxHeight, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, padding, ...components) {
-    super(x, y, alignement, verticalAlignement, padding, padding, false, ...components);
+    super(x, y, alignement, verticalAlignement, padding ? padding : Constants.Setting.DEFAULT_PADDING, padding ? padding : Constants.Setting.DEFAULT_SPACING, false, ...components);
     this.autoWidth = (this.width == undefined ? true : false);
     this.autoHeight = (this.height == undefined ? true : false);
     this.backgroundColor = backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND;
