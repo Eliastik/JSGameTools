@@ -39,6 +39,24 @@ class Button extends Col {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
+    this.drawBackground(ctx);
+
+    if(this.selected) {
+      this.drawBorder(ctx);
+    }
+    
+    this.drawComponents(ctx);
+    
+    ctx.restore();
+  }
+
+  drawComponents(ctx) {
+    super.draw(ctx);
+  }
+
+  drawBackground(ctx) {
+    ctx.save();
+
     if(this.hovered && this.clicked) {
       ctx.fillStyle = this.backgroundColorDown;
     } else if(this.hovered) {
@@ -49,15 +67,17 @@ class Button extends Col {
 
     ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
 
-    if(this.selected) {
-      ctx.strokeStyle = "#a2cdd8";
-      ctx.lineWidth = 3;
-      
-      ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-    }
+    ctx.restore();
+  }
+
+  drawBorder(ctx) {
+    ctx.save();
     
-    super.draw(ctx);
+    ctx.strokeStyle = "#a2cdd8";
+    ctx.lineWidth = 3;
     
+    ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+
     ctx.restore();
   }
 

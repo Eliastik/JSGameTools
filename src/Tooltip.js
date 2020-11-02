@@ -42,11 +42,19 @@ export default class Tooltip extends Col {
         this.y -= (this.height + this.padding);
       }
   
-      ctx.fillStyle = this.backgroundColor;
-      ctx.fillRect(this.x, this.y, this.width + this.padding, this.height + this.padding);
+      this.drawBackground(ctx);
       super.draw(ctx);
       
       ctx.restore();
     }
+  }
+
+  drawBackground(ctx) {
+    ctx.save();
+
+    ctx.fillStyle = this.backgroundColor;
+    ctx.fillRect(this.x, this.y, this.width + this.padding, this.height + this.padding);
+
+    ctx.restore();
   }
 }

@@ -71,8 +71,23 @@ export default class ProgressBar extends Component {
       this.lastTime = 0;
     }
 
+    this.drawBackground(ctx);
+    this.drawForeground(ctx, widthForeground);
+
+    ctx.restore();
+  }
+
+  drawBackground(ctx) {
+    ctx.save();
+
     ctx.fillStyle = this.backgroundColor;
-    ctx.fillRect(this.x, this.y, this.width, this.height); // Background
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+
+    ctx.restore();
+  }
+
+  drawForeground(ctx, widthForeground) {
+    ctx.save();
 
     ctx.fillStyle = this.foregroundColor;
     ctx.fillRect(this.x, this.y, widthForeground, this.height); // Foreground

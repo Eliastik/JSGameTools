@@ -50,22 +50,34 @@ export default class Scene extends Container {
     inputs && inputs.forEach(input => input.canvas = this.canvas);
 
     // Disable background components if a menu is opened
+    this.disableBackgroundComponents(menuOpened, componentsBackground);
+
+    // Draw background components, background notifications and tooltips
+    this.drawBackgroundComponents(componentsBackground, ctx, notificationsBackground, tooltips);
+
+    // Draw menu and foreground notifications
+    this.drawForegroundComponents(menuOpened, ctx, notificationsForeground);
+
+    ctx.restore();
+  }
+
+  disableBackgroundComponents(menuOpened, componentsBackground) {
     if(menuOpened) {
       componentsBackground && componentsBackground.forEach(component => component.disable());
     } else {
       componentsBackground && componentsBackground.forEach(component => component.enable());
     }
+  }
 
-    // Draw background components, background notifications and tooltips
+  drawForegroundComponents(menuOpened, ctx, notificationsForeground) {
+    menuOpened && menuOpened.draw(ctx);
+    notificationsForeground && notificationsForeground.forEach(notification => notification.draw(ctx));
+  }
+
+  drawBackgroundComponents(componentsBackground, ctx, notificationsBackground, tooltips) {
     componentsBackground && componentsBackground.forEach(component => component.draw(ctx));
     notificationsBackground && notificationsBackground.forEach(notification => notification.draw(ctx));
     tooltips && tooltips.forEach(tooltip => tooltip.draw(ctx));
-
-    // Draw menu and foreground notifications
-    menuOpened && menuOpened.draw(ctx);
-    notificationsForeground && notificationsForeground.forEach(notification => notification.draw(ctx));
-
-    ctx.restore();
   }
 
   get x() {

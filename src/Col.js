@@ -37,17 +37,23 @@ export default class Col extends Container {
       let currentY = this.y + this.padding || this.padding;
 
       super.components.forEach(component => {
-        if(component instanceof Component) {
-          if(this.x) component.x = this.x + this.padding;
-          component.y = currentY;
-          component.enable();
-          component.draw(ctx);
-          currentY += component.height + this.spaceBetweenComponents;
-        }
+        currentY = this.drawComponent(component, currentY, ctx);
       });
     }
     
     ctx.restore();
+  }
+
+  drawComponent(component, currentY, ctx) {
+    if(component instanceof Component) {
+      if(this.x) component.x = this.x + this.padding;
+      component.y = currentY;
+      component.enable();
+      component.draw(ctx);
+      currentY += component.height + this.spaceBetweenComponents;
+    }
+    
+    return currentY;
   }
 
   get height() {

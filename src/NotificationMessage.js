@@ -101,10 +101,8 @@ export default class NotificationMessage extends Col {
 
       this.y = canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
 
-      ctx.fillStyle = this.backgroundColor;
-      ctx.fillRect(0, this.y, this.width, this.height);
-
-      super.draw(ctx);
+      this.drawBackground(ctx);
+      this.drawComponents(ctx);
 
       if(this.closeButton != null) {
         this.closeButton.y = this.y + this.padding / 2;
@@ -121,6 +119,19 @@ export default class NotificationMessage extends Col {
     this.init = true;
   }
   
+  drawComponents(ctx) {
+    super.draw(ctx);
+  }
+
+  drawBackground(ctx) {
+    ctx.save();
+
+    ctx.fillStyle = this.backgroundColor;
+    ctx.fillRect(0, this.y, this.width, this.height);
+
+    ctx.restore();
+  }
+
   close() {
     this.disableCloseButton();
   

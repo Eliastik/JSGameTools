@@ -41,10 +41,14 @@ export default class Image extends Component {
     }
 
     if(this.image != null) {
-      Utils.drawImage(ctx, this.image, Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+      this.drawImage(ctx);
     }
 
     ctx.restore();
+  }
+
+  drawImage(ctx) {
+    Utils.drawImage(ctx, this.image, Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
   }
 
   get sizes() {

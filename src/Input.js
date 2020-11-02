@@ -96,12 +96,8 @@ export default class Input extends Component {
     this.lastTime = time;
     this.totalTime += offsetTime;
 
-    ctx.fillStyle = this.backgroundColor;
-    ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-      
-    ctx.strokeStyle = this.selected ? this.borderColorHover : this.borderColor;
-    ctx.lineWidth = this.borderSize;
-    ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+    this.drawBackground(ctx);
+    this.drawBorder(ctx);
 
     this.canvasTmp.width = canvas.width;
     this.canvasTmp.height = canvas.height;
@@ -109,34 +105,7 @@ export default class Input extends Component {
 
     let currentX = this.x + 5;
 
-    for(let i = -1; i < this.text.length; i++) {
-      if(i > -1) {
-        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily, true);
-
-        if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
-          ctxText.fillStyle = this.selectColor;
-          ctxText.fillRect(currentX - this.offsetX, this.y + this.borderSize, sizes["width"] + 2, this.height - this.borderSize * 2);
-        }
-        
-        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y + this.borderSize, false);
-        currentX += sizes["width"] + 1;
-      }
-
-      if(this.positionEnd == i + 1 && this.selected) {
-        if(this.totalTime <= 500) {
-          ctxText.strokeStyle = this.borderColor;
-          ctxText.lineWidth = 1;
-          ctxText.beginPath();
-          ctxText.moveTo(currentX - this.offsetX, this.y + 3);
-          ctxText.lineTo(currentX - this.offsetX, this.y + this.fontSize);
-          ctxText.stroke();
-        } else if(this.totalTime > 1000) {
-          this.totalTime = 0;
-        }
-
-        this.offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
-      }
-    }
+    currentX = this.drawText(ctxText, currentX);
 
     Utils.drawImageData(ctx, this.canvasTmp, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2);
 
@@ -149,6 +118,58 @@ export default class Input extends Component {
     }
 
     ctx.restore();
+  }
+
+  drawText(ctxText, currentX) {
+    for(let i = -1; i < this.text.length; i++) {
+      if(i > -1) {
+        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily, true);
+
+        if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
+          this.drawHighlight(ctxText, currentX, sizes);
+        }
+
+        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y + this.borderSize, false);
+        currentX += sizes["width"] + 1;
+      }
+
+      if(this.positionEnd == i + 1 && this.selected) {
+        if(this.totalTime <= 500) {
+          this.drawCursor(ctxText, currentX);
+        } else if(this.totalTime > 1000) {
+          this.totalTime = 0;
+        }
+
+        this.offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
+      }
+    }
+
+    return currentX;
+  }
+
+  drawCursor(ctxText, currentX) {
+    ctxText.strokeStyle = this.borderColor;
+    ctxText.lineWidth = 1;
+    ctxText.beginPath();
+    ctxText.moveTo(currentX - this.offsetX, this.y + 3);
+    ctxText.lineTo(currentX - this.offsetX, this.y + this.fontSize);
+    ctxText.stroke();
+  }
+
+  drawHighlight(ctxText, currentX, sizes) {
+    ctxText.fillStyle = this.selectColor;
+    ctxText.fillRect(currentX - this.offsetX, this.y + this.borderSize, sizes["width"] + 2, this.height - this.borderSize * 2);
+  }
+
+  drawBorder(ctx) {
+    ctx.strokeStyle = this.selected ? this.borderColorHover : this.borderColor;
+    ctx.lineWidth = this.borderSize;
+    ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+  }
+
+  drawBackground(ctx) {
+    ctx.fillStyle = this.backgroundColor;
+    ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
   }
 
   click() {

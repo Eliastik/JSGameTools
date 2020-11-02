@@ -41,16 +41,13 @@ export default class Menu extends Col {
 
     if(!this.disabled) {
       if(this.blurCanvas) {
-        Utils.blurCanvas(ctx, 5);
+        this.drawBlur(ctx);
       }
   
       ctx.save();
   
-      ctx.font = this.fontSize + "px " + this.fontFamily;
-      ctx.fillStyle = this.backgroundColor;
-      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  
-      super.draw(ctx);
+      this.drawBackground(ctx);
+      this.drawComponents(ctx);
 
       if(!this.init) {
         document.addEventListener("keydown", event => {
@@ -106,6 +103,19 @@ export default class Menu extends Col {
     }
   
     this.lastKey = -1;
+  }
+
+  drawComponents(ctx) {
+    super.draw(ctx);
+  }
+
+  drawBlur(ctx) {
+    Utils.blurCanvas(ctx, 5);
+  }
+
+  drawBackground(ctx) {
+    ctx.fillStyle = this.backgroundColor;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
   disable() {

@@ -44,14 +44,21 @@ export default class Canvas {
 
   draw() {
     const ctx = this.canvas.getContext("2d");
-    
+    this.drawClear(ctx);
+    this.drawScene(ctx);
+  }
+
+  drawScene(ctx) {
     if(this.scene) {
       this.scene.parent = this;
       this.scene.canvas = this;
     }
 
-    Utils.clear(ctx);
     scene.draw(ctx);
+  }
+
+  drawClear(ctx) {
+    Utils.clear(ctx);
   }
 
   startDraw() {

@@ -37,17 +37,23 @@ export default class Row extends Container {
       let currentX = this.x + this.padding || this.padding;
 
       super.components.forEach(component => {
-        if(component instanceof Component) {
-          component.x = currentX;
-          if(this.y) component.y = this.y + this.padding;
-          component.enable();
-          component.draw(ctx);
-          currentX += component.width + this.spaceBetweenComponents;
-        }
+        currentX = this.drawComponent(component, currentX, ctx);
       });
     }
     
     ctx.restore();
+  }
+
+  drawComponent(component, currentX, ctx) {
+    if(component instanceof Component) {
+      component.x = currentX;
+      if(this.y) component.y = this.y + this.padding;
+      component.enable();
+      component.draw(ctx);
+      currentX += component.width + this.spaceBetweenComponents;
+    }
+    
+    return currentX;
   }
 
   get height() {
