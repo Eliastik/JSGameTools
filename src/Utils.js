@@ -221,16 +221,16 @@ export default {
       };
     }
   },
-  drawArrow: function(ctx, fromx, fromy, tox, toy, lineWidth, headSize) {
+  drawArrow: function(ctx, fromx, fromy, tox, toy, lineWidth, headSize, color) {
     ctx.save();
 
     ctx.lineCap = "round";
-    ctx.lineWidth = lineWidth || 8;
-    ctx.strokeStyle = "#FF0000";
+    ctx.lineWidth = lineWidth || Constants.Setting.ARROW_DEFAULT_LINE_SIZE;
+    ctx.strokeStyle = color || Constants.Setting.ARROW_DEFAULT_COLOR;
     ctx.filter = "";
   
     ctx.beginPath();
-    const headlen = headSize || 20;
+    const headlen = headSize || Constants.Setting.ARROW_DEFAULT_HEAD_SIZE;
     const dx = tox - fromx;
     const dy = toy - fromy;
     const angle = Math.atan2(dy, dx);

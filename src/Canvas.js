@@ -27,8 +27,8 @@ export default class Canvas {
   constructor(scene, canvas, width, height, autoResize, maxFPS) {
     this.canvas = canvas || document.createElement("canvas");
     this.container = document.createElement("div");
-    this.#_width = width || Constants.Setting.CANVAS_WIDTH;
-    this.#_height = height || Constants.Setting.CANVAS_HEIGHT;
+    this.width = width || Constants.Setting.CANVAS_WIDTH;
+    this.height = height || Constants.Setting.CANVAS_HEIGHT;
     this.scene = scene;
     this.container.appendChild(this.canvas);
     this.started = false;

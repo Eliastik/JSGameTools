@@ -25,7 +25,7 @@ const buttonText2 = new JGT.Button(5, 150, null, null,  "#2ecc71", "#1abc9c", "#
 const pauseImage = new JGT.Image("pause.png", null, null, 64, 64, null, "center");
 const buttonImage = new JGT.Button(5, 50, null, null, null, null, null, "left", null, null, new JGT.Row(5, 250, null, null, null, null, false, pauseImage, new JGT.Label("Pause", null, null, null, null, "white", null, "center")));
 const buttonTextFullscreen = new JGT.Button(5, 75, null, null, "#2ecc71", "#1abc9c", "#16a085", "center", null, null, new JGT.Label("Toggle fullscreen", null, null, null, null, "white"));
-const notification = new JGT.NotificationMessage(null, null, null, false, null, null, null, null, new JGT.Label("A notification", null, null, null, null, "white", JGT.Constants.Alignement.CENTER),  new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white"), new JGT.Button(null, null, null, null, null, null, null, null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
+const notification = new JGT.NotificationMessage(null, null, null, false, null, null, null, null, new JGT.Label("A notification", null, null, null, null, "white", JGT.Constants.Alignement.CENTER),  new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), new JGT.Button(null, null, null, null, null, null, null, null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
 
 const buttonMenu1 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", "left", null, null, new JGT.Label("A button, aligned to the left", null, null, null, null, "white"));
 const buttonMenu5 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Label("Display a notification", null, null, null, null, "white"));
@@ -38,7 +38,7 @@ const textField = new JGT.Input(5, 250, 150);
 const label1 = new JGT.Label("A label", 5, 325);
 const row1 = new JGT.Row(5, 250, null, null, null, null, false, label1, textField);
 const link1 = new JGT.Link("A long link", 5, 300);
-const tooltip1 = new JGT.Tooltip(null, null, null, new JGT.Label("A tooltip\nSecond line", null, null, null, null, "white"), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white"), 
+const tooltip1 = new JGT.Tooltip(null, null, null, new JGT.Label("A tooltip\nSecond line", null, null, null, null, "white"), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), 
 new JGT.Button(5, 150, null, null,  "#CC2F2F", "#F23838", "#A62626", null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
 label1.tooltip = tooltip1;
 const tooltip2 = new JGT.Tooltip(null, null, null, new JGT.Label("A tooltip .... .. .. ...... Autowrap\nNew line", null, null, null, null, "white"));
@@ -48,6 +48,7 @@ const progress = new JGT.ProgressBar(300, 5, 200, 25, null, null, 0.25);
 progress.percent = 1;
 const tooltip3 = new JGT.Tooltip(null, null, null, new JGT.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, null, null, "white"));
 progress.tooltip = tooltip3;
+const buttonArrow = new JGT.Button(5, 150, null, null, "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Arrow(null, null, 100, 200, null, null, "white"));
 
 // Custom component
 class Box extends JGT.Component {
@@ -70,7 +71,7 @@ class Box extends JGT.Component {
 }
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3);
+const scene = new JGT.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"));
 canvas.appendTo(document.body);
 
