@@ -44,7 +44,7 @@ export default class Label extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, null, this.x, this.y, this.wrap, this.bold, this.underline);
+    Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, this.verticalAlignement, this.x, this.y, this.wrap, this.bold, this.underline, null, this.parent);
 
     ctx.restore();
   }

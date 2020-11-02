@@ -83,7 +83,7 @@ export default {
       ctx.restore();
     }
   },
-  drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold, underline, textBaseline) {
+  drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold, underline, textBaseline, parent) {
     if(ctx) {
       ctx.save();
 
@@ -102,22 +102,21 @@ export default {
       
       const lines = text.split("\n");
       let maxWidth = 0;
-      let xCurrent = 0;
+      let xCurrent = x;
+      let yCurrent = Math.round((parent && parent.y ? parent.y : y)) + size;
       let yFirst = 0;
-      y += size;
-  
+
       if(verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        y = Math.round((ctx.canvas.height / 2) - (size * lines.length / 2));
-      } else if(verticalAlignement == Constants.VerticalAlignement.TOP) {
-        y = 5;
+        yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height) / 2) - (size * lines.length / 2));
       } else if(verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        y = Math.round((ctx.canvas.height) - (size * lines.length) / 2 - size / 5);
+        yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height)) - (size * lines.length) / 2 - size / 5);
+      } else {
+        yCurrent += 6;
       }
   
       for(let i = 0; i < lines.length; i++) {
         const currentText = lines[i];
         const currentWidth = ctx.measureText(currentText).width;
-        let yCurrent = 0;
   
         if(Array.isArray(color)) {
           let colorIndex = i;
@@ -131,17 +130,9 @@ export default {
         }
   
         if(alignement == Constants.Alignement.CENTER) {
-          xCurrent = Math.round((ctx.canvas.width / 2) - (ctx.measureText(currentText).width / 2));
-          yCurrent = Math.round(y + (size * i));
+          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round(((parent && parent.width ? parent.width : ctx.canvas.width) / 2) - (ctx.measureText(currentText).width / 2));
         } else if(alignement == Constants.Alignement.RIGHT) {
-          xCurrent = Math.round((ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
-          yCurrent = Math.round(y + (size * i));
-        } else if(alignement == Constants.Alignement.LEFT) {
-          xCurrent = 5;
-          yCurrent = Math.round(y + (size * i));
-        } else {
-          xCurrent = Math.round(x);
-          yCurrent = Math.round(y + (size * i));
+          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round((parent && parent.width ? parent.width : ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
         }
 
         ctx.fillText(currentText, xCurrent, yCurrent);
@@ -156,6 +147,8 @@ export default {
   
         if(currentWidth > maxWidth) maxWidth = currentWidth;
         if(i == 0) yFirst = yCurrent;
+
+        yCurrent += size;
       }
   
       ctx.restore();
