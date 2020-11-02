@@ -21,10 +21,8 @@ import Col from "./Col";
 export default class Tooltip extends Col {
   selectable = false;
   
-  constructor(backgroundColor, ...components) {
-    super(0, 0, 0, 0);
-
-    this.addAll(...components);
+  constructor(backgroundColor, padding, ...components) {
+    super(null, null, null, null, padding ? padding : 6, false, ...components);
     this.backgroundColor = backgroundColor || "rgba(255, 255, 255, 0.25)";
     this.disabled = true;
   }
@@ -35,16 +33,16 @@ export default class Tooltip extends Col {
       const ctx = canvas.getContext("2d");
       ctx.save();
 
-      if(this.x + this.width + 15 > canvas.width) {
-        this.x -= (this.width + 15);
+      if(this.x + this.width + this.padding * 2 > canvas.width) {
+        this.x -= (this.width + this.padding * 2);
       }
 
-      if(this.y + this.height + 15 > canvas.height) {
-        this.y -= (this.height + 15);
+      if(this.y + this.height + this.padding * 2 > canvas.height) {
+        this.y -= (this.height + this.padding * 2);
       }
   
       ctx.fillStyle = this.backgroundColor;
-      ctx.fillRect(this.x, this.y, this.width + 15, this.height + 15);
+      ctx.fillRect(this.x, this.y, this.width + this.padding * 2, this.height + this.padding * 2);
       super.draw(ctx);
       
       ctx.restore();

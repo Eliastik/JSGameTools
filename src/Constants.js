@@ -21,7 +21,7 @@ import CloseIcon from "../assets/close.png";
 export default {
   Setting: {
     FONT_FAMILY: "sans-serif",
-    FONT_SIZE: 32,
+    FONT_SIZE: 28,
     CLOSE_ICON: CloseIcon
   },
   Key: {

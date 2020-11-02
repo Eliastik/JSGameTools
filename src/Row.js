@@ -22,8 +22,8 @@ import Container from "./Container";
 export default class Row extends Container {
   selectable = false;
 
-  constructor(x, y, alignement, verticalAlignement, disableAnimation, ...components) {
-    super(x, y, null, null, alignement, verticalAlignement, disableAnimation, ...components);
+  constructor(x, y, alignement, verticalAlignement, padding, disableAnimation, ...components) {
+    super(x, y, null, null, alignement, verticalAlignement, padding, disableAnimation, ...components);
   }
 
   draw(context) {
@@ -39,10 +39,10 @@ export default class Row extends Container {
       super.components.forEach(component => {
         if(component instanceof Component) {
           component.x = currentX;
-          if(this.y) component.y = this.y + 5;
+          if(this.y) component.y = this.y + this.padding;
           component.enable();
           component.draw(ctx);
-          currentX += component.width + 8;
+          currentX += component.width + this.padding;
         }
       });
     }
@@ -53,12 +53,12 @@ export default class Row extends Container {
   get height() {
     let maxHeight = 0;
     super.components.forEach(component => { if(component.height > maxHeight) maxHeight = component.height; });
-    return maxHeight;
+    return maxHeight + this.padding * super.components.length;
   }
 
   get width() {
     let totalWidth = 0;
     super.components.forEach(component => totalWidth += component.width);
-    return totalWidth;
+    return totalWidth + this.padding;
   }
 }

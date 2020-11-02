@@ -17,14 +17,16 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Constants from "./Constants";
-import { Button, ButtonImage } from "./Button";
 import Col from "./Col";
+import { Button } from "./Button";
+import Image from "./Image";
+import ImageLoader from "./ImageLoader";
 
 export default class NotificationMessage extends Col {
   selectable = false;
 
-  constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, ...components) {
-    super(0, 0, Constants.Alignement.CENTER, null, disableAnimation, ...components);
+  constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, padding, ...components) {
+    super(0, 0, Constants.Alignement.CENTER, null, padding, disableAnimation, ...components);
 
     this.backgroundColor = backgroundColor == undefined ? "rgba(46, 204, 113, 0.5)" : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
@@ -36,10 +38,14 @@ export default class NotificationMessage extends Col {
     this.closing = false;
     this.easingFunction = easingFunction;
 
-    this.closeButton = new ButtonImage(null, null, 5, "right", null, 32, 32);
-    this.closeButton.image = new Image();
-    this.closeButton.image.src = Constants.Setting.CLOSE_ICON;
-    this.closeButton.canvas = this.canvas;
+    const pauseImage = new Image(Constants.Setting.CLOSE_ICON, null, null, 32, 32);
+    const imageLoader = new ImageLoader();
+    this.closeButton = new Button(null, null, 32, 32, null, null, null, "right", "top", null, pauseImage);
+    this.add(this.closeButton);
+
+    imageLoader.load([Constants.Setting.CLOSE_ICON], () => {
+      pauseImage.loadImage(imageLoader);
+    });
   }
   
   draw(context) {
@@ -101,7 +107,7 @@ export default class NotificationMessage extends Col {
       super.draw(ctx);
 
       if(this.closeButton != null) {
-        this.closeButton.y = this.y + 5;
+        this.closeButton.y = this.y + this.padding / 2;
         this.closeButton.draw(ctx);
       }
 
@@ -145,7 +151,7 @@ export default class NotificationMessage extends Col {
   };
   
   copy() {
-    return new NotificationMessage(this.text, this.textColor, this.backgroundColor, this.delayBeforeClosing, this.animationDelay, this.fontSize, this.fontFamily, this.foreGround);
+    return new NotificationMessage(this.backgroundColor, this.delayBeforeClosing, this.animationDelay, this.foreGround, this.disableAnimation, this.easingFunction, this.padding, ...this.components);
   }
 
   get width() {
@@ -153,6 +159,6 @@ export default class NotificationMessage extends Col {
   }
 
   get height() {
-    return super.height + 8;
+    return super.height + this.padding * 2 - this.closeButton.height;
   }
 }

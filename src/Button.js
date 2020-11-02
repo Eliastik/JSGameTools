@@ -16,28 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Constants from "./Constants";
-import Utils from "./Utils";
-import Component from "./Component";
+import Col from "./Col";
+import Image from "./Image";
 
-class Button extends Component {
+class Button extends Col {
   selectable = true;
 
-  constructor(text, x, y, alignement, color, colorHover, colorDown, width, height, fontSize, fontFamily, fontColor, imgSrc, imageLoader, verticalAlignement) {
-    super(x, y, width, height, alignement, verticalAlignement);
+  constructor(x, y, maxWidth, maxHeight, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, padding, ...components) {
+    super(x, y, alignement, verticalAlignement, padding ? padding : 6, false, ...components);
     this.autoWidth = (this.width == undefined ? true : false);
     this.autoHeight = (this.height == undefined ? true : false);
-    this.text = text;
-    this.fontSizeInitial = fontSize;
-    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
-    this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
-    this.fontColor = fontColor || "white";
-    this.color = color || "rgba(0, 0, 0, 0)";
-    this.colorHover = colorHover || "#95a5a6";
-    this.colorDown = colorDown || "#727F80"
-    this.image;
-    this.imgSrc = imgSrc;
-    this.imageLoader = imageLoader;
+    this.backgroundColor = backgroundColor || "rgba(0, 0, 0, 0)";
+    this.backgroundColorHover = backgroundColorHover || "#95a5a6";
+    this.backgroundColorDown = backgroundColorDown || "#727F80"
   }
   
   draw(context) {
@@ -47,108 +38,34 @@ class Button extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
-
-    ctx.font = this.fontSize + "px " + this.fontFamily;
-
-    const textWrapped = this.textWrapped;
-    const textLines = textWrapped["text"].split("\n").length;
-    const widthText = textWrapped["width"];
-
-    if(this.imgSrc != null && this.imageLoader != null) {
-      this.loadImage(this.imageLoader);
-    }
-
     if(this.hovered && this.clicked) {
-      ctx.fillStyle = this.colorDown;
+      ctx.fillStyle = this.backgroundColorDown;
     } else if(this.hovered) {
-      ctx.fillStyle = this.colorHover;
+      ctx.fillStyle = this.backgroundColorHover;
     } else {
-      ctx.fillStyle = this.color;
+      ctx.fillStyle = this.backgroundColor;
     }
 
     ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
 
     if(this.selected) {
-      const initialStrokeStyle = ctx.strokeStyle;
-      const initialLineWidth = ctx.lineWidth;
-      
       ctx.strokeStyle = "#a2cdd8";
       ctx.lineWidth = 3;
       
       ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-      
-      ctx.strokeStyle = initialStrokeStyle;
-      ctx.lineWidth = initialLineWidth;
     }
-
-    if(this.image != null) {
-      let imgWidth;
-      let imgHeight;
-      
-      if(this.image.width > this.width || this.image.height > this.height) {
-        const aspectRatio = this.image.width / this.image.height;
-        imgWidth = Math.floor(this.width / 1.25);
-        imgHeight = Math.floor(imgWidth / aspectRatio);
-      }
-      
-      const imgX = this.x + (this.width / 2) - (imgWidth / 2);
-      const imgY = this.y + (this.height / 2) - (imgHeight / 2);
-      
-      Utils.drawImage(ctx, this.image, Math.round(imgX), Math.round(imgY), Math.round(imgWidth), Math.round(imgHeight));
-    } else if(this.text != null) {
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = this.fontColor;
-      
-      const textX = this.x + (this.width / 2) - (widthText / 2);
-      const textY = this.y + (this.height / 2) - (textLines - 1) * (this.fontSize / 2) - this.fontSize;
-      
-      Utils.drawText(ctx, this.text, this.fontColor, this.fontSize, this.fontFamily, (this.alignement == "center" ? "center" : "default"), "default", Math.round(textX), Math.round(textY), true);
-    }
+    
+    super.draw(ctx);
     
     ctx.restore();
   }
 
-  get textWrapped() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily);
-  }
-
   get height() {
-    if(this.image) {
-      let imgHeight = this.image.height;
-
-      if(this.autoHeight) {
-        return imgHeight * 1.5;
-      }
-    } else if(this.text) {
-      const textWrapped = this.textWrapped;
-      const heightText = textWrapped["height"];
-
-      if(this.autoHeight) {
-        return heightText + this.fontSize / 1.5;
-      }
-    }
-
-    return super.height;
+    return super.height + this.padding;
   }
 
   get width() {
-    if(this.image) {
-      let imgWidth = this.image.width;
-
-      if(this.autoWidth) {
-        return imgWidth * 1.25;
-      }
-    } else if(this.text) {
-      const textWrapped = this.textWrapped;
-      const widthText = textWrapped["width"];
-
-      if(this.autoWidth) {
-        return widthText + textWrapped["carWidth"] * 2;
-      }
-    }
-
-    return super.width;
+    return super.width + this.padding;
   }
 
   set width(width) {
@@ -160,15 +77,15 @@ class Button extends Component {
     super.height = height;
     this.autoHeight = false;
   }
-  
-  loadImage(imageLoader) {
-    this.image = imageLoader.get(this.imgSrc);
-  }
 }
 
 class ButtonImage extends Button {
-  constructor(imgSrc, x, y, alignement, verticalAlignement, width, height, color, colorHover, imageLoader) {
-    super(null, x, y, alignement, color, colorHover, null, width, height, null, null, null, imgSrc, imageLoader, verticalAlignement);
+  constructor(imgSrc, x, y, alignement, verticalAlignement, width, height, backgroundColor, backgroundColorHover, imageLoader) {
+    super(x, y, width, height, backgroundColor, backgroundColorHover, null, alignement, verticalAlignement, null, new Image(imgSrc, x, y, width, height, alignement, verticalAlignement, imageLoader));
+  }
+
+  loadImage(imageLoader) {
+    if(this.components[0] instanceof Image) this.components[0].loadImage(imageLoader);
   }
 }
 

@@ -301,13 +301,13 @@ export default class Component {
   }
 
   get x() {
-    if(this.alignement && this.canvas) {
+    if(this.alignement && this.parent) {
       if(this.alignement == Constants.Alignement.CENTER) {
-        return (this.canvas.width / 2) - (this.width / 2);
+        return this.parent.x + (this.parent.width / 2) - (this.width / 2);
       } else if(this.alignement == Constants.Alignement.RIGHT) {
-        return (this.canvas.width) - (this.width) - 5;
+        return this.parent.x + (this.parent.width) - (this.width) - 5;
       } else if(this.alignement == Constants.Alignement.LEFT) {
-        return 5;
+        return this.parent.x + 5;
       }
     }
     
@@ -319,13 +319,13 @@ export default class Component {
   }
 
   get y() {
-    if(this.verticalAlignement && this.canvas) {
+    if(this.verticalAlignement && this.parent) {
       if(this.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        return (this.canvas.height) - (this.height) - 5;
+        return this.parent.y + (this.parent.height) - (this.height) - 5;
       } else if(this.verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        return (this.canvas.height / 2) - (this.height / 2);
+        return this.parent.y + (this.parent.height / 2) - (this.height / 2);
       } else if(this.verticalAlignement == Constants.VerticalAlignement.TOP) {
-        return 15;
+        return this.parent.y + 5;
       }
     }
     

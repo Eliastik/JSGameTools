@@ -79,7 +79,7 @@ export default class Input extends Component {
       this.noticeLogged = true;
     }
 
-    if(this.selected) {
+    if(this.selected && !this.disabled) {
       this.click();
     } else {
       this.blur();
@@ -118,7 +118,7 @@ export default class Input extends Component {
           ctxText.fillRect(currentX - this.offsetX, this.y + this.borderSize, sizes["width"] + 2, this.height - this.borderSize * 2);
         }
         
-        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y, false);
+        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y + this.borderSize, false);
         currentX += sizes["width"] + 1;
       }
 

@@ -39,10 +39,10 @@ export default class Link extends Label {
       this.underline = false;
       this.color = this.colorDown;
       canvas.style.cursor = "pointer";
-    } else if(this.hovered) {
+    } else if(this.hovered || this.selected) {
       this.underline = false;
       this.color = this.colorHover;
-      canvas.style.cursor = "pointer";
+      if(this.hovered) canvas.style.cursor = "pointer";
     } else {
       this.underline = this.initialUnderline;
       this.color = this.initialColor;

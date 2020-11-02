@@ -22,9 +22,10 @@ export default class Container extends Component {
   selectable = false;
   #components = [];
 
-  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation, ...components) {
+  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, disableAnimation, ...components) {
     super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation);
     this.addAll(...components);
+    this.padding = padding ? padding : 6;
     this.canvasTmp = document.createElement("canvas");
   }
 
@@ -50,7 +51,7 @@ export default class Container extends Component {
     components.forEach(component => {
       this.#components.push(component);
       component.parent = this;
-      if(this.canvas) component.canvas = this.canvas;
+      if(super.canvas) component.canvas = super.canvas;
     });
   }
 
@@ -66,5 +67,35 @@ export default class Container extends Component {
     const components = [];
     this.#components.forEach(component => components.push(component));
     return components;
+  }
+
+  disable() {
+    super.disable();
+    this.#components.forEach(component => component.disable());
+  }
+
+  enable() {
+    super.enable();
+    this.#components.forEach(component => component.enable());
+  }
+
+  get width() {
+    return this.parent.width;
+  }
+
+  get height() {
+    return this.parent.height;
+  }
+
+  set canvas(canvas) {
+    super.canvas = canvas;
+
+    this.#components.forEach(component => {
+      component.canvas = canvas;
+    });
+  }
+
+  get canvas() {
+    return super.canvas;
   }
 }

@@ -25,7 +25,7 @@ import Container from "./Container";
 
 export default class Scene extends Container {
   constructor(...components) {
-    super(0, 0, 0, 0);
+    super();
     this.addAll(...components);
   }
 

@@ -83,7 +83,7 @@ export default {
       ctx.restore();
     }
   },
-  drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold, underline) {
+  drawText: function(ctx, text, color, size, fontFamily, alignement, verticalAlignement, x, y, wrap, bold, underline, textBaseline) {
     if(ctx) {
       ctx.save();
 
@@ -93,6 +93,7 @@ export default {
       }
   
       ctx.font = (bold ? "bold " : "") + size + "px " + fontFamily;
+      ctx.textBaseline = textBaseline || "bottom";
       ctx.filter = "none";
   
       if(wrap) {
@@ -148,8 +149,8 @@ export default {
         if(underline) {
           ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(xCurrent, yCurrent + 3);
-          ctx.lineTo(Math.round(xCurrent + currentWidth), yCurrent + 3);
+          ctx.moveTo(xCurrent, yCurrent - 2);
+          ctx.lineTo(Math.round(xCurrent + currentWidth), yCurrent - 2);
           ctx.stroke();
         }
   
