@@ -17,13 +17,14 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Col from "./Col";
+import Constants from "./Constants";
 
 export default class Tooltip extends Col {
   selectable = false;
   
   constructor(backgroundColor, padding, spaceBetweenComponents, ...components) {
     super(null, null, null, null, padding ? padding : 6, spaceBetweenComponents, false, ...components);
-    this.backgroundColor = backgroundColor || "rgba(255, 255, 255, 0.25)";
+    this.backgroundColor = backgroundColor || Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND;
     this.disabled = true;
   }
 

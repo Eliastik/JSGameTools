@@ -16,16 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
+import Constants from "./Constants";
 import Label from "./Label";
 
 export default class Link extends Label {
   selectable = true;
 
   constructor(text, x, y, size, fontFamily, color, colorHover, colorDown, alignement, verticalAlignement, wrap, bold, underline) {
-    super(text, x, y, size, fontFamily, color || "#0000EE", alignement, verticalAlignement, wrap, bold, underline || true);
+    super(text, x, y, size, fontFamily, color || Constants.Setting.LINK_DEFAULT_COLOR, alignement, verticalAlignement, wrap, bold, underline || true);
 
-    this.colorHover = colorHover || "#4D4DFF";
-    this.colorDown = colorDown || "#EE7700";
+    this.colorHover = colorHover || Constants.Setting.LINK_DEFAULT_HOVER_COLOR;
+    this.colorDown = colorDown || Constants.Setting.LINK_DEFAULT_CLICK_COLOR;
     this.initialColor = this.color;
     this.initialUnderline = this.underline;
   }

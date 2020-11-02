@@ -30,11 +30,11 @@ export default class Input extends Component {
     this.fontSizeInitial = fontSize;
     this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
-    this.fontColor = fontColor || "#000000";
-    this.backgroundColor = backgroundColor || "#ffffff";
-    this.borderColor = borderColor || "#000000";
-    this.borderColorHover = borderColorHover || "#a2cdd8";
-    this.selectColor = selectColor || "#2980b9";
+    this.fontColor = fontColor || Constants.Setting.INPUT_DEFAULT_FONT_COLOR;
+    this.backgroundColor = backgroundColor || Constants.Setting.INPUT_DEFAULT_BACKGROUND_COLOR;
+    this.borderColor = borderColor || Constants.Setting.INPUT_DEFAULT_BORDER_COLOR;
+    this.borderColorHover = borderColorHover || Constants.Setting.INPUT_DEFAULT_BORDER_COLOR_HOVER;
+    this.selectColor = selectColor || Constants.Setting.INPUT_DEFAULT_SELECT_COLOR;
     this.borderSize = borderSize || 3;
     this.height = this.height == undefined ? this.fontSize + this.borderSize * 2 : this.height;
 
@@ -111,14 +111,14 @@ export default class Input extends Component {
 
     for(let i = -1; i < this.text.length; i++) {
       if(i > -1) {
-        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily);
+        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily, true);
 
         if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
           ctxText.fillStyle = this.selectColor;
           ctxText.fillRect(currentX - this.offsetX, this.y + this.borderSize, sizes["width"] + 2, this.height - this.borderSize * 2);
         }
         
-        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y + this.borderSize, false);
+        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y, false);
         currentX += sizes["width"] + 1;
       }
 

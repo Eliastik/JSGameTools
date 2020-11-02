@@ -27,8 +27,8 @@ export default class Menu extends Col {
   constructor(backgroundColor, blurCanvas, ...components) {
     super(0, 0, null, Constants.VerticalAlignement.CENTER, null, null, false, ...components);
 
-    this.backgroundColor = backgroundColor || "rgba(44, 62, 80, 0.75)";
-    this.blurCanvas = blurCanvas || false;
+    this.backgroundColor = backgroundColor || Constants.Setting.MENU_DEFAULT_BACKGROUND;
+    this.blurCanvas = blurCanvas || Constants.Setting.MENU_DEFAULT_BLUR_BACKGROUND;
     this.lastKey = this.lastKey == undefined ? -1 : this.lastKey;
     this.selectedComponent = this.selectedComponent == undefined ? 0 : this.selectedComponent;
 

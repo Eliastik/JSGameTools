@@ -17,18 +17,19 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Col from "./Col";
+import Constants from "./Constants";
 import Image from "./Image";
 
 class Button extends Col {
   selectable = true;
 
   constructor(x, y, maxWidth, maxHeight, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, padding, ...components) {
-    super(x, y, alignement, verticalAlignement, padding ? padding : 6, padding ? padding : 6, false, ...components);
+    super(x, y, alignement, verticalAlignement, padding, padding, false, ...components);
     this.autoWidth = (this.width == undefined ? true : false);
     this.autoHeight = (this.height == undefined ? true : false);
-    this.backgroundColor = backgroundColor || "rgba(0, 0, 0, 0)";
-    this.backgroundColorHover = backgroundColorHover || "#95a5a6";
-    this.backgroundColorDown = backgroundColorDown || "#727F80"
+    this.backgroundColor = backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND;
+    this.backgroundColorHover = backgroundColorHover || Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND;
+    this.backgroundColorDown = backgroundColorDown || Constants.Setting.BUTTON_DEFAULT_CLICK_BACKGROUND
   }
   
   draw(context) {

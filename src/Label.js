@@ -27,7 +27,7 @@ export default class Label extends Component {
     super(x, y);
 
     this.text = text;
-    this.color = color || "#000000";
+    this.color = color || Constants.Setting.LABEL_DEFAULT_FONT_COLOR;
     this.fontSize = fontSize || Constants.Setting.FONT_SIZE;
     this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
     this.alignement = alignement || "default";
@@ -50,10 +50,10 @@ export default class Label extends Component {
   }
 
   get height() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily)["height"];
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily, !this.wrap)["height"];
   }
 
   get width() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily)["width"];
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily, !this.wrap)["width"];
   }
 }

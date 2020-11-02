@@ -111,7 +111,7 @@ export default {
       } else if(verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
         yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height)) - (size * lines.length) / 2 - size / 5);
       } else {
-        yCurrent += 6;
+        yCurrent += (parent && parent.spaceBetweenComponents ? parent.spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING);
       }
   
       for(let i = 0; i < lines.length; i++) {
@@ -132,7 +132,7 @@ export default {
         if(alignement == Constants.Alignement.CENTER) {
           xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round(((parent && parent.width ? parent.width : ctx.canvas.width) / 2) - (ctx.measureText(currentText).width / 2));
         } else if(alignement == Constants.Alignement.RIGHT) {
-          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round((parent && parent.width ? parent.width : ctx.canvas.width) - (ctx.measureText(currentText).width) - 15);
+          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round((parent && parent.width ? parent.width : ctx.canvas.width) - (ctx.measureText(currentText).width) - (parent && parent.spaceBetweenComponents ? parent.spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING));
         }
 
         ctx.fillText(currentText, xCurrent, yCurrent);
@@ -190,7 +190,7 @@ export default {
       let maxWidth = 0;
   
       for(let i = 0; i < lines.length; i++) {
-        const lineWrap = this.wrapText(lines[i], nbCarLine);
+        const lineWrap = disableWrap ? lines[i] : this.wrapText(lines[i], nbCarLine);
         newText += lineWrap;
   
         if(i < lines.length - 1) {
@@ -221,16 +221,16 @@ export default {
       };
     }
   },
-  drawArrow: function(ctx, fromx, fromy, tox, toy) {
+  drawArrow: function(ctx, fromx, fromy, tox, toy, lineWidth, headSize) {
     ctx.save();
 
     ctx.lineCap = "round";
-    ctx.lineWidth = 8;
+    ctx.lineWidth = lineWidth || 8;
     ctx.strokeStyle = "#FF0000";
     ctx.filter = "";
   
     ctx.beginPath();
-    const headlen = 20;
+    const headlen = headSize || 20;
     const dx = tox - fromx;
     const dy = toy - fromy;
     const angle = Math.atan2(dy, dx);

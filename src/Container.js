@@ -17,6 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Component from "./Component";
+import Constants from "./Constants";
 
 export default class Container extends Component {
   selectable = false;
@@ -25,8 +26,8 @@ export default class Container extends Component {
   constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
     super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation);
     this.addAll(...components);
-    this.padding = padding ? padding : 6;
-    this.spaceBetweenComponents = spaceBetweenComponents ? spaceBetweenComponents : 6;
+    this.padding = padding ? padding : Constants.Setting.DEFAULT_PADDING;
+    this.spaceBetweenComponents = spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING;
     this.canvasTmp = document.createElement("canvas");
   }
 

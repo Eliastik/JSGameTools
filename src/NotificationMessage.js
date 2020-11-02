@@ -28,7 +28,7 @@ export default class NotificationMessage extends Col {
   constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
     super(0, 0, Constants.Alignement.CENTER, null, padding, spaceBetweenComponents, disableAnimation, ...components);
 
-    this.backgroundColor = backgroundColor == undefined ? "rgba(46, 204, 113, 0.5)" : backgroundColor;
+    this.backgroundColor = backgroundColor == undefined ? Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
     this.animationDelay = animationDelay == undefined ? 500 : animationDelay;
     this.foreGround = foreGround == undefined ? false : foreGround;

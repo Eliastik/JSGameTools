@@ -17,6 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Component from "./Component";
+import Constants from "./Constants";
 
 export default class ProgressBar extends Component {
   #precPercent = 0;
@@ -25,8 +26,8 @@ export default class ProgressBar extends Component {
   constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation, alignement, verticalAlignement, easingFunction) {
     super(x, y, width, height, alignement, verticalAlignement, disableAnimation);
 
-    this.backgroundColor = backgroundColor || "#bdc3c7";
-    this.foregroundColor = foregroundColor || "#27ae60";
+    this.backgroundColor = backgroundColor || Constants.Setting.PROGRESS_DEFAULT_BACKGROUND;
+    this.foregroundColor = foregroundColor || Constants.Setting.PROGRESS_DEFAULT_FOREGROUND;
     this.percent = defaultPercent == undefined ? 0 : defaultPercent;
     this.#precPercent = this.percent;
     this.easingFunction = easingFunction;

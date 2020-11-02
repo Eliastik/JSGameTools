@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Scene from "./Scene";
+import Constants from "./Constants";
 import Utils from "./Utils";
 
 export default class Canvas {
@@ -27,8 +27,8 @@ export default class Canvas {
   constructor(scene, canvas, width, height, autoResize, maxFPS) {
     this.canvas = canvas || document.createElement("canvas");
     this.container = document.createElement("div");
-    this.#_width = width || 600;
-    this.#_height = height || 400;
+    this.#_width = width || Constants.Setting.CANVAS_WIDTH;
+    this.#_height = height || Constants.Setting.CANVAS_HEIGHT;
     this.scene = scene;
     this.container.appendChild(this.canvas);
     this.started = false;
@@ -85,6 +85,14 @@ export default class Canvas {
 
   autoResize() {
     Utils.enableAutoResizeCanvas(this.canvas, this.width, this.height);
+  }
+
+  get x() {
+    return 0;
+  }
+
+  get y() {
+    return 0;
   }
 
   get width() {
