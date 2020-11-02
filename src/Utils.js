@@ -102,16 +102,16 @@ export default {
       
       const lines = text.split("\n");
       let maxWidth = 0;
-      let xCurrent = x;
-      let yCurrent = Math.round((parent && parent.y ? parent.y : y)) + size;
+      let xCurrent = Math.round(x);
+      let yCurrent = Math.round(y) + size;
       let yFirst = 0;
 
-      if(verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height) / 2) - (size * lines.length / 2));
-      } else if(verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height)) - (size * lines.length) / 2 - size / 5);
-      } else {
-        yCurrent += (parent && parent.spaceBetweenComponents ? parent.spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING);
+      if(!y) {
+        if(verticalAlignement == Constants.VerticalAlignement.CENTER) {
+          yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height) / 2) - (size * lines.length / 2));
+        } else if(verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
+          yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height)) - (size * lines.length) / 2 - size / 5);
+        }
       }
   
       for(let i = 0; i < lines.length; i++) {

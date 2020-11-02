@@ -67,4 +67,12 @@ export default class Scene extends Container {
 
     ctx.restore();
   }
+
+  get x() {
+    return 0;
+  }
+
+  get y() {
+    return 0;
+  }
 }
