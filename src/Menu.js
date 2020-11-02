@@ -25,7 +25,7 @@ export default class Menu extends Col {
   selectable = false;
 
   constructor(backgroundColor, blurCanvas, ...components) {
-    super(0, 0, null, Constants.VerticalAlignement.CENTER, null, false, ...components);
+    super(0, 0, null, Constants.VerticalAlignement.CENTER, null, null, false, ...components);
 
     this.backgroundColor = backgroundColor || "rgba(44, 62, 80, 0.75)";
     this.blurCanvas = blurCanvas || false;

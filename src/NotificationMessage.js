@@ -25,8 +25,8 @@ import ImageLoader from "./ImageLoader";
 export default class NotificationMessage extends Col {
   selectable = false;
 
-  constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, padding, ...components) {
-    super(0, 0, Constants.Alignement.CENTER, null, padding, disableAnimation, ...components);
+  constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
+    super(0, 0, Constants.Alignement.CENTER, null, padding, spaceBetweenComponents, disableAnimation, ...components);
 
     this.backgroundColor = backgroundColor == undefined ? "rgba(46, 204, 113, 0.5)" : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second

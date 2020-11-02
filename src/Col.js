@@ -22,8 +22,8 @@ import Container from "./Container";
 export default class Col extends Container {
   selectable = false;
 
-  constructor(x, y, alignement, verticalAlignement, padding, disableAnimation, ...components) {
-    super(x, y, null, null, alignement, verticalAlignement, padding, disableAnimation, ...components);
+  constructor(x, y, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
+    super(x, y, null, null, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components);
   }
 
   draw(context) {
@@ -34,7 +34,7 @@ export default class Col extends Container {
     ctx.save();
   
     if(super.components != null) {
-      let currentY = this.y + this.padding || this.padding;
+      let currentY = this.y + this.spaceBetweenComponents || this.spaceBetweenComponents;
 
       super.components.forEach(component => {
         if(component instanceof Component) {
@@ -42,7 +42,7 @@ export default class Col extends Container {
           component.y = currentY;
           component.enable();
           component.draw(ctx);
-          currentY += component.height + this.padding;
+          currentY += component.height + this.spaceBetweenComponents;
         }
       });
     }
@@ -53,7 +53,7 @@ export default class Col extends Container {
   get height() {
     let totalHeight = 0;
     super.components.forEach(component => totalHeight += component.height);
-    return totalHeight + this.padding;
+    return totalHeight + this.spaceBetweenComponents;
   }
 
   get width() {

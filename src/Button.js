@@ -23,7 +23,7 @@ class Button extends Col {
   selectable = true;
 
   constructor(x, y, maxWidth, maxHeight, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, padding, ...components) {
-    super(x, y, alignement, verticalAlignement, padding ? padding : 6, false, ...components);
+    super(x, y, alignement, verticalAlignement, padding ? padding : 6, padding ? padding : 6, false, ...components);
     this.autoWidth = (this.width == undefined ? true : false);
     this.autoHeight = (this.height == undefined ? true : false);
     this.backgroundColor = backgroundColor || "rgba(0, 0, 0, 0)";

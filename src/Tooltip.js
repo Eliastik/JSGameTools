@@ -21,8 +21,8 @@ import Col from "./Col";
 export default class Tooltip extends Col {
   selectable = false;
   
-  constructor(backgroundColor, padding, ...components) {
-    super(null, null, null, null, padding ? padding : 6, false, ...components);
+  constructor(backgroundColor, padding, spaceBetweenComponents, ...components) {
+    super(null, null, null, null, padding ? padding : 6, spaceBetweenComponents, false, ...components);
     this.backgroundColor = backgroundColor || "rgba(255, 255, 255, 0.25)";
     this.disabled = true;
   }

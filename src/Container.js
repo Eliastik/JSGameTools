@@ -22,10 +22,11 @@ export default class Container extends Component {
   selectable = false;
   #components = [];
 
-  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, disableAnimation, ...components) {
+  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
     super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation);
     this.addAll(...components);
     this.padding = padding ? padding : 6;
+    this.spaceBetweenComponents = spaceBetweenComponents ? spaceBetweenComponents : 6;
     this.canvasTmp = document.createElement("canvas");
   }
 
