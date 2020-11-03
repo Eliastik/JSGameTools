@@ -22,21 +22,62 @@ import Constants from "./Constants";
 export default class Container extends Component {
   selectable = false;
   #components = [];
+  #_maxWidth = 0;
+  #_maxHeight = 0;
 
   constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
-    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, disableAnimation);
+    super(x, y, null, null, alignement, verticalAlignement, disableAnimation);
+
     this.addAll(...components);
     this.padding = padding ? padding : 0;
     this.spaceBetweenComponents = spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING;
     this.canvasTmp = document.createElement("canvas");
+    this.#_maxWidth = maxWidth;
+    this.#_maxHeight = maxHeight;
+    this.scrollBarColor = "rgb(149, 165, 166, 0.75)";
+
+    this.addScrollAction((deltaX, deltaY) => {
+      const scrollAreaSize = this.height - this.maxHeight;
+
+      if(scrollAreaSize <= 0) {
+        this.offsetScrollY = 0;
+      } else {
+        const percentScrollbar = this.offsetScrollY / scrollAreaSize;
+  
+        if(percentScrollbar < 0 && deltaY < 0) {
+          this.offsetScrollY = this.y;
+        } else if(percentScrollbar > 1 && deltaY > 0) {
+          this.offsetScrollY = scrollAreaSize;
+        }
+      }
+    });
   }
 
   draw(context) {
+    const canvas = context.canvas;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+    
     this.components.forEach(component => {
       if(this.canvas) component.canvas = this.canvas;
     });
 
     super.draw(context);
+
+    // Scroll variables
+    const contentRatio = this.maxHeight / this.height;
+    const barHeight = this.maxHeight * contentRatio;
+    const scrollAreaSize = this.height - this.maxHeight;
+    const percentScrollbar = this.offsetScrollY / scrollAreaSize;
+    const yBar = -this.y + scrollAreaSize * percentScrollbar;
+
+    // Scrollbar drawing
+    if(scrollAreaSize > 0) {
+      ctx.fillStyle = this.scrollBarColor;
+      ctx.fillRect(this.x + this.maxWidth - 10, yBar, 10, barHeight);
+    }
+
+    ctx.restore();
   }
 
   set(...components) {
@@ -87,6 +128,22 @@ export default class Container extends Component {
 
   get height() {
     return this.parent.height;
+  }
+
+  get maxWidth() {
+    return this.#_maxWidth || (this.canvas && this.canvas.width);
+  }
+
+  get maxHeight() {
+    return this.#_maxHeight || (this.canvas && this.canvas.height);
+  }
+
+  set maxWidth(maxWidth) {
+    this.#_maxWidth = maxWidth;
+  }
+
+  set maxHeight(maxHeight) {
+    this.#_maxHeight = maxHeight;
   }
 
   set canvas(canvas) {

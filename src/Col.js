@@ -27,19 +27,19 @@ export default class Col extends Container {
   }
 
   draw(context) {
-    super.draw(context);
-
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
   
     if(super.components != null) {
-      let currentY = this.y + this.padding || this.padding;
+      let currentY = (this.y + this.padding || this.padding) - this.offsetScrollY;
 
       super.components.forEach(component => {
         currentY = this.drawComponent(component, currentY, ctx);
       });
     }
+    
+    super.draw(context);
     
     ctx.restore();
   }

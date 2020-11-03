@@ -125,11 +125,17 @@ export default class Input extends Component {
       if(i > -1) {
         const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily, true);
 
-        if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
-          this.drawHighlight(ctxText, currentX, sizes);
+        const xDraw = currentX - this.offsetX;
+        const yDraw = this.y + this.borderSize;
+
+        if(xDraw >= this.x - sizes["width"] && xDraw <= this.x + this.width) { // Don't draw the text if it is outside the input (overflow)
+          if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
+            this.drawHighlight(ctxText, currentX, sizes);
+          }
+
+          Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", xDraw, yDraw, false);
         }
 
-        Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", currentX - this.offsetX, this.y + this.borderSize, false);
         currentX += sizes["width"] + 1;
       }
 

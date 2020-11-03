@@ -344,4 +344,12 @@ export default class Component {
   set y(y) {
     this.#_y = y;
   }
+
+  get maxWidth() {
+    return this.width;
+  }
+
+  get maxHeight() {
+    return this.height;
+  }
 }

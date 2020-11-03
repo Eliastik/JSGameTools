@@ -98,6 +98,14 @@ class Button extends Col {
     super.height = height;
     this.autoHeight = false;
   }
+
+  get maxWidth() {
+    return this.width;
+  }
+
+  get maxHeight() {
+    return this.height;
+  }
 }
 
 class ButtonImage extends Button {

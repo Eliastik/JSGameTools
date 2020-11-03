@@ -27,8 +27,6 @@ export default class Row extends Container {
   }
 
   draw(context) {
-    super.draw(context);
-
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
@@ -41,13 +39,14 @@ export default class Row extends Container {
       });
     }
     
+    super.draw(context);
     ctx.restore();
   }
 
   drawComponent(component, currentX, ctx) {
     if(component instanceof Component) {
       component.x = currentX;
-      if(this.y) component.y = this.y + this.padding;
+      if(this.y) component.y = (this.y + this.padding) - this.offsetScrollY;
       component.enable();
       component.draw(ctx);
       currentX += component.width + this.spaceBetweenComponents;
