@@ -25,7 +25,7 @@ import ImageLoader from "./ImageLoader";
 export default class NotificationMessage extends Col {
   selectable = false;
 
-  constructor(backgroundColor, delayBeforeClosing, animationDelay, foreGround, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
+  constructor(backgroundColor, foreGround, verticalAlignement, delayBeforeClosing, animationDelay, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
     super(0, 0, Constants.Alignement.CENTER, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING, disableAnimation, ...components);
 
     this.backgroundColor = backgroundColor == undefined ? Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND : backgroundColor;
@@ -37,6 +37,7 @@ export default class NotificationMessage extends Col {
     this.closed = true;
     this.closing = false;
     this.easingFunction = easingFunction;
+    this.verticalPosition = verticalAlignement || Constants.VerticalAlignement.BOTTOM;
 
     const pauseImage = new Image(Constants.Setting.CLOSE_ICON, null, null, 32, 32);
     const imageLoader = new ImageLoader();
@@ -99,7 +100,11 @@ export default class NotificationMessage extends Col {
         offsetY = this.easingFunction(offsetY);
       }
 
-      this.y = canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
+      if(this.verticalPosition == Constants.VerticalAlignement.TOP) {
+        this.y = (this.height * (offsetY <= 1 ? offsetY : 1)) - this.height;
+      } else {
+        this.y = canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
+      }
 
       this.drawBackground(ctx);
       this.drawComponents(ctx);

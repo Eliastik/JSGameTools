@@ -25,7 +25,7 @@ const buttonText2 = new JGT.Button(5, 150, null, null,  "#2ecc71", "#1abc9c", "#
 const pauseImage = new JGT.Image("pause.png", null, null, 64, 64, null, "center");
 const buttonImage = new JGT.Button(5, 50, null, null, null, null, null, "left", null, null, new JGT.Row(5, 250, null, null, null, null, false, pauseImage, new JGT.Label("Pause", null, null, null, null, "white", null, "center")));
 const buttonTextFullscreen = new JGT.Button(5, 75, null, null, "#2ecc71", "#1abc9c", "#16a085", "center", null, null, new JGT.Label("Toggle fullscreen", null, null, null, null, "white"));
-const notification = new JGT.NotificationMessage(null, null, null, false, null, null, null, null, new JGT.Label("A notification", null, null, null, null, "white", JGT.Constants.Alignement.CENTER),  new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), new JGT.Button(null, null, null, null, null, null, null, null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
+const notification = new JGT.NotificationMessage(null, false, null, null, null, null, null, null, null, new JGT.Label("A notification", null, null, null, null, "white", JGT.Constants.Alignement.CENTER),  new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), new JGT.Button(null, null, null, null, null, null, null, null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
 
 const buttonMenu1 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", "left", null, null, new JGT.Label("A button, aligned to the left", null, null, null, null, "white"));
 const buttonMenu5 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Label("Display a notification", null, null, null, null, "white"));
@@ -33,7 +33,7 @@ const buttonMenu2 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16
 const buttonMenu3 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", "right", null, null, new JGT.Label("A long buttonnnnnnnnnnnnnnnnnnnnnnnnnn", null, null, null, null, "white"));
 const buttonMenu4 = new JGT.Button(5, 5, null, null,  "#CC2F2F", "#F23838", "#A62626", "center", null, null, new JGT.Label("Close (centered)", null, null, null, null, "white"));
 const menu = new JGT.Menu(null, null, new JGT.Label("Pause menu\nYou can use the arrow keys, press enter to select", null, null, null, null, "white", "center"), buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4, new JGT.Input(null, null, 150, null, JGT.Constants.Alignement.CENTER));
-const notification2 = new JGT.NotificationMessage("rgba(46, 204, 225, 0.85)", null, null, true, null, null, null, null, new JGT.Label("Hi!", null, null, null, null, "white", JGT.Constants.Alignement.CENTER));
+const notification2 = new JGT.NotificationMessage("rgba(46, 204, 225, 0.85)", true, null, null, null, null, null, null, null, new JGT.Label("Hi!", null, null, null, null, "white", JGT.Constants.Alignement.CENTER));
 const textField = new JGT.Input(5, 250, 150);
 const label1 = new JGT.Label("A label", 5, 325);
 const row1 = new JGT.Row(5, 250, null, null, null, null, false, label1, textField);
