@@ -18,6 +18,7 @@
  */
 import Component from "./Component";
 import Container from "./Container";
+import Utils from "./Utils";
 
 export default class Col extends Container {
   selectable = false;
@@ -30,24 +31,31 @@ export default class Col extends Container {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
+
+    this.canvasTmp.width = canvas.width;
+    this.canvasTmp.height = canvas.height;
+    const ctxTemp = this.canvasTmp.getContext("2d");
+    Utils.clear(ctxTemp);
   
     if(super.components != null) {
-      let currentY = (this.y + this.padding || this.padding) - this.offsetScrollY;
+      let currentY = (this.y + this.padding || this.padding);
 
       super.components.forEach(component => {
-        currentY = this.drawComponent(component, currentY, ctx);
+        currentY = this.drawComponent(component, currentY, ctxTemp);
       });
     }
     
-    super.draw(context);
-    
+    super.drawScrollBar(ctxTemp);
+    Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
+
+    super.draw(ctx);
     ctx.restore();
   }
 
   drawComponent(component, currentY, ctx) {
     if(component instanceof Component) {
       if(this.x) component.x = this.x + this.padding;
-      component.y = currentY;
+      component.y = currentY - this.offsetScrollY;
       component.enable();
       component.draw(ctx);
       currentY += component.height + this.spaceBetweenComponents;

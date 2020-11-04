@@ -44,8 +44,8 @@ export default class Container extends Component {
       } else {
         const percentScrollbar = this.offsetScrollY / scrollAreaSize;
   
-        if(percentScrollbar < 0 && deltaY < 0) {
-          this.offsetScrollY = this.y;
+        if(percentScrollbar <= 0 && deltaY < 0) {
+          this.offsetScrollY = Math.min(0, this.y);
         } else if(percentScrollbar > 1 && deltaY > 0) {
           this.offsetScrollY = scrollAreaSize;
         }
@@ -63,21 +63,24 @@ export default class Container extends Component {
     });
 
     super.draw(context);
+    this.drawScrollBar(ctx);
 
-    // Scroll variables
+    ctx.restore();
+  }
+
+  drawScrollBar(ctx) {
     const contentRatio = this.maxHeight / this.height;
     const barHeight = this.maxHeight * contentRatio;
-    const scrollAreaSize = this.height - this.maxHeight;
-    const percentScrollbar = this.offsetScrollY / scrollAreaSize;
-    const yBar = -this.y + scrollAreaSize * percentScrollbar;
+    const windowScrollSize = this.height - this.maxHeight;
+    const percentScrollbar = this.offsetScrollY / windowScrollSize;
+    const scrollAreaSize = this.maxHeight - barHeight;
+    const yBar = scrollAreaSize * percentScrollbar;
 
     // Scrollbar drawing
     if(scrollAreaSize > 0) {
       ctx.fillStyle = this.scrollBarColor;
-      ctx.fillRect(this.x + this.maxWidth - 10, yBar, 10, barHeight);
+      ctx.fillRect(this.x + Math.min(this.width, this.maxWidth) - 10, Math.abs(this.y) + yBar, 10, barHeight);
     }
-
-    ctx.restore();
   }
 
   set(...components) {

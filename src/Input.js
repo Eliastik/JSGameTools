@@ -48,6 +48,7 @@ export default class Input extends Component {
     this.input.setAttribute("type", "text");
     this.input.style.position = "absolute";
     this.input.style.left = "-9999px";
+    this.input.tabIndex = -1;
     this.input.addEventListener("input", () => this.totalTime = 0);
     this.input.addEventListener("blur", () => this.selected = false);
     this.input.addEventListener("focus", () => this.selected = true);
@@ -102,6 +103,7 @@ export default class Input extends Component {
     this.canvasTmp.width = canvas.width;
     this.canvasTmp.height = canvas.height;
     const ctxText = this.canvasTmp.getContext("2d");
+    Utils.clear(ctxText);
 
     let currentX = this.x + 5;
 
@@ -110,7 +112,11 @@ export default class Input extends Component {
     Utils.drawImageData(ctx, this.canvasTmp, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2);
 
     if(this.hovered || this.clicked) {
-      canvas.style.cursor = "text";
+      if(this.canvas && this.canvas.canvas) {
+        this.canvas.canvas.style.cursor = "text";
+      } else {
+        canvas.style.cursor = "text";
+      }
     }
 
     if(!this.selected) {

@@ -23,7 +23,7 @@ const imageLoader = new JGT.ImageLoader();
 const buttonText = new JGT.Button(5, 5, null, null, "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Label("Show a notification", null, null, null, null, "white"));
 const buttonText2 = new JGT.Button(5, 150, null, null,  "#2ecc71", "#1abc9c", "#16a085", "right", null, null, new JGT.Label("Long text button ........... This should be on next line", null, null, null, null, "white"));
 const pauseImage = new JGT.Image("pause.png", null, null, 64, 64, null, "center");
-const buttonImage = new JGT.Button(5, 50, null, null, null, null, null, "left", null, null, new JGT.Row(5, 250, null, null, null, null, false, pauseImage, new JGT.Label("Pause", null, null, null, null, "white", null, "center")));
+const buttonImage = new JGT.Button(null, 50, null, null, null, null, null, "left", null, null, new JGT.Row(5, 250, null, null, null, null, false, pauseImage, new JGT.Label("Pause", null, null, null, null, "white", null, "center")));
 const buttonTextFullscreen = new JGT.Button(5, 75, null, null, "#2ecc71", "#1abc9c", "#16a085", "center", null, null, new JGT.Label("Toggle fullscreen", null, null, null, null, "white"));
 const notification = new JGT.NotificationMessage(null, false, null, null, null, null, null, null, null, new JGT.Label("A notification", null, null, null, null, "white", JGT.Constants.Alignement.CENTER),  new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), new JGT.Button(null, null, null, null, null, null, null, null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
 
@@ -49,6 +49,10 @@ progress.percent = 1;
 const tooltip3 = new JGT.Tooltip(null, null, null, new JGT.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, null, null, "white"));
 progress.tooltip = tooltip3;
 const buttonArrow = new JGT.Button(5, 150, null, null, "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Arrow(null, null, 100, 200, null, null, "white"));
+const colScrollable = new JGT.Col(245, 250, null, null, null, false, new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12")));
+colScrollable.maxHeight = 42;
+colScrollable.padding = 10;
+colScrollable.spaceBetweenComponents = 0;
 
 // Custom component
 class Box extends JGT.Component {
@@ -71,7 +75,7 @@ class Box extends JGT.Component {
 }
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow);
+const scene = new JGT.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"));
 canvas.appendTo(document.body);
 

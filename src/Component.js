@@ -65,10 +65,9 @@ export default class Component {
   }
 
   draw(context) {
-    const canvas = context.canvas;
-    const ctx = canvas.getContext("2d");
+    const canvas = (this.canvas && this.canvas.canvas ? this.canvas.canvas : context.canvas);
 
-    if(!this.initEvents && ctx != null) {
+    if(!this.initEvents && canvas != null) {
       canvas.addEventListener("mousemove", event => {
         if(!this.disabled) {
           if(this.isInside(this.getMousePos(canvas, event))) {
