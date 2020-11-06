@@ -19,8 +19,7 @@
 import Constants from "./Constants";
 import Col from "./Col";
 import { Button } from "./Button";
-import Image from "./Image";
-import ImageLoader from "./ImageLoader";
+import Cross from "./Cross";
 
 export default class NotificationMessage extends Col {
   selectable = false;
@@ -39,14 +38,8 @@ export default class NotificationMessage extends Col {
     this.easingFunction = easingFunction;
     this.verticalPosition = verticalAlignement || Constants.VerticalAlignement.BOTTOM;
 
-    const pauseImage = new Image(Constants.Setting.CLOSE_ICON, null, null, 32, 32);
-    const imageLoader = new ImageLoader();
-    this.closeButton = new Button(null, null, 32, 32, null, null, null, "right", "top", null, pauseImage);
+    this.closeButton = new Button(null, null, null, null, null, null, null, "right", "top", 10, new Cross(null, null, 12, 12));
     this.add(this.closeButton);
-
-    imageLoader.load([Constants.Setting.CLOSE_ICON], () => {
-      pauseImage.loadImage(imageLoader);
-    });
   }
   
   draw(context) {

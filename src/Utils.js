@@ -244,6 +244,23 @@ export default {
     
     ctx.restore();
   },
+  drawCross: function(ctx, x, y, width, height, lineWidth, color) {
+    ctx.save();
+
+    ctx.lineCap = "round";
+    ctx.lineWidth = lineWidth || Constants.Setting.CROSS_DEFAULT_LINE_SIZE;
+    ctx.strokeStyle = color || Constants.Setting.CROSS_DEFAULT_COLOR;
+    ctx.filter = "";
+  
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width, y + height);
+    ctx.moveTo(x + width, y);
+    ctx.lineTo(x, y + height);
+    ctx.stroke();
+    
+    ctx.restore();
+  },
   clear: function(ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   },
@@ -252,11 +269,13 @@ export default {
     canvas.width = 5;
     canvas.height = 5;
     const ctx = canvas.getContext("2d");
+    ctx.save();
   
     ctx.fillStyle = "#FF0000";
     ctx.filter = "hue-rotate(90deg)";
     ctx.fillRect(0, 0, 5, 5);
     const color = ctx.getImageData(0, 0, 1, 1).data;
+    ctx.restore();
   
     if(color[0] == 255 && color[1] == 0 && color[2] == 0) {
       return false;

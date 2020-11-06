@@ -16,15 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import CloseIcon from "../assets/close.png";
-
 export default {
   Setting: {
     FONT_FAMILY: "sans-serif",
     FONT_SIZE: 28,
     CANVAS_WIDTH: 600,
     CANVAS_HEIGHT: 400,
-    CLOSE_ICON: CloseIcon,
     DEFAULT_PADDING: 6,
     DEFAULT_SPACING: 6,
     BUTTON_DEFAULT_BACKGROUND: "rgba(0, 0, 0, 0)",
@@ -47,7 +44,9 @@ export default {
     TOOLTIP_DEFAULT_BACKGROUND: "rgba(255, 255, 255, 0.25)",
     ARROW_DEFAULT_COLOR: "#FF0000",
     ARROW_DEFAULT_LINE_SIZE: 8,
-    ARROW_DEFAULT_HEAD_SIZE: 20
+    ARROW_DEFAULT_HEAD_SIZE: 20,
+    CROSS_DEFAULT_COLOR: "#fff",
+    CROSS_DEFAULT_LINE_SIZE: 3
   },
   Key: {
     UP: 38,
