@@ -32,10 +32,16 @@ export default class Row extends Container {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    this.canvasTmp.width = canvas.width;
-    this.canvasTmp.height = canvas.height;
-    const ctxTemp = this.canvasTmp.getContext("2d");
-    Utils.clear(ctxTemp);
+    let ctxTemp;
+
+    if(this.maxWidth || this.maxHeight) {
+      this.canvasTmp.width = canvas.width;
+      this.canvasTmp.height = canvas.height;
+      ctxTemp = this.canvasTmp.getContext("2d");
+      Utils.clear(ctxTemp);
+    } else {
+      ctxTemp = ctx;
+    }
   
     if(super.components != null) {
       let currentX = (this.x + this.padding) || this.padding;
@@ -45,8 +51,7 @@ export default class Row extends Container {
       });
     }
 
-    super.drawScrollBar(ctxTemp);
-    Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
+    if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
 
     super.draw(ctx);
     ctx.restore();
@@ -54,7 +59,7 @@ export default class Row extends Container {
 
   drawComponent(component, currentX, ctx) {
     if(component instanceof Component) {
-      component.x = currentX;
+      component.x = currentX - this.offsetScrollX;
       if(this.y) component.y = (this.y + this.padding) - this.offsetScrollY;
       component.enable();
       component.draw(ctx);

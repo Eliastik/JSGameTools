@@ -26,7 +26,7 @@ export default class Component {
   #_y = 0;
   #_disabled = false;
 
-  constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollDisabled) {
+  constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollXDisabled, scrollYDisabled) {
     this.#_x = x || 0;
     this.#_y = y || 0;
     this.#_width = width;
@@ -50,11 +50,14 @@ export default class Component {
     this.hovered = false;
     this.#_disabled = false;
     this.disableAnimation = disableAnimation || false;
-    this.scrollDisabled = scrollDisabled || false;
 
     // Scroll state
     this.offsetScrollX = 0;
     this.offsetScrollY = 0;
+
+    // Scroll enable/disable
+    this.scrollXDisabled = scrollXDisabled || false;
+    this.scrollYDisabled = scrollYDisabled || false;
 
     // Touch events
     this.touchEventStartX = 0;

@@ -30,6 +30,8 @@ class Button extends Col {
     this.backgroundColor = backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND;
     this.backgroundColorHover = backgroundColorHover || Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND;
     this.backgroundColorDown = backgroundColorDown || Constants.Setting.BUTTON_DEFAULT_CLICK_BACKGROUND
+    this.scrollXDisabled = true;
+    this.scrollYDisabled = true;
   }
   
   draw(context) {

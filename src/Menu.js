@@ -149,4 +149,8 @@ export default class Menu extends Col {
   get width() {
     return this.parent.width;
   }
+
+  get maxWidth() {
+    return this.canvas.width;
+  }
 }

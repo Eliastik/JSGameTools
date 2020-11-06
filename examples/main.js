@@ -49,8 +49,9 @@ progress.percent = 1;
 const tooltip3 = new JGT.Tooltip(null, null, null, new JGT.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, null, null, "white"));
 progress.tooltip = tooltip3;
 const buttonArrow = new JGT.Button(5, 150, null, null, "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Arrow(null, null, 100, 200, null, null, "white"));
-const colScrollable = new JGT.Col(245, 250, null, null, null, false, new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12")));
+const colScrollable = new JGT.Col(255, 250, null, null, null, false, new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, null, false, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12")));
 colScrollable.maxHeight = 42;
+colScrollable.maxWidth = 250;
 colScrollable.padding = 10;
 colScrollable.spaceBetweenComponents = 0;
 

@@ -32,21 +32,26 @@ export default class Col extends Container {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    this.canvasTmp.width = canvas.width;
-    this.canvasTmp.height = canvas.height;
-    const ctxTemp = this.canvasTmp.getContext("2d");
-    Utils.clear(ctxTemp);
+    let ctxTemp;
+
+    if(this.maxWidth || this.maxHeight) {
+      this.canvasTmp.width = canvas.width;
+      this.canvasTmp.height = canvas.height;
+      ctxTemp = this.canvasTmp.getContext("2d");
+      Utils.clear(ctxTemp);
+    } else {
+      ctxTemp = ctx;
+    }
   
     if(super.components != null) {
-      let currentY = (this.y + this.padding || this.padding);
+      let currentY = (this.y + this.padding) || this.padding;
 
       super.components.forEach(component => {
         currentY = this.drawComponent(component, currentY, ctxTemp);
       });
     }
     
-    super.drawScrollBar(ctxTemp);
-    Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
+    if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
 
     super.draw(ctx);
     ctx.restore();
@@ -54,7 +59,7 @@ export default class Col extends Container {
 
   drawComponent(component, currentY, ctx) {
     if(component instanceof Component) {
-      if(this.x) component.x = this.x + this.padding;
+      if(this.x) component.x = (this.x + this.padding) - this.offsetScrollX;
       component.y = currentY - this.offsetScrollY;
       component.enable();
       component.draw(ctx);
