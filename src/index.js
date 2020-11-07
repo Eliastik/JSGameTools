@@ -17,7 +17,8 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Constants from "./Constants";
-import { Button, ButtonImage } from "./Button";
+import Button from "./Button";
+import ButtonImage from "./ButtonImage";
 import ImageLoader from "./ImageLoader";
 import NotificationMessage from "./NotificationMessage";
 import Utils from "./Utils";
@@ -38,5 +39,9 @@ import Row from "./Row";
 import ImageContainer from "./ImageContainer";
 import Arrow from "./Arrow";
 import Cross from "./Cross";
+import Scrollbar from "./Scrollbar";
+import ScrollbarVertical from "./ScrollbarVertical";
+import ScrollbarHorizontal from "./ScrollbarHorizontal";
+import Box from "./Box";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions, Col, Container, Row, ImageContainer, Arrow, Cross };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions, Col, Container, Row, ImageContainer, Arrow, Cross, Scrollbar, ScrollbarVertical, ScrollbarHorizontal, Box };

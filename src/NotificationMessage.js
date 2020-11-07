@@ -18,16 +18,15 @@
  */
 import Constants from "./Constants";
 import Col from "./Col";
-import { Button } from "./Button";
+import Button from "./Button";
 import Cross from "./Cross";
 
 export default class NotificationMessage extends Col {
   selectable = false;
 
   constructor(backgroundColor, foreGround, verticalAlignement, delayBeforeClosing, animationDelay, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
-    super(0, 0, Constants.Alignement.CENTER, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING, disableAnimation, ...components);
+    super(0, 0, null, null, Constants.Alignement.CENTER, null, backgroundColor == undefined ? Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND : backgroundColor, null, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING, disableAnimation, false, false, ...components);
 
-    this.backgroundColor = backgroundColor == undefined ? Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND : backgroundColor;
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
     this.animationDelay = animationDelay == undefined ? 500 : animationDelay;
     this.foreGround = foreGround == undefined ? false : foreGround;
@@ -99,7 +98,6 @@ export default class NotificationMessage extends Col {
         this.y = canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
       }
 
-      this.drawBackground(ctx);
       this.drawComponents(ctx);
 
       if(this.closeButton != null) {
@@ -119,15 +117,6 @@ export default class NotificationMessage extends Col {
   
   drawComponents(ctx) {
     super.draw(ctx);
-  }
-
-  drawBackground(ctx) {
-    ctx.save();
-
-    ctx.fillStyle = this.backgroundColor;
-    ctx.fillRect(0, this.y, this.width, this.height);
-
-    ctx.restore();
   }
 
   close() {

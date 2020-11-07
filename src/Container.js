@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Component from "./Component";
+import Box from "./Box";
 import Constants from "./Constants";
 
-export default class Container extends Component {
+export default class Container extends Box {
   selectable = false;
   #components = [];
   #_maxWidth = 0;
   #_maxHeight = 0;
 
-  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
-    super(x, y, null, null, alignement, verticalAlignement, disableAnimation);
+  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor, backgroundColorHover, backgroundColorDown, padding, spaceBetweenComponents, disableAnimation, scrollXDisabled, scrollYDisabled, ...components) {
+    super(x, y, null, null, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, disableAnimation, scrollXDisabled, scrollYDisabled);
 
     this.addAll(...components);
     this.padding = padding ? padding : 0;
@@ -34,7 +34,8 @@ export default class Container extends Component {
     this.canvasTmp = document.createElement("canvas");
     this.#_maxWidth = maxWidth;
     this.#_maxHeight = maxHeight;
-    this.scrollBarColor = "rgb(149, 165, 166, 0.75)";
+    this.scrollbarHorizontal = new ScrollbarHorizontal(null, null, null, null, this);
+    this.scrollbarVertical = new ScrollbarVertical(null, null, null, null, this);
 
     this.addScrollAction((deltaX, deltaY) => {
       const scrollAreaSizeY = this.height - this.maxHeight;
@@ -84,42 +85,21 @@ export default class Container extends Component {
     });
 
     super.draw(context);
-    if(!this.scrollXDisabled) this.drawVerticalScrollBar(ctx);
-    if(!this.scrollYDisabled) this.drawHorizontalScrollBar(ctx);
 
     ctx.restore();
   }
 
   drawVerticalScrollBar(ctx) {
-    const maxHeight = this.maxHeight - Math.abs(Math.min(0, this.y));
-    const contentRatio = maxHeight / this.height;
-    const barHeight = maxHeight * contentRatio;
-    const windowScrollSize = this.height - maxHeight;
-    const percentScrollbar = this.offsetScrollY / windowScrollSize;
-    const scrollAreaSize = maxHeight - barHeight;
-    const yBar = scrollAreaSize * percentScrollbar;
-
-    // Scrollbar drawing
-    if(scrollAreaSize > 0) {
-      ctx.fillStyle = this.scrollBarColor;
-      ctx.fillRect(this.x + Math.min(this.width, this.maxWidth) - 10, Math.abs(this.y) + yBar, 10, barHeight);
-    }
+    if(this.scrollbarVertical) this.scrollbarVertical.draw(ctx);
   }
 
   drawHorizontalScrollBar(ctx) {
-    const maxWidth = this.maxWidth - Math.abs(Math.min(0, this.x));
-    const contentRatio = maxWidth / this.width;
-    const barWidth = maxWidth * contentRatio;
-    const windowScrollSize = this.width - maxWidth;
-    const percentScrollbar = this.offsetScrollX / windowScrollSize;
-    const scrollAreaSize = maxWidth - barWidth;
-    const xBar = scrollAreaSize * percentScrollbar;
+    if(this.scrollbarHorizontal) this.scrollbarHorizontal.draw(ctx);
+  }
 
-    // Scrollbar drawing
-    if(scrollAreaSize > 0) {
-      ctx.fillStyle = this.scrollBarColor;
-      ctx.fillRect(Math.abs(this.x) + xBar, this.y + Math.min(this.height, this.maxHeight) - 10, barWidth, 10);
-    }
+  drawScrollbars(ctx) {
+    if(!this.scrollXDisabled) this.drawVerticalScrollBar(ctx);
+    if(!this.scrollYDisabled) this.drawHorizontalScrollBar(ctx);
   }
 
   set(...components) {
@@ -200,3 +180,6 @@ export default class Container extends Component {
     return super.canvas;
   }
 }
+
+import ScrollbarHorizontal from "./ScrollbarHorizontal";
+import ScrollbarVertical from "./ScrollbarVertical";

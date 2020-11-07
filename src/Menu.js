@@ -25,9 +25,8 @@ export default class Menu extends Col {
   selectable = false;
 
   constructor(backgroundColor, blurCanvas, ...components) {
-    super(0, 0, null, Constants.VerticalAlignement.CENTER, null, null, false, ...components);
+    super(0, 0, null, null, null, Constants.VerticalAlignement.CENTER, backgroundColor || Constants.Setting.MENU_DEFAULT_BACKGROUND, null, null, null, null, null, false, false, ...components);
 
-    this.backgroundColor = backgroundColor || Constants.Setting.MENU_DEFAULT_BACKGROUND;
     this.blurCanvas = blurCanvas || Constants.Setting.MENU_DEFAULT_BLUR_BACKGROUND;
     this.lastKey = this.lastKey == undefined ? -1 : this.lastKey;
     this.selectedComponent = this.selectedComponent == undefined ? 0 : this.selectedComponent;
@@ -46,7 +45,6 @@ export default class Menu extends Col {
   
       ctx.save();
   
-      this.drawBackground(ctx);
       this.drawComponents(ctx);
 
       if(!this.init) {

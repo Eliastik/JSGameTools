@@ -23,11 +23,13 @@ import Utils from "./Utils";
 export default class Row extends Container {
   selectable = false;
 
-  constructor(x, y, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components) {
-    super(x, y, null, null, alignement, verticalAlignement, padding, spaceBetweenComponents, disableAnimation, ...components);
+  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor, backgroundColorHover, backgroundColorDown, padding, spaceBetweenComponents, disableAnimation, scrollXDisabled, scrollYDisabled, ...components) {
+    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor, backgroundColorHover, backgroundColorDown, padding, spaceBetweenComponents, disableAnimation, scrollXDisabled, scrollYDisabled, ...components);
   }
 
   draw(context) {
+    super.draw(context);
+
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
@@ -52,8 +54,8 @@ export default class Row extends Container {
     }
 
     if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
+    super.drawScrollbars(ctx);
 
-    super.draw(ctx);
     ctx.restore();
   }
 

@@ -18,20 +18,14 @@
  */
 import Col from "./Col";
 import Constants from "./Constants";
-import ImageContainer from "./ImageContainer";
 
-class Button extends Col {
+export default class Button extends Col {
   selectable = true;
 
   constructor(x, y, maxWidth, maxHeight, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, padding, ...components) {
-    super(x, y, alignement, verticalAlignement, padding ? padding : Constants.Setting.DEFAULT_PADDING, padding ? padding : Constants.Setting.DEFAULT_SPACING, false, ...components);
+    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND, backgroundColorHover || Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND, backgroundColorDown || Constants.Setting.BUTTON_DEFAULT_CLICK_BACKGROUND, padding ? padding : Constants.Setting.DEFAULT_PADDING, padding ? padding : Constants.Setting.DEFAULT_SPACING, false, true, true, ...components);
     this.autoWidth = (this.width == undefined ? true : false);
     this.autoHeight = (this.height == undefined ? true : false);
-    this.backgroundColor = backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND;
-    this.backgroundColorHover = backgroundColorHover || Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND;
-    this.backgroundColorDown = backgroundColorDown || Constants.Setting.BUTTON_DEFAULT_CLICK_BACKGROUND
-    this.scrollXDisabled = true;
-    this.scrollYDisabled = true;
   }
   
   draw(context) {
@@ -109,15 +103,3 @@ class Button extends Col {
     return this.height;
   }
 }
-
-class ButtonImage extends Button {
-  constructor(imgSrc, x, y, alignement, verticalAlignement, width, height, backgroundColor, backgroundColorHover, imageLoader) {
-    super(x, y, width, height, backgroundColor, backgroundColorHover, null, alignement, verticalAlignement, null, new ImageContainer(imgSrc, x, y, width, height, alignement, verticalAlignement, imageLoader));
-  }
-
-  loadImage(imageLoader) {
-    if(this.components[0] instanceof ImageContainer) this.components[0].loadImage(imageLoader);
-  }
-}
-
-export { Button, ButtonImage };

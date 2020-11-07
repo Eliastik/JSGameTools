@@ -23,8 +23,7 @@ export default class Tooltip extends Col {
   selectable = false;
   
   constructor(backgroundColor, padding, spaceBetweenComponents, ...components) {
-    super(null, null, null, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents, false, ...components);
-    this.backgroundColor = backgroundColor || Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND;
+    super(null, null, null, null, null, null, backgroundColor || Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND, null, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents, false, true, true, ...components);
     this.disabled = true;
   }
 
@@ -49,12 +48,19 @@ export default class Tooltip extends Col {
     }
   }
 
-  drawBackground(ctx) {
-    ctx.save();
+  get width() {
+    return super.width + this.padding;
+  }
 
-    ctx.fillStyle = this.backgroundColor;
-    ctx.fillRect(this.x, this.y, this.width + this.padding, this.height + this.padding);
+  get height() {
+    return super.height + this.padding;
+  }
 
-    ctx.restore();
+  set width(width) {
+    super.width = width;
+  }
+
+  set height(height) {
+    super.height = height;
   }
 }

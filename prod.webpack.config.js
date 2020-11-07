@@ -1,8 +1,18 @@
 const path = require("path");
+const CircularDependencyPlugin = require("circular-dependency-plugin");
 
 const config = {
   entry: "./src/index.js",
   mode: "production",
+  plugins: [
+    new CircularDependencyPlugin({
+      exclude: /a\.js|node_modules/,
+      include: /src/,
+      failOnError: true,
+      allowAsyncCycles: false,
+      cwd: process.cwd(),
+    })
+  ],
   output: {
     path: path.resolve(__dirname, "lib"),
     filename: "JSGameTools.js",
