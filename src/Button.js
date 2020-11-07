@@ -18,7 +18,7 @@
  */
 import Col from "./Col";
 import Constants from "./Constants";
-import Image from "./Image";
+import ImageContainer from "./ImageContainer";
 
 class Button extends Col {
   selectable = true;
@@ -112,11 +112,11 @@ class Button extends Col {
 
 class ButtonImage extends Button {
   constructor(imgSrc, x, y, alignement, verticalAlignement, width, height, backgroundColor, backgroundColorHover, imageLoader) {
-    super(x, y, width, height, backgroundColor, backgroundColorHover, null, alignement, verticalAlignement, null, new Image(imgSrc, x, y, width, height, alignement, verticalAlignement, imageLoader));
+    super(x, y, width, height, backgroundColor, backgroundColorHover, null, alignement, verticalAlignement, null, new ImageContainer(imgSrc, x, y, width, height, alignement, verticalAlignement, imageLoader));
   }
 
   loadImage(imageLoader) {
-    if(this.components[0] instanceof Image) this.components[0].loadImage(imageLoader);
+    if(this.components[0] instanceof ImageContainer) this.components[0].loadImage(imageLoader);
   }
 }
 

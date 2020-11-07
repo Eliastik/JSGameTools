@@ -19,7 +19,7 @@
 import Utils from "./Utils";
 import Component from "./Component";
 
-export default class Image extends Component {
+export default class ImageContainer extends Component {
   selectable = false;
 
   constructor(imgSrc, x, y, width, height, alignement, verticalAlignement, imageLoader) {

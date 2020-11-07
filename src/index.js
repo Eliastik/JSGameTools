@@ -35,8 +35,8 @@ import EasingFunctions from "./EasingFunctions";
 import Col from "./Col";
 import Container from "./Container";
 import Row from "./Row";
-import Image from "./Image";
+import ImageContainer from "./ImageContainer";
 import Arrow from "./Arrow";
 import Cross from "./Cross";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions, Col, Container, Row, Image, Arrow, Cross };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions, Col, Container, Row, ImageContainer, Arrow, Cross };
