@@ -41,6 +41,7 @@ export default class Component {
     this.triggersHover = [];
     this.triggersDown = [];
     this.triggersScroll = [];
+    this.triggersMove = [];
 
     // State
     this.init = false;
@@ -59,6 +60,12 @@ export default class Component {
     this.scrollXDisabled = scrollXDisabled || false;
     this.scrollYDisabled = scrollYDisabled || false;
 
+    // Move event
+    this.offsetMoveX = 0;
+    this.offsetMoveY = 0;
+    this.moveEventStartX = 0;
+    this.moveEventStartY = 0;
+
     // Touch events
     this.touchEventStartX = 0;
     this.touchEventStartY = 0;
@@ -73,13 +80,29 @@ export default class Component {
     if(!this.initEvents && canvas != null) {
       canvas.addEventListener("mousemove", event => {
         if(!this.disabled) {
-          if(this.isInside(this.getMousePos(canvas, event))) {
+          const mousePosition = this.getMousePos(canvas, event);
+
+          if(this.clicked) {
+            const deltaX = this.moveEventStartX - mousePosition.x;
+            const deltaY = this.moveEventStartY - mousePosition.y;
+
+            this.offsetMoveX += deltaX;
+            this.offsetMoveY += deltaY;
+
+            if(this.triggersMove != null) {
+              this.triggersMove.forEach(trigger => trigger(deltaX, deltaY));
+            }
+            
+            this.moveEventStartX = mousePosition.x;
+            this.moveEventStartY = mousePosition.y;
+          }
+
+          if(this.isInside(mousePosition)) {
             if(this.triggersHover != null && !this.disabled) {
               this.triggersHover.forEach(trigger => trigger());
             }
 
             if(this.tooltip) {
-              const mousePosition = this.getMousePos(canvas, event);
               this.tooltip.x = mousePosition.x + 10;
               this.tooltip.y = mousePosition.y + 10;
               this.tooltip.disabled = false;
@@ -99,7 +122,9 @@ export default class Component {
       
       canvas.addEventListener("click", event => {
         if(!this.disabled) {
-          if(this.isInside(this.getMousePos(canvas, event))) {
+          const mousePosition = this.getMousePos(canvas, event);
+
+          if(this.isInside(mousePosition)) {
             if(this.triggersClick != null) {
               this.triggersClick.forEach(trigger => trigger());
             }
@@ -117,14 +142,16 @@ export default class Component {
       
       canvas.addEventListener("mousedown", event => {
         if(!this.disabled) {
-          if(this.isInside(this.getMousePos(canvas, event))) {
+          const mousePosition = this.getMousePos(canvas, event);
+
+          if(this.isInside(mousePosition)) {
             if(this.triggersDown != null) {
               this.triggersDown.forEach(trigger => trigger());
             }
             
             this.clicked = true;
-          } else {
-            this.clicked = false;
+            this.moveEventStartX = mousePosition.x;
+            this.moveEventStartY = mousePosition.y;
           }
         } else {
           this.hovered = false;
@@ -152,11 +179,14 @@ export default class Component {
         const position = this.getMousePos(canvas, changedTouches);
 
         if(this.hovered && !this.disabled && !this.scrollDisabled) {
-          this.offsetScrollX += this.touchEventStartX - position.x;
-          this.offsetScrollY += this.touchEventStartY - position.y;
+          const deltaX = this.touchEventStartX - position.x;
+          const deltaY = this.touchEventStartY - position.y;
+
+          this.offsetScrollX += deltaX;
+          this.offsetScrollY += deltaY;
 
           if(this.triggersScroll != null) {
-            this.triggersScroll.forEach(trigger => trigger(this.touchEventStartX - position.x, this.touchEventStartY - position.y));
+            this.triggersScroll.forEach(trigger => trigger(deltaX, deltaY));
           }
           
           this.touchEventStartX = position.x;
@@ -293,6 +323,22 @@ export default class Component {
 
   removeAllScrollActions() {
     this.triggersScroll = [];
+  }
+
+  setMoveAction(trigger) {
+    this.triggersMove = [trigger];
+  }
+  
+  addMoveAction(trigger) {
+    this.triggersMove.push(trigger);
+  }
+  
+  removeMoveAction(trigger) {
+    this.triggersMove = this.triggersMove.filter(elem => elem != trigger);
+  }
+
+  removeAllMoveActions() {
+    this.triggersMove = [];
   }
 
   get height() {

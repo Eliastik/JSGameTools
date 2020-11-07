@@ -23,6 +23,16 @@ export default class ScrollbarVertical extends Scrollbar {
 
   constructor(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent) {
     super(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent);
+    
+    this.addMoveAction((deltaX, deltaY) => {
+      if(this.parent) {
+        this.parent.offsetScrollY -= deltaY;
+
+        if(this.parent.triggersScroll != null) {
+          this.parent.triggersScroll.forEach(trigger => trigger(0, -deltaY));
+        }
+      }
+    });
   }
   
   draw(context) {

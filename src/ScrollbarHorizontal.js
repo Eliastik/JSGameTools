@@ -23,6 +23,16 @@ export default class ScrollbarHorizontal extends Scrollbar {
 
   constructor(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent) {
     super(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent);
+
+    this.addMoveAction((deltaX, deltaY) => {
+      if(this.parent) {
+        this.parent.offsetScrollX -= deltaX;
+
+        if(this.parent.triggersScroll != null) {
+          this.parent.triggersScroll.forEach(trigger => trigger(-deltaX, 0));
+        }
+      }
+    });
   }
   
   draw(context) {
