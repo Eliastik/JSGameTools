@@ -67,13 +67,15 @@ export default class Box extends Component {
   }
 
   drawBorder(ctx) {
-    ctx.save();
-    
-    ctx.strokeStyle = Constants.Setting.BOX_DEFAULT_SELECT_BORDER;
-    ctx.lineWidth = 3;
-    
-    ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-
-    ctx.restore();
+    if(this.selectable) {
+      ctx.save();
+      
+      ctx.strokeStyle = Constants.Setting.BOX_DEFAULT_SELECT_BORDER;
+      ctx.lineWidth = 3;
+      
+      ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+  
+      ctx.restore();
+    }
   }
 }

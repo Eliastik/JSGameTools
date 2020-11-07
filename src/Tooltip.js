@@ -41,7 +41,6 @@ export default class Tooltip extends Col {
         this.y -= (this.height + this.padding);
       }
   
-      this.drawBackground(ctx);
       super.draw(ctx);
       
       ctx.restore();
