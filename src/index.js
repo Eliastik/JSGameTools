@@ -37,5 +37,6 @@ import Container from "./Container";
 import Row from "./Row";
 import Image from "./Image";
 import Arrow from "./Arrow";
+import Cross from "./Cross";
 
-export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions, Col, Container, Row, Image, Arrow };
+export { Constants, Button, ButtonImage, ImageLoader, NotificationMessage, Utils, Menu, Input, Label, Link, Tooltip, Scene, FPSMeter, ProgressBar, Canvas, Component, EasingFunctions, Col, Container, Row, Image, Arrow, Cross };

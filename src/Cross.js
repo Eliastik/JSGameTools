@@ -20,7 +20,7 @@ import Component from "./Component";
 import Constants from "./Constants";
 import Utils from "./Utils";
 
-export default class Arrow extends Component {
+export default class Cross extends Component {
   selectable = false;
 
   constructor(x, y, width, height, lineWidth, color, alignement, verticalAlignement) {
@@ -39,5 +39,21 @@ export default class Arrow extends Component {
     Utils.drawCross(ctx, this.x, this.y, this.width, this.height, this.lineWidth, this.color);
 
     this.init = true;
+  }
+
+  get width() {
+    return super.width + this.lineWidth;
+  }
+
+  get height() {
+    return super.height + this.lineWidth;
+  }
+
+  set width(width) {
+    super.width = width;
+  }
+
+  set height(height) {
+    super.height = height;
   }
 }

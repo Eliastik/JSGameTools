@@ -38,7 +38,7 @@ export default class NotificationMessage extends Col {
     this.easingFunction = easingFunction;
     this.verticalPosition = verticalAlignement || Constants.VerticalAlignement.BOTTOM;
 
-    this.closeButton = new Button(null, null, null, null, null, null, null, "right", "top", 10, new Cross(null, null, 12, 12));
+    this.closeButton = new Button(null, null, null, null, null, null, null, "right", "top", 10, new Cross(null, null, 10, 10));
     this.add(this.closeButton);
   }
   
