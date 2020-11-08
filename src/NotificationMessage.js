@@ -159,4 +159,12 @@ export default class NotificationMessage extends Col {
   get height() {
     return super.height - this.closeButton.height;
   }
+
+  get maxWidth() {
+    return this.width;
+  }
+
+  get maxHeight() {
+    return this.height;
+  }
 }

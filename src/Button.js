@@ -34,12 +34,6 @@ export default class Button extends Col {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
-
-    this.drawBackground(ctx);
-
-    if(this.selected) {
-      this.drawBorder(ctx);
-    }
     
     this.drawComponents(ctx);
     
@@ -48,33 +42,6 @@ export default class Button extends Col {
 
   drawComponents(ctx) {
     super.draw(ctx);
-  }
-
-  drawBackground(ctx) {
-    ctx.save();
-
-    if(this.hovered && this.clicked) {
-      ctx.fillStyle = this.backgroundColorDown;
-    } else if(this.hovered) {
-      ctx.fillStyle = this.backgroundColorHover;
-    } else {
-      ctx.fillStyle = this.backgroundColor;
-    }
-
-    ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-
-    ctx.restore();
-  }
-
-  drawBorder(ctx) {
-    ctx.save();
-    
-    ctx.strokeStyle = "#a2cdd8";
-    ctx.lineWidth = 3;
-    
-    ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-
-    ctx.restore();
   }
 
   get height() {
@@ -96,10 +63,10 @@ export default class Button extends Col {
   }
 
   get maxWidth() {
-    return this.width;
+    return super.maxWidth ? super.maxWidth : this.width;
   }
 
   get maxHeight() {
-    return this.height;
+    return super.maxHeight ? super.maxHeight : this.height;
   }
 }

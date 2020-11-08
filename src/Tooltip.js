@@ -62,4 +62,12 @@ export default class Tooltip extends Col {
   set height(height) {
     super.height = height;
   }
+
+  get maxWidth() {
+    return this.width;
+  }
+
+  get maxHeight() {
+    return this.height;
+  }
 }

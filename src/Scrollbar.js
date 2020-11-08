@@ -32,36 +32,44 @@ export default class Scrollbar extends Box {
     super.draw(context);
   }
 
-  get maxWidth() {
+  get maxWidthParent() {
     return this.parent ? this.parent.maxWidth - Math.abs(Math.min(0, this.parent.x)) : 0;
   }
 
-  get maxHeight() {
+  get maxHeightParent() {
     return this.parent ? this.parent.maxHeight - Math.abs(Math.min(0, this.parent.y)) : 0;
   }
 
+  get maxWidth() {
+    return this.width;
+  }
+
+  get maxHeight() {
+    return this.height;
+  }
+
   get contentRatioX() {
-    return this.parent ? this.maxWidth / this.parent.width : 0;
+    return this.parent ? this.maxWidthParent / this.parent.width : 0;
   }
 
   get contentRatioY() {
-    return this.parent ? this.maxHeight / this.parent.height : 0;
+    return this.parent ? this.maxHeightParent / this.parent.height : 0;
   }
 
   get width() {
-    return this.maxWidth * this.contentRatioX;
+    return this.maxWidthParent * this.contentRatioX;
   }
 
   get height() {
-    return this.maxHeight * this.contentRatioY;
+    return this.maxHeightParent * this.contentRatioY;
   }
 
   get windowScrollSizeX() {
-    return this.parent ? this.parent.width - this.maxWidth : 0;
+    return this.parent ? this.parent.width - this.maxWidthParent : 0;
   }
 
   get windowScrollSizeY() {
-    return this.parent ? this.parent.height - this.maxHeight : 0;
+    return this.parent ? this.parent.height - this.maxHeightParent : 0;
   }
 
   get percentScrollbarX() {
@@ -73,11 +81,11 @@ export default class Scrollbar extends Box {
   }
 
   get scrollAreaSizeX() {
-    return this.maxWidth - this.width;
+    return this.maxWidthParent - this.width;
   }
 
   get scrollAreaSizeY() {
-    return this.maxHeight - this.height;
+    return this.maxHeightParent - this.height;
   }
 
   get x() {

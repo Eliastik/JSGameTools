@@ -153,11 +153,11 @@ export default class Container extends Box {
   }
 
   get maxWidth() {
-    return (this.#_maxWidth || (this.canvas && this.canvas.width)) + Math.abs(Math.min(0, this.x));
+    return this.#_maxWidth;
   }
 
   get maxHeight() {
-    return (this.#_maxHeight || (this.canvas && this.canvas.height)) + Math.abs(Math.min(0, this.y));
+    return this.#_maxHeight;
   }
 
   set maxWidth(maxWidth) {

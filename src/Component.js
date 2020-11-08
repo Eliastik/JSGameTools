@@ -242,7 +242,7 @@ export default class Component {
   }
   
   isInside(pos) {
-    return pos.x > this.x && pos.x < this.x + this.width && pos.y < this.y + this.height && pos.y > this.y;
+    return pos.x > this.x && pos.x < this.x + this.maxWidth && pos.y < this.y + this.maxHeight && pos.y > this.y;
   }
   
   disable() {
