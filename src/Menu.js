@@ -149,10 +149,14 @@ export default class Menu extends Col {
   }
 
   get maxHeight() {
-    return (super.maxHeight || (this.canvas && this.canvas.height)) + Math.abs(Math.min(0, this.y));
+    return (super.maxHeight || (this.canvas && this.canvas.height));
   }
 
   get maxWidth() {
     return this.canvas.width;
+  }
+
+  get y() {
+    return Math.max(0, super.y);
   }
 }

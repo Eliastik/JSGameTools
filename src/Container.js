@@ -18,6 +18,8 @@
  */
 import Box from "./Box";
 import Constants from "./Constants";
+import ScrollbarHorizontal from "./ScrollbarHorizontal";
+import ScrollbarVertical from "./ScrollbarVertical";
 
 export default class Container extends Box {
   selectable = false;
@@ -37,42 +39,7 @@ export default class Container extends Box {
     this.scrollbarHorizontal = new ScrollbarHorizontal(null, null, null, null, this);
     this.scrollbarVertical = new ScrollbarVertical(null, null, null, null, this);
 
-    this.addScrollAction((deltaX, deltaY) => {
-      const scrollAreaSizeY = this.height - this.maxHeight;
-      const scrollAreaSizeX = this.width - this.maxWidth;
-
-      if(!this.scrollYDisabled) {
-        if(scrollAreaSizeY <= 0) {
-          this.offsetScrollY = 0;
-        } else {
-          const percentScrollbarY = this.offsetScrollY / scrollAreaSizeY;
-    
-          if(percentScrollbarY <= 0 && deltaY < 0) {
-            this.offsetScrollY = Math.min(0, this.y);
-          } else if(percentScrollbarY > 1 && deltaY > 0) {
-            this.offsetScrollY = scrollAreaSizeY;
-          }
-        }
-      } else {
-        this.offsetScrollY -= deltaY;
-      }
-
-      if(!this.scrollXDisabled) {
-        if(scrollAreaSizeX <= 0) {
-          this.offsetScrollX = 0;
-        } else {
-          const percentScrollbarX = this.offsetScrollX / scrollAreaSizeX;
-    
-          if(percentScrollbarX <= 0 && deltaX < 0) {
-            this.offsetScrollX = Math.min(0, this.x);
-          } else if(percentScrollbarX > 1 && deltaX > 0) {
-            this.offsetScrollX = scrollAreaSizeX;
-          }
-        }
-      } else {
-        this.offsetScrollX -= deltaX;
-      }
-    });
+    this.addScrollAction((deltaX, deltaY) => this.controlScrolling(deltaX, deltaY));
   }
 
   draw(context) {
@@ -83,7 +50,8 @@ export default class Container extends Box {
     this.components.forEach(component => {
       if(this.canvas) component.canvas = this.canvas;
     });
-
+    
+    this.controlScrolling(0, 0);
     super.draw(context);
 
     ctx.restore();
@@ -179,7 +147,41 @@ export default class Container extends Box {
   get canvas() {
     return super.canvas;
   }
-}
 
-import ScrollbarHorizontal from "./ScrollbarHorizontal";
-import ScrollbarVertical from "./ScrollbarVertical";
+  controlScrolling(deltaX, deltaY) {
+    const scrollAreaSizeY = this.height - this.maxHeight;
+    const scrollAreaSizeX = this.width - this.maxWidth;
+
+    if(!this.scrollYDisabled) {
+      if(scrollAreaSizeY <= 0) {
+        this.offsetScrollY = 0;
+      } else {
+        const percentScrollbarY = this.offsetScrollY / scrollAreaSizeY;
+  
+        if(percentScrollbarY <= 0 && deltaY < 0) {
+          this.offsetScrollY = Math.min(0, this.y);
+        } else if(percentScrollbarY > 1 && deltaY > 0) {
+          this.offsetScrollY = scrollAreaSizeY;
+        }
+      }
+    } else {
+      this.offsetScrollY -= deltaY;
+    }
+
+    if(!this.scrollXDisabled) {
+      if(scrollAreaSizeX <= 0) {
+        this.offsetScrollX = 0;
+      } else {
+        const percentScrollbarX = this.offsetScrollX / scrollAreaSizeX;
+  
+        if(percentScrollbarX <= 0 && deltaX < 0) {
+          this.offsetScrollX = Math.min(0, this.x);
+        } else if(percentScrollbarX > 1 && deltaX > 0) {
+          this.offsetScrollX = scrollAreaSizeX;
+        }
+      }
+    } else {
+      this.offsetScrollX -= deltaX;
+    }
+  }
+}
