@@ -18,10 +18,18 @@
  */
 import ImageContainer from "./ImageContainer";
 import Button from "./Button";
+import Style from "./Style";
 
 export default class ButtonImage extends Button {
   constructor(imgSrc, x, y, alignement, verticalAlignement, width, height, backgroundColor, backgroundColorHover, imageLoader) {
-    super(x, y, width, height, backgroundColor, backgroundColorHover, null, alignement, verticalAlignement, null, new ImageContainer(imgSrc, x, y, width, height, alignement, verticalAlignement, imageLoader));
+    const style = new Style({
+      "alignement": alignement,
+      "verticalAlignement": verticalAlignement,
+      "backgroundColor": backgroundColor,
+      "backgroundColorHover": backgroundColorHover
+    });
+
+    super(x, y, width, height, style, new ImageContainer(imgSrc, x, y, width, height, style, imageLoader));
   }
 
   loadImage(imageLoader) {

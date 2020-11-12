@@ -30,7 +30,7 @@ export default {
     INPUT_DEFAULT_FONT_COLOR: "#000",
     INPUT_DEFAULT_BACKGROUND_COLOR: "#fff",
     INPUT_DEFAULT_BORDER_COLOR: "#000",
-    INPUT_DEFAULT_BORDER_COLOR_HOVER: "#a2cdd8",
+    INPUT_DEFAULT_BORDER_COLOR_SELECTED: "#a2cdd8",
     INPUT_DEFAULT_SELECT_COLOR: "#2980b9",
     LABEL_DEFAULT_FONT_COLOR: "#000",
     LINK_DEFAULT_COLOR: "#0000EE",
@@ -51,7 +51,8 @@ export default {
     SCROLLBAR_DEFAULT_HOVER_BACKGROUND: "rgb(149, 165, 166, 0.9)",
     SCROLLBAR_DEFAULT_CLICK_BACKGROUND: "rgb(149, 165, 166, 0.5)",
     SCROLLBAR_DEFAULT_SIZE: 10,
-    BOX_DEFAULT_SELECT_BORDER: "#a2cdd8"
+    DEFAULT_BORDER_SIZE: 3,
+    DEFAULT_BORDER_COLOR_SELECTED: "#a2cdd8"
   },
   Key: {
     UP: 38,
@@ -65,11 +66,13 @@ export default {
   Alignement: {
     RIGHT: "right",
     LEFT: "left",
-    CENTER: "center"
+    CENTER: "center",
+    DEFAULT: "default"
   },
   VerticalAlignement: {
     TOP: "top",
     CENTER: "center",
-    BOTTOM: "bottom"
+    BOTTOM: "bottom",
+    DEFAULT: "default"
   }
 };

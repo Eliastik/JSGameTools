@@ -18,19 +18,17 @@
  */
 import Component from "./Component";
 import Constants from "./Constants";
+import Style from "./Style";
 import Utils from "./Utils";
 
 export default class Arrow extends Component {
   selectable = false;
 
-  constructor(x, y, toX, toY, lineWidth, headSize, color, alignement, verticalAlignement) {
-    super(x, y, null, null, alignement, verticalAlignement);
+  constructor(x, y, toX, toY, style) {
+    super(x, y, null, null, style);
 
     this.toX = toX;
     this.toY = toY;
-    this.lineWidth = lineWidth || Constants.Setting.ARROW_DEFAULT_LINE_SIZE;
-    this.headSize = headSize || Constants.Setting.ARROW_DEFAULT_HEAD_SIZE;
-    this.color = color || Constants.Setting.ARROW_DEFAULT_COLOR;
   }
 
   draw(context) {
@@ -39,7 +37,7 @@ export default class Arrow extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     
-    Utils.drawArrow(ctx, this.x, this.y, this.toX, this.toY, this.lineWidth, this.headSize, this.color);
+    Utils.drawArrow(ctx, this.x, this.y, this.toX, this.toY, this.style.lineWidth, this.style.headSize, this.style.foregroundColor);
 
     this.init = true;
   }
@@ -50,5 +48,13 @@ export default class Arrow extends Component {
 
   get height() {
     return Math.abs(this.y - this.toY);
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "lineWidth": Constants.Setting.ARROW_DEFAULT_LINE_SIZE,
+      "headSize": Constants.Setting.ARROW_DEFAULT_HEAD_SIZE,
+      "foregroundColor": Constants.Setting.ARROW_DEFAULT_COLOR
+    });
   }
 }

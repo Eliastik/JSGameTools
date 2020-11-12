@@ -18,14 +18,13 @@
  */
 import Col from "./Col";
 import Constants from "./Constants";
+import Style from "./Style";
 
 export default class Button extends Col {
   selectable = true;
 
-  constructor(x, y, maxWidth, maxHeight, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, padding, ...components) {
-    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND, backgroundColorHover || Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND, backgroundColorDown || Constants.Setting.BUTTON_DEFAULT_CLICK_BACKGROUND, padding ? padding : Constants.Setting.DEFAULT_PADDING, padding ? padding : Constants.Setting.DEFAULT_SPACING, false, true, true, ...components);
-    this.autoWidth = (this.width == undefined ? true : false);
-    this.autoHeight = (this.height == undefined ? true : false);
+  constructor(x, y, maxWidth, maxHeight, style, ...components) {
+    super(x, y, maxWidth, maxHeight, style, ...components);
   }
   
   draw(context) {
@@ -45,11 +44,11 @@ export default class Button extends Col {
   }
 
   get height() {
-    return super.height + this.padding;
+    return super.height + this.style.padding;
   }
 
   get width() {
-    return super.width + this.padding;
+    return super.width + this.style.padding;
   }
 
   set width(width) {
@@ -68,5 +67,15 @@ export default class Button extends Col {
 
   get maxHeight() {
     return super.maxHeight ? super.maxHeight : this.height;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "backgroundColor": Constants.Setting.BUTTON_DEFAULT_BACKGROUND,
+      "backgroundColorHover": Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND,
+      "backgroundColorDown": Constants.Setting.BUTTON_DEFAULT_CLICK_BACKGROUND,
+      "scrollXDisabled": true,
+      "scrollYDisabled": true
+    });
   }
 }

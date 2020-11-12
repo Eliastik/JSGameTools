@@ -17,6 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Constants from "./Constants";
+import Style from "./Style";
 
 export default class Component {
   selectable = true;
@@ -25,16 +26,18 @@ export default class Component {
   #_x = 0;
   #_y = 0;
   #_disabled = false;
+  #_style;
 
-  constructor(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollXDisabled, scrollYDisabled) {
+  constructor(x, y, width, height, style) {
     this.#_x = x || 0;
     this.#_y = y || 0;
     this.#_width = width;
     this.#_height = height;
-    this.alignement = alignement || "default";
-    this.verticalAlignement = verticalAlignement || "default";
     this.canvas;
     this.parent;
+
+    // Style
+    this.style = style;
     
     // Functions triggered by events
     this.triggersClick = [];
@@ -50,15 +53,10 @@ export default class Component {
     this.clicked = false;
     this.hovered = false;
     this.#_disabled = false;
-    this.disableAnimation = disableAnimation || false;
 
     // Scroll state
     this.offsetScrollX = 0;
     this.offsetScrollY = 0;
-
-    // Scroll enable/disable
-    this.scrollXDisabled = scrollXDisabled || false;
-    this.scrollYDisabled = scrollYDisabled || false;
 
     // Move event
     this.offsetMoveX = 0;
@@ -105,18 +103,18 @@ export default class Component {
             if(this.tooltip) {
               this.tooltip.x = mousePosition.x + 10;
               this.tooltip.y = mousePosition.y + 10;
-              this.tooltip.disabled = false;
+              this.tooltip.enable();
             }
             
             this.hovered = true;
           } else {
             this.hovered = false;
-            if(this.tooltip) this.tooltip.disabled = true;
+            if(this.tooltip) this.tooltip.disable()
           }
         } else {
           this.hovered = false;
           this.clicked = false;
-          if(this.tooltip) this.tooltip.disabled = true;
+          if(this.tooltip) this.tooltip.disable();
         }
       }, false);
       
@@ -358,12 +356,12 @@ export default class Component {
   }
 
   get x() {
-    if(this.alignement && this.parent) {
-      if(this.alignement == Constants.Alignement.CENTER) {
+    if(this.style.alignement && this.parent) {
+      if(this.style.alignement == Constants.Alignement.CENTER) {
         return this.parent.x + (this.parent.width / 2) - (this.width / 2);
-      } else if(this.alignement == Constants.Alignement.RIGHT) {
+      } else if(this.style.alignement == Constants.Alignement.RIGHT) {
         return this.parent.x + (this.parent.width) - (this.width) - 5;
-      } else if(this.alignement == Constants.Alignement.LEFT) {
+      } else if(this.style.alignement == Constants.Alignement.LEFT) {
         return this.parent.x + 5;
       }
     }
@@ -376,12 +374,12 @@ export default class Component {
   }
 
   get y() {
-    if(this.verticalAlignement && this.parent) {
-      if(this.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
+    if(this.style.verticalAlignement && this.parent) {
+      if(this.style.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
         return this.parent.y + (this.parent.height) - (this.height) - 5;
-      } else if(this.verticalAlignement == Constants.VerticalAlignement.CENTER) {
+      } else if(this.style.verticalAlignement == Constants.VerticalAlignement.CENTER) {
         return this.parent.y + (this.parent.height / 2) - (this.height / 2);
-      } else if(this.verticalAlignement == Constants.VerticalAlignement.TOP) {
+      } else if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
         return this.parent.y + 5;
       }
     }
@@ -399,5 +397,25 @@ export default class Component {
 
   get maxHeight() {
     return this.height;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "padding": Constants.Setting.DEFAULT_PADDING,
+      "spaceBetweenComponents": Constants.Setting.DEFAULT_SPACING
+    });
+  }
+
+  get style() {
+    return this.#_style || this.defaultStyle;
+  }
+
+  set style(style) {
+    this.#_style = new Style();
+    this.#_style.setAll(this.defaultStyle.getStyles());
+
+    if(style && style instanceof Style) {
+      this.#_style.setAll(style.getStyles());
+    }
   }
 }

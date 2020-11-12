@@ -18,26 +18,16 @@
  */
 import Constants from "./Constants";
 import Utils from "./Utils";
-import Component from "./Component";
+import Box from "./Box";
+import Style from "./Style";
 
-export default class Input extends Component {
+export default class Input extends Box {
   selectable = true;
 
-  constructor(x, y, width, height, alignement, verticalAlignement, fontSize, fontFamily, backgroundColor, borderColor, borderColorHover, borderSize, fontColor, selectColor, defaultText) {
-    super(x, y, width, height, alignement, verticalAlignement);
+  constructor(x, y, width, height, defaultText, style) {
+    super(x, y, width, height, style);
     
     this.text = defaultText || "";
-    this.fontSizeInitial = fontSize;
-    this.fontSize = this.fontSizeInitial || Math.floor(Constants.Setting.FONT_SIZE / 1.25);
-    this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
-    this.fontColor = fontColor || Constants.Setting.INPUT_DEFAULT_FONT_COLOR;
-    this.backgroundColor = backgroundColor || Constants.Setting.INPUT_DEFAULT_BACKGROUND_COLOR;
-    this.borderColor = borderColor || Constants.Setting.INPUT_DEFAULT_BORDER_COLOR;
-    this.borderColorHover = borderColorHover || Constants.Setting.INPUT_DEFAULT_BORDER_COLOR_HOVER;
-    this.selectColor = selectColor || Constants.Setting.INPUT_DEFAULT_SELECT_COLOR;
-    this.borderSize = borderSize || 3;
-    this.height = this.height == undefined ? this.fontSize + this.borderSize * 2 : this.height;
-
     this.positionStart = 0;
     this.positionEnd = 0;
     this.offsetX = 0;
@@ -109,7 +99,7 @@ export default class Input extends Component {
 
     currentX = this.drawText(ctxText, currentX);
 
-    Utils.drawImageData(ctx, this.canvasTmp, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2, this.x + this.borderSize, this.y + this.borderSize, this.width - this.borderSize * 2, this.height - this.borderSize * 2);
+    Utils.drawImageData(ctx, this.canvasTmp, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2);
 
     if(this.hovered || this.clicked) {
       if(this.canvas && this.canvas.canvas) {
@@ -129,17 +119,17 @@ export default class Input extends Component {
   drawText(ctxText, currentX) {
     for(let i = -1; i < this.text.length; i++) {
       if(i > -1) {
-        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.fontSize, this.fontFamily, true);
+        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);
 
         const xDraw = currentX - this.offsetX;
-        const yDraw = this.y + this.borderSize;
+        const yDraw = this.y + this.style.borderSize;
 
         if(xDraw >= this.x - sizes["width"] && xDraw <= this.x + this.width) { // Don't draw the text if it is outside the input (overflow)
           if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
             this.drawHighlight(ctxText, currentX, sizes);
           }
 
-          Utils.drawText(ctxText, this.text[i], this.fontColor, this.fontSize, this.fontFamily, "default", "default", xDraw, yDraw, false);
+          Utils.drawText(ctxText, this.text[i], this.style.fontColor, this.style.fontSize, this.style.fontFamily, "default", "default", xDraw, yDraw, false);
         }
 
         currentX += sizes["width"] + 1;
@@ -160,28 +150,17 @@ export default class Input extends Component {
   }
 
   drawCursor(ctxText, currentX) {
-    ctxText.strokeStyle = this.borderColor;
+    ctxText.strokeStyle = this.style.borderColor;
     ctxText.lineWidth = 1;
     ctxText.beginPath();
     ctxText.moveTo(currentX - this.offsetX, this.y + 3);
-    ctxText.lineTo(currentX - this.offsetX, this.y + this.fontSize);
+    ctxText.lineTo(currentX - this.offsetX, this.y + this.style.fontSize);
     ctxText.stroke();
   }
 
   drawHighlight(ctxText, currentX, sizes) {
-    ctxText.fillStyle = this.selectColor;
-    ctxText.fillRect(currentX - this.offsetX, this.y + this.borderSize, sizes["width"] + 2, this.height - this.borderSize * 2);
-  }
-
-  drawBorder(ctx) {
-    ctx.strokeStyle = this.selected ? this.borderColorHover : this.borderColor;
-    ctx.lineWidth = this.borderSize;
-    ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
-  }
-
-  drawBackground(ctx) {
-    ctx.fillStyle = this.backgroundColor;
-    ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+    ctxText.fillStyle = this.style.selectColor;
+    ctxText.fillRect(currentX - this.offsetX, this.y + this.style.borderSize, sizes["width"] + 2, this.height - this.style.borderSize * 2);
   }
 
   click() {
@@ -190,5 +169,21 @@ export default class Input extends Component {
 
   blur() {
     this.input.blur();
+  }
+
+  get height() {
+    return super.height ? super.height : this.style.fontSize + this.style.borderSize * 2;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "fontSize": Math.floor(Constants.Setting.FONT_SIZE / 1.25),
+      "fontFamily": Constants.Setting.FONT_FAMILY,
+      "fontColor": Constants.Setting.INPUT_DEFAULT_FONT_COLOR,
+      "backgroundColor": Constants.Setting.INPUT_DEFAULT_BACKGROUND_COLOR,
+      "borderColor": Constants.Setting.INPUT_DEFAULT_BORDER_COLOR,
+      "borderColorSelected": Constants.Setting.INPUT_DEFAULT_BORDER_COLOR_SELECTED,
+      "selectColor": Constants.Setting.INPUT_DEFAULT_SELECT_COLOR
+    });
   }
 }

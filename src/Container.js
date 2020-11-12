@@ -20,6 +20,7 @@ import Box from "./Box";
 import Constants from "./Constants";
 import ScrollbarHorizontal from "./ScrollbarHorizontal";
 import ScrollbarVertical from "./ScrollbarVertical";
+import Style from "./Style";
 
 export default class Container extends Box {
   selectable = false;
@@ -27,17 +28,15 @@ export default class Container extends Box {
   #_maxWidth = 0;
   #_maxHeight = 0;
 
-  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor, backgroundColorHover, backgroundColorDown, padding, spaceBetweenComponents, disableAnimation, scrollXDisabled, scrollYDisabled, ...components) {
-    super(x, y, null, null, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, disableAnimation, scrollXDisabled, scrollYDisabled);
+  constructor(x, y, maxWidth, maxHeight, style, ...components) {
+    super(x, y, null, null, style);
 
     this.addAll(...components);
-    this.padding = padding ? padding : 0;
-    this.spaceBetweenComponents = spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING;
     this.canvasTmp = document.createElement("canvas");
     this.#_maxWidth = maxWidth;
     this.#_maxHeight = maxHeight;
-    this.scrollbarHorizontal = new ScrollbarHorizontal(null, null, null, null, this);
-    this.scrollbarVertical = new ScrollbarVertical(null, null, null, null, this);
+    this.scrollbarHorizontal = new ScrollbarHorizontal(null, null, this);
+    this.scrollbarVertical = new ScrollbarVertical(null, null, this);
 
     this.addScrollAction((deltaX, deltaY) => this.controlScrolling(deltaX, deltaY));
   }
@@ -66,8 +65,8 @@ export default class Container extends Box {
   }
 
   drawScrollbars(ctx) {
-    if(!this.scrollXDisabled) this.drawVerticalScrollBar(ctx);
-    if(!this.scrollYDisabled) this.drawHorizontalScrollBar(ctx);
+    if(!this.style.scrollXDisabled) this.drawVerticalScrollBar(ctx);
+    if(!this.style.scrollYDisabled) this.drawHorizontalScrollBar(ctx);
   }
 
   set(...components) {
@@ -104,12 +103,12 @@ export default class Container extends Box {
 
   disable() {
     super.disable();
-    this.#components.forEach(component => component.disable());
+    this.#components.forEach(component => component && component.disable && component.disable());
   }
 
   enable() {
     super.enable();
-    this.#components.forEach(component => component.enable());
+    this.#components.forEach(component => component && component.enable && component.enable());
   }
 
   get width() {
@@ -152,7 +151,7 @@ export default class Container extends Box {
     const scrollAreaSizeY = this.height - this.maxHeight;
     const scrollAreaSizeX = this.width - this.maxWidth;
 
-    if(!this.scrollYDisabled) {
+    if(!this.style.scrollYDisabled) {
       if(scrollAreaSizeY <= 0) {
         this.offsetScrollY = 0;
       } else {
@@ -168,7 +167,7 @@ export default class Container extends Box {
       this.offsetScrollY -= deltaY;
     }
 
-    if(!this.scrollXDisabled) {
+    if(!this.style.scrollXDisabled) {
       if(scrollAreaSizeX <= 0) {
         this.offsetScrollX = 0;
       } else {
@@ -183,5 +182,12 @@ export default class Container extends Box {
     } else {
       this.offsetScrollX -= deltaX;
     }
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "padding": 0,
+      "spaceBetweenComponents": Constants.Setting.DEFAULT_SPACING
+    });
   }
 }

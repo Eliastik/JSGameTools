@@ -23,8 +23,8 @@ import Utils from "./Utils";
 export default class Row extends Container {
   selectable = false;
 
-  constructor(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor, backgroundColorHover, backgroundColorDown, padding, spaceBetweenComponents, disableAnimation, scrollXDisabled, scrollYDisabled, ...components) {
-    super(x, y, maxWidth, maxHeight, alignement, verticalAlignement, backgroundColor, backgroundColorHover, backgroundColorDown, padding, spaceBetweenComponents, disableAnimation, scrollXDisabled, scrollYDisabled, ...components);
+  constructor(x, y, maxWidth, maxHeight, style, ...components) {
+    super(x, y, maxWidth, maxHeight, style, ...components);
   }
 
   draw(context) {
@@ -46,7 +46,7 @@ export default class Row extends Container {
     }
   
     if(super.components != null) {
-      let currentX = (this.x + this.padding) || this.padding;
+      let currentX = (this.x + this.style.padding) || this.style.padding;
 
       super.components.forEach(component => {
         currentX = this.drawComponent(component, currentX, ctxTemp);
@@ -62,10 +62,10 @@ export default class Row extends Container {
   drawComponent(component, currentX, ctx) {
     if(component instanceof Component) {
       component.x = currentX - this.offsetScrollX;
-      if(this.y) component.y = (this.y + this.padding) - this.offsetScrollY;
+      if(this.y) component.y = (this.y + this.style.padding) - this.offsetScrollY;
       component.enable();
       component.draw(ctx);
-      currentX += component.width + this.spaceBetweenComponents;
+      currentX += component.width + this.style.spaceBetweenComponents;
     }
     
     return currentX;
@@ -74,12 +74,16 @@ export default class Row extends Container {
   get height() {
     let maxHeight = 0;
     super.components.forEach(component => { if(component.height > maxHeight) maxHeight = component.height; });
-    return maxHeight + this.padding;
+    return maxHeight + this.style.padding;
   }
 
   get width() {
     let totalWidth = 0;
     super.components.forEach(component => totalWidth += component.width);
-    return totalWidth + this.spaceBetweenComponents * (super.components.length - 1) + this.padding;
+    return totalWidth + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
+  }
+
+  get defaultStyle() {
+    return super.defaultStyle;
   }
 }

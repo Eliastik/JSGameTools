@@ -18,12 +18,13 @@
  */
 import Col from "./Col";
 import Constants from "./Constants";
+import Style from "./Style";
 
 export default class Tooltip extends Col {
   selectable = false;
   
-  constructor(backgroundColor, padding, spaceBetweenComponents, ...components) {
-    super(null, null, null, null, null, null, backgroundColor || Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND, null, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents, false, true, true, ...components);
+  constructor(style, ...components) {
+    super(null, null, null, null, style, ...components);
     this.disabled = true;
   }
 
@@ -33,12 +34,12 @@ export default class Tooltip extends Col {
       const ctx = canvas.getContext("2d");
       ctx.save();
 
-      if(this.x + this.width + this.padding > canvas.width) {
-        this.x -= (this.width + this.padding);
+      if(this.x + this.width + this.style.padding > canvas.width) {
+        this.x -= (this.width + this.style.padding);
       }
 
-      if(this.y + this.height + this.padding > canvas.height) {
-        this.y -= (this.height + this.padding);
+      if(this.y + this.height + this.style.padding > canvas.height) {
+        this.y -= (this.height + this.style.padding);
       }
   
       super.draw(ctx);
@@ -48,11 +49,11 @@ export default class Tooltip extends Col {
   }
 
   get width() {
-    return super.width + this.padding;
+    return super.width + this.style.padding;
   }
 
   get height() {
-    return super.height + this.padding;
+    return super.height + this.style.padding;
   }
 
   set width(width) {
@@ -69,5 +70,11 @@ export default class Tooltip extends Col {
 
   get maxHeight() {
     return this.height;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "backgroundColor": Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND
+    });
   }
 }

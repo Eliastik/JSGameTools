@@ -21,8 +21,8 @@ import Scrollbar from "./Scrollbar";
 export default class ScrollbarHorizontal extends Scrollbar {
   selectable = true;
 
-  constructor(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent) {
-    super(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent);
+  constructor(size, style, parent) {
+    super(size, style, parent);
 
     this.addMoveAction((deltaX, deltaY) => {
       if(this.parent) {

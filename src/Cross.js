@@ -19,15 +19,13 @@
 import Component from "./Component";
 import Constants from "./Constants";
 import Utils from "./Utils";
+import Style from "./Style";
 
 export default class Cross extends Component {
   selectable = false;
 
-  constructor(x, y, width, height, lineWidth, color, alignement, verticalAlignement) {
-    super(x, y, width, height, alignement, verticalAlignement);
-
-    this.lineWidth = lineWidth || Constants.Setting.CROSS_DEFAULT_LINE_SIZE;
-    this.color = color || Constants.Setting.CROSS_DEFAULT_COLOR;
+  constructor(x, y, width, height, style) {
+    super(x, y, width, height, style);
   }
 
   draw(context) {
@@ -36,17 +34,17 @@ export default class Cross extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     
-    Utils.drawCross(ctx, this.x, this.y, this.width, this.height, this.lineWidth, this.color);
+    Utils.drawCross(ctx, this.x, this.y, this.width, this.height, this.style.lineWidth, this.style.color);
 
     this.init = true;
   }
 
   get width() {
-    return super.width + this.lineWidth;
+    return super.width + this.style.lineWidth;
   }
 
   get height() {
-    return super.height + this.lineWidth;
+    return super.height + this.style.lineWidth;
   }
 
   set width(width) {
@@ -55,5 +53,12 @@ export default class Cross extends Component {
 
   set height(height) {
     super.height = height;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "lineWidth": Constants.Setting.CROSS_DEFAULT_LINE_SIZE,
+      "color": Constants.Setting.CROSS_DEFAULT_COLOR
+    });
   }
 }

@@ -20,14 +20,14 @@ import Constants from "./Constants";
 import Utils from "./Utils";
 import Component from "./Component";
 import Col from "./Col";
+import Style from "./Style";
 
 export default class Menu extends Col {
   selectable = false;
 
-  constructor(backgroundColor, blurCanvas, ...components) {
-    super(0, 0, null, null, null, Constants.VerticalAlignement.CENTER, backgroundColor || Constants.Setting.MENU_DEFAULT_BACKGROUND, null, null, null, null, null, false, false, ...components);
+  constructor(style, ...components) {
+    super(0, 0, null, null, style, ...components);
 
-    this.blurCanvas = blurCanvas || Constants.Setting.MENU_DEFAULT_BLUR_BACKGROUND;
     this.lastKey = this.lastKey == undefined ? -1 : this.lastKey;
     this.selectedComponent = this.selectedComponent == undefined ? 0 : this.selectedComponent;
 
@@ -39,7 +39,7 @@ export default class Menu extends Col {
     const ctx = canvas.getContext("2d");
 
     if(!this.disabled) {
-      if(this.blurCanvas) {
+      if(this.style.blurBackground) {
         this.drawBlur(ctx);
       }
   
@@ -112,7 +112,7 @@ export default class Menu extends Col {
   }
 
   drawBackground(ctx) {
-    ctx.fillStyle = this.backgroundColor;
+    ctx.fillStyle = this.style.backgroundColor;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
 
@@ -158,5 +158,12 @@ export default class Menu extends Col {
 
   get y() {
     return Math.max(0, super.y);
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "blurBackground": Constants.Setting.MENU_DEFAULT_BLUR_BACKGROUND,
+      "backgroundColor": Constants.Setting.MENU_DEFAULT_BACKGROUND
+    });
   }
 }

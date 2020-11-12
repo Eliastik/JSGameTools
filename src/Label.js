@@ -19,22 +19,15 @@
 import Constants from "./Constants";
 import Utils from "./Utils";
 import Component from "./Component";
+import Style from "./Style";
 
 export default class Label extends Component {
   selectable = false;
 
-  constructor(text, x, y, fontSize, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
-    super(x, y);
+  constructor(text, x, y, style) {
+    super(x, y, null, null, style);
 
     this.text = text;
-    this.color = color || Constants.Setting.LABEL_DEFAULT_FONT_COLOR;
-    this.fontSize = fontSize || Constants.Setting.FONT_SIZE;
-    this.fontFamily = fontFamily || Constants.Setting.FONT_FAMILY;
-    this.alignement = alignement || "default";
-    this.verticalAlignement = verticalAlignement || "default";
-    this.wrap = wrap || true;
-    this.bold = bold || false;
-    this.underline = underline || false;
   }
 
   draw(context) {
@@ -44,16 +37,27 @@ export default class Label extends Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    Utils.drawText(ctx, this.text, this.color, this.fontSize, this.fontFamily, this.alignement, this.verticalAlignement, this.x, this.y, this.wrap, this.bold, this.underline, null, this.parent);
+    Utils.drawText(ctx, this.text, this.style.fontColor, this.style.fontSize, this.style.fontFamily, this.style.alignement, this.style.verticalAlignement, this.x, this.y, this.style.wrap, this.style.bold, this.style.underline, null, this.parent);
 
     ctx.restore();
   }
 
   get height() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily, !this.wrap)["height"];
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap)["height"];
   }
 
   get width() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.fontSize, this.fontFamily, !this.wrap)["width"];
+    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap)["width"];
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "fontSize": Constants.Setting.FONT_SIZE,
+      "fontFamily": Constants.Setting.FONT_FAMILY,
+      "fontColor": Constants.Setting.LABEL_DEFAULT_FONT_COLOR,
+      "wrap": true,
+      "bold": false,
+      "underline": false
+    });
   }
 }

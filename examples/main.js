@@ -20,43 +20,78 @@
 const JGT = JSGameTools;
 
 const imageLoader = new JGT.ImageLoader();
-const buttonText = new JGT.Button(5, 5, null, null, "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Label("Show a notification", null, null, null, null, "white"));
-const buttonText2 = new JGT.Button(5, 150, null, null,  "#2ecc71", "#1abc9c", "#16a085", "right", null, null, new JGT.Label("Long text button ........... This should be on next line", null, null, null, null, "white"));
-const pauseImage = new JGT.ImageContainer("pause.png", null, null, 64, 64, null, "center");
-const buttonImage = new JGT.Button(null, 50, null, null, null, null, null, "left", null, null, new JGT.Row(5, 250, null, null, null, null, null, null, null, null, null, false, false, false, pauseImage, new JGT.Label("Pause", null, null, null, null, "white", null, "center")));
-const buttonTextFullscreen = new JGT.Button(5, 75, null, null, "#2ecc71", "#1abc9c", "#16a085", "center", null, null, new JGT.Label("Toggle fullscreen", null, null, null, null, "white"));
-const notification = new JGT.NotificationMessage(null, false, null, null, null, null, null, null, null, new JGT.Label("A notification", null, null, null, null, "white", JGT.Constants.Alignement.CENTER),  new JGT.Row(null, null, null, null, null, null, null, null, null, null, null, false, false, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), new JGT.Button(null, null, null, null, null, null, null, null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
 
-const buttonMenu1 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", "left", null, null, new JGT.Label("A button, aligned to the left", null, null, null, null, "white"));
-const buttonMenu5 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Label("Display a notification", null, null, null, null, "white"));
-const buttonMenu2 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", "right", null, null, new JGT.Label("Another button, aligned to the right", null, null, null, null, "white"));
-const buttonMenu3 = new JGT.Button(5, 5, null, null,  "#2ecc71", "#1abc9c", "#16a085", "right", null, null, new JGT.Label("A long buttonnnnnnnnnnnnnnnnnnnnnnnnnn", null, null, null, null, "white"));
-const buttonMenu4 = new JGT.Button(5, 5, null, null,  "#CC2F2F", "#F23838", "#A62626", "center", null, null, new JGT.Label("Close (centered)", null, null, null, null, "white"));
-const menu = new JGT.Menu(null, null, new JGT.Label("Pause menu\nYou can use the arrow keys, press enter to select", null, null, null, null, "white", "center"), buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4, new JGT.Input(null, null, 150, null, JGT.Constants.Alignement.CENTER), new JGT.Input(null, null, 150, null, JGT.Constants.Alignement.CENTER));
-const notification2 = new JGT.NotificationMessage("rgba(46, 204, 225, 0.85)", true, null, null, null, null, null, null, null, new JGT.Label("Hi!", null, null, null, null, "white", JGT.Constants.Alignement.CENTER));
+const buttonStyle = new JGT.Style({
+  "backgroundColor": "#2ecc71",
+  "backgroundColorHover": "#1abc9c",
+  "backgroundColorDown": "#16a085"
+});
+
+const buttonStyleRed = new JGT.Style({
+  "backgroundColor": "#CC2F2F",
+  "backgroundColorHover": "#F23838",
+  "backgroundColorDown": "#A62626"
+});
+
+const labelStyle = new JGT.Style({
+  "fontColor": "white"
+});
+
+const labelStyleCenter = new JGT.Style({
+  "fontColor": "white",
+  "alignement": "center"
+});
+
+const labelStyleVerticalCenter = new JGT.Style({
+  "fontColor": "white",
+  "verticalAlignement": "center"
+});
+
+const buttonText = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label("Show a notification", null, null, labelStyle));
+const buttonText2 = new JGT.Button(5, 150, null, null, buttonStyle, new JGT.Label("Long text button ........... This should be on next line", null, null, labelStyle));
+buttonText2.style.set("alignement", "right");
+const pauseImage = new JGT.ImageContainer("pause.png", null, null, 64, 64, new JGT.Style({ "verticalAlignement": "center", "alignement": "left" }));
+const buttonImage = new JGT.Button(null, 50, null, null, new JGT.Style({ "alignement": "left" }), new JGT.Row(5, 250, null, null, null, pauseImage, new JGT.Label("Pause", null, null, labelStyleVerticalCenter)));
+const buttonTextFullscreen = new JGT.Button(5, 75, null, null, buttonStyle, new JGT.Label("Toggle fullscreen", null, null, labelStyle));
+buttonTextFullscreen.style.set("alignement", "center");
+const notification = new JGT.NotificationMessage(null, null, null, null, null, new JGT.Label("A notification", null, null, labelStyleCenter), new JGT.Row(null, null, null, null, null, new JGT.Label("Label : ", null, null, labelStyleVerticalCenter), new JGT.Button(null, null, null, null, null, new JGT.Label("Button", null, null, labelStyle))));
+
+const buttonMenu1 = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label("A button, aligned to the left", null, null, labelStyle));
+buttonMenu1.style.set("alignement", "left");
+const buttonMenu5 = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label("Display a notification", null, null, labelStyle));
+const buttonMenu2 = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label("Another button, aligned to the right", null, null, labelStyle));
+buttonMenu2.style.set("alignement", "right");
+const buttonMenu3 = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label("A long buttonnnnnnnnnnnnnnnnnnnnnnnnnn", null, null, labelStyle));
+buttonMenu3.style.set("alignement", "right");
+const buttonMenu4 = new JGT.Button(5, 5, null, null, buttonStyleRed, new JGT.Label("Close (centered)", null, null, labelStyle));
+buttonMenu4.style.set("alignement", "center");
+const menuLabel = new JGT.Label("Pause menu\nYou can use the arrow keys, press enter to select", null, null, labelStyle, "center");
+menuLabel.style.set("alignement", "center");
+const menu = new JGT.Menu(null, menuLabel, buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4, new JGT.Input(null, null, 150, null, null, new JGT.Style({"alignement": JGT.Constants.Alignement.CENTER })), new JGT.Input(null, null, 150, null, null, new JGT.Style({"alignement": JGT.Constants.Alignement.CENTER })));
+
+const notification2 = new JGT.NotificationMessage(new JGT.Style({ "backgroundColor": "rgba(46, 204, 225, 0.85)" }), true, null, null, null, new JGT.Label("Hi!", null, null, labelStyleCenter));
 const textField = new JGT.Input(5, 250, 150);
 const label1 = new JGT.Label("A label", 5, 325);
-const row1 = new JGT.Row(5, 250, null, null, null, null, null, null, null, null, null, false, false, false, label1, textField);
+const row1 = new JGT.Row(5, 250, null, null, null, label1, textField);
 const link1 = new JGT.Link("A long link", 5, 300);
-const tooltip1 = new JGT.Tooltip(null, null, null, new JGT.Label("A tooltip\nSecond line", null, null, null, null, "white"), new JGT.Row(null, null, null, null, null, null, null, null, null, null, null, false, false, false, new JGT.Label("Label : ", null, null, null, null, "white", null, "center"), 
-new JGT.Button(5, 150, null, null,  "#CC2F2F", "#F23838", "#A62626", null, null, null, new JGT.Label("Button", null, null, null, null, "white"))));
+const tooltip1 = new JGT.Tooltip(null, new JGT.Label("A tooltip\nSecond line", null, null, labelStyle), new JGT.Row(null, null, null, null, null, new JGT.Label("Label : ", null, null, labelStyleVerticalCenter), new JGT.Button(5, 150, null, null, buttonStyleRed, new JGT.Label("Button", null, null, labelStyle))));
 label1.tooltip = tooltip1;
-const tooltip2 = new JGT.Tooltip(null, null, null, new JGT.Label("A tooltip .... .. .. ...... Autowrap\nNew line", null, null, null, null, "white"));
+const tooltip2 = new JGT.Tooltip(null, new JGT.Label("A tooltip .... .. .. ...... Autowrap\nNew line", null, null, labelStyle));
 buttonText2.tooltip = tooltip2;
-const fpsMeter = new JGT.FPSMeter(false, null, null, null, null, null, "right", "bottom");
-const progress = new JGT.ProgressBar(300, 5, 200, 25, null, null, 0.25);
+const fpsMeter = new JGT.FPSMeter(false, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "bottom"}));
+const progress = new JGT.ProgressBar(300, 5, 200, 25);
 progress.percent = 1;
-const tooltip3 = new JGT.Tooltip(null, null, null, new JGT.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, null, null, "white"));
+const tooltip3 = new JGT.Tooltip(null, new JGT.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, labelStyle));
 progress.tooltip = tooltip3;
-const buttonArrow = new JGT.Button(5, 150, null, null, "#2ecc71", "#1abc9c", "#16a085", null, null, null, new JGT.Arrow(null, null, 100, 200, null, null, "white"));
-const colScrollable = new JGT.Col(255, 250, 250, 42, null, null, "#fff", null, null, null, null, false, false, false, new JGT.Row(null, null, null, null, null, null, null, null, null, null, null, false, false, false, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, null, null, null, null, null, null, false, false, false, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, null, null, null, null, null, null, false, false, false, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12")));
-colScrollable.padding = 10;
-colScrollable.spaceBetweenComponents = 0;
+const buttonArrow = new JGT.Button(5, 150, null, null, buttonStyle, new JGT.Arrow(null, null, 100, 200, new JGT.Style({ "foregroundColor": "white" })));
+const colScrollable = new JGT.Col(255, 250, 250, 42, new JGT.Style({ "backgroundColor": "#fff"}), new JGT.Row(null, null, null, null, null, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12")));
+colScrollable.style.padding = 10;
+colScrollable.style.spaceBetweenComponents = 0;
 
 // Custom component
 class Box extends JGT.Component {
-  constructor() {
-    super();
+  constructor(style) {
+    super(null, null, null, null, style);
   }
 
   draw(context) {
@@ -66,7 +101,7 @@ class Box extends JGT.Component {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    ctx.fillStyle = "#888888";
+    ctx.fillStyle = this.style.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.restore();
@@ -74,7 +109,8 @@ class Box extends JGT.Component {
 }
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(new Box(), buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable);
+const box = new Box(new JGT.Style({ "backgroundColor": "#888888" }));
+const scene = new JGT.Scene(box, buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"));
 canvas.appendTo(document.body);
 

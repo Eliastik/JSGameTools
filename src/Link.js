@@ -18,17 +18,16 @@
  */
 import Constants from "./Constants";
 import Label from "./Label";
+import Style from "./Style";
 
 export default class Link extends Label {
   selectable = true;
 
-  constructor(text, x, y, size, fontFamily, color, colorHover, colorDown, alignement, verticalAlignement, wrap, bold, underline) {
-    super(text, x, y, size, fontFamily, color || Constants.Setting.LINK_DEFAULT_COLOR, alignement, verticalAlignement, wrap, bold, underline || true);
+  constructor(text, x, y, style) {
+    super(text, x, y, style);
 
-    this.colorHover = colorHover || Constants.Setting.LINK_DEFAULT_HOVER_COLOR;
-    this.colorDown = colorDown || Constants.Setting.LINK_DEFAULT_CLICK_COLOR;
-    this.initialColor = this.color;
-    this.initialUnderline = this.underline;
+    this.initialColor = this.style.fontColor;
+    this.initialUnderline = this.style.underline;
   }
 
   draw(context) {
@@ -37,18 +36,31 @@ export default class Link extends Label {
     const canvas = context.canvas;
 
     if(this.clicked) {
-      this.underline = false;
-      this.color = this.colorDown;
+      this.style.set("underline", false);
+      this.style.set("fontColor", this.style.fontColorDown);
       canvas.style.cursor = "pointer";
     } else if(this.hovered || this.selected) {
-      this.underline = false;
-      this.color = this.colorHover;
+      this.style.set("underline", false);
+      this.style.set("fontColor", this.style.fontColorHover);
       if(this.hovered) canvas.style.cursor = "pointer";
     } else {
-      this.underline = this.initialUnderline;
-      this.color = this.initialColor;
+      this.style.set("underline", this.initialUnderline);
+      this.style.set("fontColor", this.initialColor);
     }
 
     this.init = true;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "fontSize": Constants.Setting.FONT_SIZE,
+      "fontFamily": Constants.Setting.FONT_FAMILY,
+      "fontColor": Constants.Setting.LINK_DEFAULT_COLOR,
+      "fontColorHover": Constants.Setting.LINK_DEFAULT_HOVER_COLOR,
+      "fontColorDown": Constants.Setting.LINK_DEFAULT_CLICK_COLOR,
+      "wrap": true,
+      "bold": false,
+      "underline": true
+    });
   }
 }

@@ -18,12 +18,13 @@
  */
 import Constants from "./Constants";
 import Box from "./Box";
+import Style from "./Style";
 
 export default class Scrollbar extends Box {
   selectable = true;
 
-  constructor(size, backgroundColor, backgroundColorHover, backgroundColorDown, parent) {
-    super(null, null, null, null, backgroundColor || Constants.Setting.SCROLLBAR_DEFAULT_BACKGROUND, backgroundColorHover || Constants.Setting.SCROLLBAR_DEFAULT_HOVER_BACKGROUND, backgroundColorDown || Constants.Setting.SCROLLBAR_DEFAULT_CLICK_BACKGROUND, null, null, null);
+  constructor(size, style, parent) {
+    super(null, null, null, null, style);
     this.parent = parent;
     this.size = size || Constants.Setting.SCROLLBAR_DEFAULT_SIZE;
   }
@@ -98,5 +99,13 @@ export default class Scrollbar extends Box {
 
   get y() {
     return this.parent ? Math.abs(this.parent.y) + this.scrollAreaSizeY * this.percentScrollbarY : 0;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "backgroundColor": Constants.Setting.SCROLLBAR_DEFAULT_BACKGROUND,
+      "backgroundColorHover": Constants.Setting.SCROLLBAR_DEFAULT_HOVER_BACKGROUND,
+      "backgroundColorDown": Constants.Setting.SCROLLBAR_DEFAULT_CLICK_BACKGROUND
+    });
   }
 }

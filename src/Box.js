@@ -22,11 +22,8 @@ import Constants from "./Constants";
 export default class Box extends Component {
   selectable = false;
 
-  constructor(x, y, width, height, backgroundColor, backgroundColorHover, backgroundColorDown, alignement, verticalAlignement, disableAnimation, scrollXDisabled, scrollYDisabled) {
-    super(x, y, width, height, alignement, verticalAlignement, disableAnimation, scrollXDisabled, scrollYDisabled);
-    this.backgroundColor = backgroundColor;
-    this.backgroundColorHover = backgroundColorHover;
-    this.backgroundColorDown = backgroundColorDown;
+  constructor(x, y, width, height, style) {
+    super(x, y, width, height, style);
   }
   
   draw(context) {
@@ -46,32 +43,44 @@ export default class Box extends Component {
   }
 
   drawBackground(ctx) {
-    ctx.save();
-
     let color = null;
 
-    if(this.hovered && this.clicked && this.backgroundColorDown) {
-      color = this.backgroundColorDown;
-    } else if(this.hovered && this.backgroundColorHover) {
-      color = this.backgroundColorHover;
+    if(this.hovered && this.clicked && this.style.backgroundColorDown) {
+      color = this.style.backgroundColorDown;
+    } else if(this.hovered && this.style.backgroundColorHover) {
+      color = this.style.backgroundColorHover;
     } else {
-      color = this.backgroundColor;
+      color = this.style.backgroundColor;
     }
     
     if(color) {
+      ctx.save();
+  
       ctx.fillStyle = color;
       ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.maxWidth), Math.round(this.maxHeight));
-    }
 
-    ctx.restore();
+      ctx.restore();
+    }
   }
 
   drawBorder(ctx) {
-    if(this.selectable) {
+    let color = null;
+    
+    if(this.selectable && this.selected && this.style.borderColorSelected) {
+      color = this.style.borderColorSelected;
+    } else if(this.hovered && this.clicked && this.style.borderColorDown) {
+      color = this.style.borderColorDown;
+    } else if(this.hovered && this.style.borderColorHover) {
+      color = this.style.borderColorHover;
+    } else {
+      color = this.style.borderColor;
+    }
+
+    if(color && this.style.borderSize > 0) {
       ctx.save();
       
-      ctx.strokeStyle = Constants.Setting.BOX_DEFAULT_SELECT_BORDER;
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = this.style.borderSize;
       
       ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.maxWidth), Math.round(this.maxHeight));
   

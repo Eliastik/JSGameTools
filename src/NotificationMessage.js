@@ -20,12 +20,13 @@ import Constants from "./Constants";
 import Col from "./Col";
 import Button from "./Button";
 import Cross from "./Cross";
+import Style from "./Style";
 
 export default class NotificationMessage extends Col {
   selectable = false;
 
-  constructor(backgroundColor, foreGround, verticalAlignement, delayBeforeClosing, animationDelay, disableAnimation, easingFunction, padding, spaceBetweenComponents, ...components) {
-    super(0, 0, null, null, Constants.Alignement.CENTER, null, backgroundColor == undefined ? Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND : backgroundColor, null, null, padding ? padding : Constants.Setting.DEFAULT_PADDING, spaceBetweenComponents ? spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING, disableAnimation, false, false, ...components);
+  constructor(style, foreGround, delayBeforeClosing, animationDelay, easingFunction, ...components) {
+    super(0, 0, null, null, style, ...components);
 
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
     this.animationDelay = animationDelay == undefined ? 500 : animationDelay;
@@ -35,9 +36,8 @@ export default class NotificationMessage extends Col {
     this.closed = true;
     this.closing = false;
     this.easingFunction = easingFunction;
-    this.verticalPosition = verticalAlignement || Constants.VerticalAlignement.BOTTOM;
 
-    this.closeButton = new Button(null, null, null, null, null, null, null, "right", "top", 10, new Cross(null, null, 10, 10));
+    this.closeButton = new Button(null, null, null, null, new Style({"alignement": Constants.Alignement.RIGHT, "verticalAlignement": Constants.VerticalAlignement.TOP, "padding": 10 }), new Cross(null, null, 10, 10));
     this.add(this.closeButton);
   }
   
@@ -65,9 +65,6 @@ export default class NotificationMessage extends Col {
     if(this.animationTime >= this.delayBeforeClosing * 1000 && !this.closing && !this.closed) {
       this.close();
     }
-
-    let offsetY = 1;
-
     if(!this.closing) {
       this.animationTime += offsetTime;
     } else {
@@ -84,24 +81,10 @@ export default class NotificationMessage extends Col {
     }
 
     if(!this.closed) {
-      if(!this.disableAnimation) {
-        offsetY = this.animationTime / this.animationDelay;
-      }
-
-      if(this.easingFunction) {
-        offsetY = this.easingFunction(offsetY);
-      }
-
-      if(this.verticalPosition == Constants.VerticalAlignement.TOP) {
-        this.y = (this.height * (offsetY <= 1 ? offsetY : 1)) - this.height;
-      } else {
-        this.y = canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
-      }
-
       this.drawComponents(ctx);
 
       if(this.closeButton != null) {
-        this.closeButton.y = this.y + this.padding / 2;
+        this.closeButton.y = this.y + this.style.padding / 2;
         this.closeButton.draw(ctx);
       }
 
@@ -115,6 +98,33 @@ export default class NotificationMessage extends Col {
     this.init = true;
   }
   
+  get offsetY() {
+    let offsetY = 1;
+
+    if (!this.disableAnimation) {
+      offsetY = this.animationTime / this.animationDelay;
+    }
+
+    if (this.easingFunction) {
+      offsetY = this.easingFunction(offsetY);
+    }
+    return offsetY;
+  }
+
+  get y() {
+    const offsetY = this.offsetY;
+
+    if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
+      return (this.height * (offsetY <= 1 ? offsetY : 1)) - this.height;
+    } 
+    
+    return this.canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
+  }
+
+  set y(y) {
+    super.y = y;
+  }
+
   drawComponents(ctx) {
     super.draw(ctx);
   }
@@ -149,7 +159,7 @@ export default class NotificationMessage extends Col {
   };
   
   copy() {
-    return new NotificationMessage(this.backgroundColor, this.delayBeforeClosing, this.animationDelay, this.foreGround, this.disableAnimation, this.easingFunction, this.padding, ...this.components);
+    return new NotificationMessage(this.style.copy(), this.delayBeforeClosing, this.animationDelay, this.easingFunction, ...this.components);
   }
 
   get width() {
@@ -166,5 +176,12 @@ export default class NotificationMessage extends Col {
 
   get maxHeight() {
     return this.height;
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "alignement": Constants.Alignement.CENTER,
+      "backgroundColor": Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND
+    });
   }
 }

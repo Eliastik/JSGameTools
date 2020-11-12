@@ -18,16 +18,15 @@
  */
 import Component from "./Component";
 import Constants from "./Constants";
+import Style from "./Style";
 
 export default class ProgressBar extends Component {
   #precPercent = 0;
   selectable = false;
 
-  constructor(x, y, width, height, backgroundColor, foregroundColor, defaultPercent, animationDuration, disableAnimation, alignement, verticalAlignement, easingFunction) {
-    super(x, y, width, height, alignement, verticalAlignement, disableAnimation);
+  constructor(x, y, width, height, style, defaultPercent, animationDuration, easingFunction) {
+    super(x, y, width, height, style);
 
-    this.backgroundColor = backgroundColor || Constants.Setting.PROGRESS_DEFAULT_BACKGROUND;
-    this.foregroundColor = foregroundColor || Constants.Setting.PROGRESS_DEFAULT_FOREGROUND;
     this.percent = defaultPercent == undefined ? 0 : defaultPercent;
     this.#precPercent = this.percent;
     this.easingFunction = easingFunction;
@@ -47,7 +46,7 @@ export default class ProgressBar extends Component {
     const time = performance.now();
     let offsetTime = 0;
 
-    let animationPercent = (this.#precPercent != this.percent && !this.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);
+    let animationPercent = (this.#precPercent != this.percent && !this.style.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);
 
     if(this.easingFunction) {
       animationPercent = this.easingFunction(animationPercent);
@@ -55,7 +54,7 @@ export default class ProgressBar extends Component {
     
     const widthForeground = Math.round(Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent)));
 
-    if(this.#precPercent != this.percent && !this.disableAnimation) {
+    if(this.#precPercent != this.percent && !this.style.disableAnimation) {
       if(this.lastTime > 0) offsetTime = time - this.lastTime;
       this.totalTime += offsetTime;
 
@@ -80,7 +79,7 @@ export default class ProgressBar extends Component {
   drawBackground(ctx) {
     ctx.save();
 
-    ctx.fillStyle = this.backgroundColor;
+    ctx.fillStyle = this.style.backgroundColor;
     ctx.fillRect(this.x, this.y, this.width, this.height);
 
     ctx.restore();
@@ -89,9 +88,16 @@ export default class ProgressBar extends Component {
   drawForeground(ctx, widthForeground) {
     ctx.save();
 
-    ctx.fillStyle = this.foregroundColor;
+    ctx.fillStyle = this.style.foregroundColor;
     ctx.fillRect(this.x, this.y, widthForeground, this.height); // Foreground
 
     ctx.restore();
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "backgroundColor": Constants.Setting.PROGRESS_DEFAULT_BACKGROUND,
+      "foregroundColor": Constants.Setting.PROGRESS_DEFAULT_FOREGROUND
+    });
   }
 }

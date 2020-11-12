@@ -21,8 +21,8 @@ import Label from "./Label";
 export default class FPSMeter extends Label {
   selectable = false;
 
-  constructor(displayFrames, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline) {
-    super(null, x, y, size, fontFamily, color, alignement, verticalAlignement, wrap, bold, underline);
+  constructor(displayFrames, x, y, style) {
+    super(null, x, y, style);
 
     this.displayFrames = displayFrames || false;
     this.frames = 0;
