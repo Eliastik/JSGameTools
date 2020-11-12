@@ -17,7 +17,6 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Component from "./Component";
-import Constants from "./Constants";
 
 export default class Box extends Component {
   selectable = false;
@@ -34,24 +33,13 @@ export default class Box extends Component {
     ctx.save();
 
     this.drawBackground(ctx);
-
-    if(this.selected) {
-      this.drawBorder(ctx);
-    }
+    this.drawBorder(ctx);
     
     ctx.restore();
   }
 
   drawBackground(ctx) {
-    let color = null;
-
-    if(this.hovered && this.clicked && this.style.backgroundColorDown) {
-      color = this.style.backgroundColorDown;
-    } else if(this.hovered && this.style.backgroundColorHover) {
-      color = this.style.backgroundColorHover;
-    } else {
-      color = this.style.backgroundColor;
-    }
+    const color = this.backgroundColor;
     
     if(color) {
       ctx.save();
@@ -63,18 +51,22 @@ export default class Box extends Component {
     }
   }
 
-  drawBorder(ctx) {
+  get backgroundColor() {
     let color = null;
-    
-    if(this.selectable && this.selected && this.style.borderColorSelected) {
-      color = this.style.borderColorSelected;
-    } else if(this.hovered && this.clicked && this.style.borderColorDown) {
-      color = this.style.borderColorDown;
-    } else if(this.hovered && this.style.borderColorHover) {
-      color = this.style.borderColorHover;
+
+    if(this.hovered && this.clicked && this.style.backgroundColorDown != null) {
+      color = this.style.backgroundColorDown;
+    } else if(this.hovered && this.style.backgroundColorHover != null) {
+      color = this.style.backgroundColorHover;
     } else {
-      color = this.style.borderColor;
+      color = this.style.backgroundColor;
     }
+
+    return color;
+  }
+
+  drawBorder(ctx) {
+    const color = this.borderColor;
 
     if(color && this.style.borderSize > 0) {
       ctx.save();
@@ -86,5 +78,21 @@ export default class Box extends Component {
   
       ctx.restore();
     }
+  }
+
+  get borderColor() {
+    let color = null;
+
+    if(this.clicked && this.hovered && this.style.borderColorDown != null) {
+      color = this.style.borderColorDown;
+    } else if(!this.clicked && this.hovered && this.style.borderColorHover != null) {
+      color = this.style.borderColorHover;
+    } else if(this.selectable && this.selected && this.style.borderColorSelected != null) {
+      color = this.style.borderColorSelected;
+    } else {
+      color = this.style.borderColor;
+    }
+
+    return color;
   }
 }

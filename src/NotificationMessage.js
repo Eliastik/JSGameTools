@@ -25,12 +25,10 @@ import Style from "./Style";
 export default class NotificationMessage extends Col {
   selectable = false;
 
-  constructor(style, foreGround, delayBeforeClosing, animationDelay, easingFunction, ...components) {
+  constructor(style, delayBeforeClosing, easingFunction, ...components) {
     super(0, 0, null, null, style, ...components);
 
     this.delayBeforeClosing = delayBeforeClosing == undefined ? 5 : delayBeforeClosing; // second
-    this.animationDelay = animationDelay == undefined ? 500 : animationDelay;
-    this.foreGround = foreGround == undefined ? false : foreGround;
     this.timeLastFrame = 0;
     this.animationTime = 0;
     this.closed = true;
@@ -102,7 +100,7 @@ export default class NotificationMessage extends Col {
     let offsetY = 1;
 
     if (!this.disableAnimation) {
-      offsetY = this.animationTime / this.animationDelay;
+      offsetY = this.animationTime / this.style.animationDuration;
     }
 
     if (this.easingFunction) {
@@ -134,7 +132,7 @@ export default class NotificationMessage extends Col {
   
     if(!this.closing) {
       this.closing = true;
-      this.animationTime = this.animationDelay;
+      this.animationTime = this.style.animationDuration;
     }
   }
   
@@ -159,7 +157,7 @@ export default class NotificationMessage extends Col {
   };
   
   copy() {
-    return new NotificationMessage(this.style.copy(), this.delayBeforeClosing, this.animationDelay, this.easingFunction, ...this.components);
+    return new NotificationMessage(this.style.copy(), this.delayBeforeClosing, this.easingFunction, ...this.components);
   }
 
   get width() {
@@ -181,7 +179,8 @@ export default class NotificationMessage extends Col {
   get defaultStyle() {
     return new Style({
       "alignement": Constants.Alignement.CENTER,
-      "backgroundColor": Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND
+      "backgroundColor": Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND,
+      "animationDuration": Constants.Setting.NOTIFICATION_DEFAULT_ANIMATION_DURATION
     });
   }
 }

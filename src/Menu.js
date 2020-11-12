@@ -163,7 +163,8 @@ export default class Menu extends Col {
   get defaultStyle() {
     return new Style({
       "blurBackground": Constants.Setting.MENU_DEFAULT_BLUR_BACKGROUND,
-      "backgroundColor": Constants.Setting.MENU_DEFAULT_BACKGROUND
+      "backgroundColor": Constants.Setting.MENU_DEFAULT_BACKGROUND,
+      "verticalAlignement": Constants.VerticalAlignement.CENTER
     });
   }
 }

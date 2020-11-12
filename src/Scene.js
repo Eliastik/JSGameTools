@@ -43,8 +43,8 @@ export default class Scene extends Container {
     const menuOpened = menus.filter(menu => !menu.disabled)[0];
     const tooltips = super.components.filter(component => component && component instanceof Tooltip);
     const inputs = super.components.filter(component => component && component instanceof Input);
-    const notificationsBackground = super.components.filter(component => component && component instanceof NotificationMessage && !component.foreGround);
-    const notificationsForeground = super.components.filter(component => component && component instanceof NotificationMessage && component.foreGround);
+    const notificationsBackground = super.components.filter(component => component && component instanceof NotificationMessage && ((component.style && !component.style.foreground) || !component.style));
+    const notificationsForeground = super.components.filter(component => component && component instanceof NotificationMessage && component.style && component.style.foreground);
 
     // Set inputs canvas
     inputs && inputs.forEach(input => input.canvas = this.canvas);

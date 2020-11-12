@@ -24,14 +24,13 @@ export default class ProgressBar extends Component {
   #precPercent = 0;
   selectable = false;
 
-  constructor(x, y, width, height, style, defaultPercent, animationDuration, easingFunction) {
+  constructor(x, y, width, height, style, defaultPercent, easingFunction) {
     super(x, y, width, height, style);
 
     this.percent = defaultPercent == undefined ? 0 : defaultPercent;
     this.#precPercent = this.percent;
     this.easingFunction = easingFunction;
 
-    this.animationDuration = animationDuration || 2;
     this.lastTime = 0;
     this.totalTime = 0;
   }
@@ -46,7 +45,7 @@ export default class ProgressBar extends Component {
     const time = performance.now();
     let offsetTime = 0;
 
-    let animationPercent = (this.#precPercent != this.percent && !this.style.disableAnimation ? this.totalTime / (this.animationDuration * 1000) : 1);
+    let animationPercent = (this.#precPercent != this.percent && !this.style.disableAnimation ? this.totalTime / (this.style.animationDuration) : 1);
 
     if(this.easingFunction) {
       animationPercent = this.easingFunction(animationPercent);
@@ -58,7 +57,7 @@ export default class ProgressBar extends Component {
       if(this.lastTime > 0) offsetTime = time - this.lastTime;
       this.totalTime += offsetTime;
 
-      if(this.totalTime >= this.animationDuration * 1000) {
+      if(this.totalTime >= this.style.animationDuration) {
         this.#precPercent = this.percent;
         this.totalTime = 0;
         this.lastTime = 0;
@@ -97,7 +96,8 @@ export default class ProgressBar extends Component {
   get defaultStyle() {
     return new Style({
       "backgroundColor": Constants.Setting.PROGRESS_DEFAULT_BACKGROUND,
-      "foregroundColor": Constants.Setting.PROGRESS_DEFAULT_FOREGROUND
+      "foregroundColor": Constants.Setting.PROGRESS_DEFAULT_FOREGROUND,
+      "animationDuration": Constants.Setting.PROGRESS_DEFAULT_ANIMATION_DURATION
     });
   }
 }

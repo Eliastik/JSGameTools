@@ -105,7 +105,8 @@ export default class Scrollbar extends Box {
     return new Style({
       "backgroundColor": Constants.Setting.SCROLLBAR_DEFAULT_BACKGROUND,
       "backgroundColorHover": Constants.Setting.SCROLLBAR_DEFAULT_HOVER_BACKGROUND,
-      "backgroundColorDown": Constants.Setting.SCROLLBAR_DEFAULT_CLICK_BACKGROUND
+      "backgroundColorDown": Constants.Setting.SCROLLBAR_DEFAULT_CLICK_BACKGROUND,
+      "borderSize": 0
     });
   }
 }

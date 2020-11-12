@@ -24,7 +24,7 @@ import Style from "./Style";
 export default class Input extends Box {
   selectable = true;
 
-  constructor(x, y, width, height, defaultText, style) {
+  constructor(x, y, width, height, style, defaultText) {
     super(x, y, width, height, style);
     
     this.text = defaultText || "";

@@ -82,11 +82,11 @@ export default class Style {
   }
 
   get borderColorDown() {
-    return this.#styles.borderColorHover;
+    return this.#styles.borderColorDown;
   }
 
   get borderColorSelected() {
-    return this.#styles.borderColorHover != null ? this.#styles.borderColorHover : Constants.Setting.DEFAULT_BORDER_COLOR_SELECTED;
+    return this.#styles.borderColorSelected != null ? this.#styles.borderColorSelected : Constants.Setting.DEFAULT_BORDER_COLOR_SELECTED;
   }
 
   get borderSize() {
@@ -135,6 +135,14 @@ export default class Style {
 
   get lineWidth() {
     return this.#styles.lineWidth;
+  }
+
+  get animationDuration() {
+    return this.#styles.animationDuration != null ? this.#styles.animationDuration : Constants.Setting.DEFAULT_ANIMATION_DURATION;
+  }
+
+  get foreground() {
+    return this.#styles.foreground;
   }
 
   set(style, value) {
