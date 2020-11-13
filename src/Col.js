@@ -63,8 +63,14 @@ export default class Col extends Container {
     if(component instanceof Component) {
       if(this.x) component.x = (this.x + this.style.padding) - this.offsetScrollX;
       component.y = currentY - this.offsetScrollY;
-      component.enable();
-      component.draw(ctx);
+      
+      if(this.isComponentVisible(component)) {
+        component.enable();
+        component.draw(ctx);
+      } else {
+        component.disable();
+      }
+      
       currentY += component.height + this.style.spaceBetweenComponents;
     }
     

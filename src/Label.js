@@ -28,6 +28,7 @@ export default class Label extends Component {
     super(x, y, null, null, style);
 
     this.text = text;
+    this.sizesCache = { "fontSize": null, "fontFamily": null, "wrap": null, "text": null, "canvasWidth": null, "values": null };
   }
 
   draw(context) {
@@ -42,12 +43,26 @@ export default class Label extends Component {
     ctx.restore();
   }
 
+  get sizes() {
+    const ctx = this.canvas ? this.canvas.getContext("2d") : null;
+    
+    if(Constants.Setting.DISABLE_OPTIMIZATIONS || this.sizesCache.fontSize != this.style.fontSize || this.sizesCache.fontFamily != this.style.fontFamily || this.sizesCache.wrap != this.style.wrap || this.text != this.sizesCache.text || (ctx && ctx.canvas.width != this.sizesCache.canvasWidth) || this.sizesCache.value == null) {
+      const sizes = Utils.wrapTextLines(ctx, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap);
+      
+      if(ctx) {
+        this.sizesCache = { "fontSize": this.style.fontSize, "fontFamily": this.style.fontFamily, "wrap": this.style.wrap, "text": this.text, "canvasWidth": ctx.canvas.width, "value": sizes };
+      }
+    }
+
+    return this.sizesCache.value;
+  }
+
   get height() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap)["height"];
+    return this.sizes["height"];
   }
 
   get width() {
-    return Utils.wrapTextLines(this.canvas ? this.canvas.getContext("2d") : null, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap)["width"];
+    return this.sizes["width"];
   }
 
   get defaultStyle() {

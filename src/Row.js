@@ -63,8 +63,14 @@ export default class Row extends Container {
     if(component instanceof Component) {
       component.x = currentX - this.offsetScrollX;
       if(this.y) component.y = (this.y + this.style.padding) - this.offsetScrollY;
-      component.enable();
-      component.draw(ctx);
+      
+      if(this.isComponentVisible(component)) {
+        component.enable();
+        component.draw(ctx);
+      } else {
+        component.disable();
+      }
+
       currentX += component.width + this.style.spaceBetweenComponents;
     }
     

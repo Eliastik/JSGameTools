@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Component from "./Component";
+import Box from "./Box";
 import Constants from "./Constants";
 import Style from "./Style";
 
-export default class ProgressBar extends Component {
+export default class ProgressBar extends Box {
   #precPercent = 0;
   selectable = false;
 
@@ -51,7 +51,7 @@ export default class ProgressBar extends Component {
       animationPercent = this.easingFunction(animationPercent);
     }
     
-    const widthForeground = Math.round(Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent)));
+    const widthForeground = Math.round(Math.max(0, Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent))));
 
     if(this.#precPercent != this.percent && !this.style.disableAnimation) {
       if(this.lastTime > 0) offsetTime = time - this.lastTime;
@@ -71,15 +71,6 @@ export default class ProgressBar extends Component {
 
     this.drawBackground(ctx);
     this.drawForeground(ctx, widthForeground);
-
-    ctx.restore();
-  }
-
-  drawBackground(ctx) {
-    ctx.save();
-
-    ctx.fillStyle = this.style.backgroundColor;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
 
     ctx.restore();
   }

@@ -66,7 +66,7 @@ export default class NotificationMessage extends Col {
     if(!this.closing) {
       this.animationTime += offsetTime;
     } else {
-      if(this.disableAnimation) {
+      if(this.style.disableAnimation) {
         this.animationTime = -1;
       } else {
         this.animationTime -= offsetTime;
@@ -99,13 +99,14 @@ export default class NotificationMessage extends Col {
   get offsetY() {
     let offsetY = 1;
 
-    if (!this.disableAnimation) {
+    if(!this.style.disableAnimation) {
       offsetY = this.animationTime / this.style.animationDuration;
+
+      if(this.easingFunction) {
+        offsetY = this.easingFunction(offsetY);
+      }
     }
 
-    if (this.easingFunction) {
-      offsetY = this.easingFunction(offsetY);
-    }
     return offsetY;
   }
 

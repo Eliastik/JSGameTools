@@ -179,7 +179,8 @@ export default {
   wrapTextLines: function(ctx, text, width, fontSize, fontFamily, disableWrap) {
     if(ctx && text) {
       ctx.save();
-      ctx.font = fontSize + "px " + fontFamily;
+      ctx.font = Math.round(fontSize) + "px " + fontFamily;
+      ctx.imageSmoothingEnabled = false;
   
       const lines = text.split("\n");
       let newText = "";

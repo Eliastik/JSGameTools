@@ -184,6 +184,10 @@ export default class Container extends Box {
     }
   }
 
+  isComponentVisible(component) {
+    return true; // TODO
+  }
+
   get defaultStyle() {
     return new Style({
       "padding": 0,
