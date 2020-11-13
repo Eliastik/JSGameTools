@@ -32,6 +32,7 @@ export default class Input extends Box {
     this.text = defaultText || "";
     this.#_positionStart = 0;
     this.#_positionEnd = 0;
+    this.lastInputText = false;
     this.offsetX = 0;
     this.lastTime = 0;
     this.totalTime = 0;
@@ -43,7 +44,10 @@ export default class Input extends Box {
     this.input.style.position = "absolute";
     this.input.style.left = "-9999px";
     this.input.tabIndex = -1;
-    this.input.addEventListener("input", () => this.totalTime = 0);
+    this.input.addEventListener("input", () => {
+      this.totalTime = 0
+      this.lastInputText = true;
+    });
     this.input.addEventListener("blur", () => this.selected = false);
     this.input.addEventListener("focus", () => this.selected = true);
     document.body.appendChild(this.input);
@@ -124,9 +128,11 @@ export default class Input extends Box {
   }
 
   drawText(ctxText, currentX) {
+    let sizes;
+
     for(let i = -1; i < this.text.length; i++) {
       if(i > -1) {
-        const sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);
+        sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);
 
         const xDraw = currentX - this.offsetX;
         const yDraw = this.y + this.style.borderSize;
@@ -156,8 +162,19 @@ export default class Input extends Box {
         } else if(this.totalTime > 1000) {
           this.totalTime = 0;
         }
-        
-        this.offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
+
+        const offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
+
+        if((this.lastInputText && this.positionEnd >= this.text.length - 1) || offsetX >= this.offsetX) {
+          this.offsetX = offsetX;
+          this.lastInputText = false;
+        } else if(currentX - this.offsetX <= this.x) {
+          if(sizes) {
+            this.offsetX -= sizes["width"] - 1;
+          } else {
+            this.offsetX = 0;
+          }
+        }
       }
     }
 
