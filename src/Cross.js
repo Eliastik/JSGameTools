@@ -29,6 +29,7 @@ export default class Cross extends Component {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     super.draw(context);
 
     const canvas = context.canvas;

@@ -40,6 +40,7 @@ export default class NotificationMessage extends Col {
   }
   
   draw(context) {
+    if(this.style && this.style.hidden) return;
     this.closeButton.canvas = this.canvas;
 
     const canvas = context.canvas;

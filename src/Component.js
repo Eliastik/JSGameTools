@@ -74,6 +74,7 @@ export default class Component {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     const canvas = (this.canvas && this.canvas.canvas ? this.canvas.canvas : context.canvas);
 
     if(!this.initEvents && canvas != null) {

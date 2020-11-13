@@ -35,6 +35,7 @@ export default class Menu extends Col {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
 

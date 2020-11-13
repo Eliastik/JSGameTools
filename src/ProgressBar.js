@@ -36,6 +36,7 @@ export default class ProgressBar extends Box {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     super.draw(context);
 
     const canvas = context.canvas;

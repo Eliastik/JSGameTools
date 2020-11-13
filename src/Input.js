@@ -54,19 +54,12 @@ export default class Input extends Box {
     this.canvasTmp = document.createElement("canvas");
 
     this.addClickAction(() => this.click());
-
-    this.addDownAction((position) => {
-      console.log(position);
-      this.clickStartPosition = position;
-    });
-
-    this.addUpAction((position) => {
-      console.log(position);
-      this.clickStopPosition = position;
-    });
+    this.addDownAction(position => this.clickStartPosition = position);
+    this.addUpAction(position => this.clickStopPosition = position);
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     super.draw(context);
     
     const canvas = context.canvas;

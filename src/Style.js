@@ -125,8 +125,8 @@ export default class Style {
     return this.#styles.spaceBetweenComponents != null ? this.#styles.spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING;
   }
 
-  get visible() {
-    return this.#styles.visible;
+  get hidden() {
+    return this.#styles.hidden;
   }
 
   get blurBackground() {

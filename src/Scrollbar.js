@@ -30,6 +30,7 @@ export default class Scrollbar extends Box {
   }
   
   draw(context) {
+    if(this.style && this.style.hidden) return;
     if(this.clicked) {
       this.hovered = true;
     }

@@ -32,6 +32,7 @@ export default class Arrow extends Component {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     super.draw(context);
 
     const canvas = context.canvas;

@@ -29,6 +29,7 @@ export default class Tooltip extends Col {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     if(!this.disabled) {
       const canvas = context.canvas;
       const ctx = canvas.getContext("2d");

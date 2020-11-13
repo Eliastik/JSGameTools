@@ -43,6 +43,7 @@ export default class Container extends Box {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
@@ -188,7 +189,7 @@ export default class Container extends Box {
   isComponentVisible(component) {
     if(Constants.Setting.DISABLE_OPTIMIZATIONS) return true;
     
-    if(component instanceof Component) {
+    if(component instanceof Component && !(component.style && component.style.hidden)) {
       const width = this.maxWidth || this.width;
       const height = this.maxHeight || this.height;
       const componentWidth = component.maxWidth || component.width;

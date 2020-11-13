@@ -33,6 +33,7 @@ export default class FPSMeter extends Label {
   }
 
   draw(context) {
+    if(this.style && this.style.hidden) return;
     this.text = "FPS: " + this.currentFPS + (this.displayFrames ? " / Frames: " + this.frames : "");
     super.draw(context);
     this.frames++;
