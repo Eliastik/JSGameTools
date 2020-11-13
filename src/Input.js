@@ -23,16 +23,20 @@ import Style from "./Style";
 
 export default class Input extends Box {
   selectable = true;
+  #_positionStart = 0;
+  #_positionEnd = 0;
 
   constructor(x, y, width, height, style, defaultText) {
     super(x, y, width, height, style);
     
     this.text = defaultText || "";
-    this.positionStart = 0;
-    this.positionEnd = 0;
+    this.#_positionStart = 0;
+    this.#_positionEnd = 0;
     this.offsetX = 0;
     this.lastTime = 0;
     this.totalTime = 0;
+    this.clickStartPosition = null;
+    this.clickStopPosition = null;
 
     this.input = document.createElement("input");
     this.input.setAttribute("type", "text");
@@ -49,7 +53,17 @@ export default class Input extends Box {
 
     this.canvasTmp = document.createElement("canvas");
 
-    super.addClickAction(() => this.click());
+    this.addClickAction(() => this.click());
+
+    this.addDownAction((position) => {
+      console.log(position);
+      this.clickStartPosition = position;
+    });
+
+    this.addUpAction((position) => {
+      console.log(position);
+      this.clickStopPosition = position;
+    });
   }
 
   draw(context) {
@@ -129,6 +143,14 @@ export default class Input extends Box {
             this.drawHighlight(ctxText, currentX, sizes);
           }
 
+          if(this.clickStopPosition) {
+            if(this.clickStopPosition.x + this.offsetX >= currentX && this.clickStopPosition.x + this.offsetX <= currentX + sizes["width"] + 1) {
+              this.positionStart = i;
+              this.positionEnd = i;
+              this.clickStopPosition = null;
+            }
+          }
+
           Utils.drawText(ctxText, this.text[i], this.style.fontColor, this.style.fontSize, this.style.fontFamily, "default", "default", xDraw, yDraw, false);
         }
 
@@ -141,9 +163,15 @@ export default class Input extends Box {
         } else if(this.totalTime > 1000) {
           this.totalTime = 0;
         }
-
+        
         this.offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
       }
+    }
+
+    if(this.clickStopPosition && this.clickStopPosition.x > currentX) {
+      this.positionStart = this.text.length + 1;
+      this.positionEnd = this.text.length + 1;
+      this.clickStopPosition = null;
     }
 
     return currentX;
@@ -169,6 +197,24 @@ export default class Input extends Box {
 
   blur() {
     this.input.blur();
+  }
+
+  get positionStart() {
+    return this.#_positionStart;
+  }
+
+  get positionEnd() {
+    return this.#_positionEnd;
+  }
+
+  set positionStart(position) {
+    this.input.selectionStart = position;
+    this.#_positionStart = position;
+  }
+
+  set positionEnd(position) {
+    this.input.selectionEnd = position;
+    this.#_positionEnd = position;
   }
 
   get height() {

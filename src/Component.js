@@ -45,6 +45,7 @@ export default class Component {
     this.triggersDown = [];
     this.triggersScroll = [];
     this.triggersMove = [];
+    this.triggersUp = [];
 
     // State
     this.init = false;
@@ -88,7 +89,7 @@ export default class Component {
             this.offsetMoveY += deltaY;
 
             if(this.triggersMove != null) {
-              this.triggersMove.forEach(trigger => trigger(deltaX, deltaY));
+              this.triggersMove.forEach(trigger => trigger(deltaX, deltaY, mousePosition));
             }
             
             this.moveEventStartX = mousePosition.x;
@@ -97,7 +98,7 @@ export default class Component {
 
           if(this.isInside(mousePosition)) {
             if(this.triggersHover != null && !this.disabled) {
-              this.triggersHover.forEach(trigger => trigger());
+              this.triggersHover.forEach(trigger => trigger(mousePosition));
             }
 
             if(this.tooltip) {
@@ -124,7 +125,7 @@ export default class Component {
 
           if(this.isInside(mousePosition)) {
             if(this.triggersClick != null) {
-              this.triggersClick.forEach(trigger => trigger());
+              this.triggersClick.forEach(trigger => trigger(mousePosition));
             }
 
             this.selected = true;
@@ -144,7 +145,7 @@ export default class Component {
 
           if(this.isInside(mousePosition)) {
             if(this.triggersDown != null) {
-              this.triggersDown.forEach(trigger => trigger());
+              this.triggersDown.forEach(trigger => trigger(mousePosition));
             }
             
             this.clicked = true;
@@ -157,8 +158,16 @@ export default class Component {
         }
       }, false);
       
-      canvas.addEventListener("mouseup", () => {
-        this.clicked = false;
+      canvas.addEventListener("mouseup", (event) => {
+        if(!this.disabled) {
+          const mousePosition = this.getMousePos(canvas, event);
+
+          if(this.triggersUp != null) {
+            this.triggersUp.forEach(trigger => trigger(mousePosition));
+          }
+          
+          this.clicked = false;
+        }
       }, false);
 
       canvas.addEventListener("wheel", event => {
@@ -184,7 +193,7 @@ export default class Component {
           this.offsetScrollY += deltaY;
 
           if(this.triggersScroll != null) {
-            this.triggersScroll.forEach(trigger => trigger(deltaX, deltaY));
+            this.triggersScroll.forEach(trigger => trigger(deltaX, deltaY, position));
           }
           
           this.touchEventStartX = position.x;
@@ -337,6 +346,18 @@ export default class Component {
 
   removeAllMoveActions() {
     this.triggersMove = [];
+  }
+  
+  addUpAction(trigger) {
+    this.triggersUp.push(trigger);
+  }
+  
+  removeUpAction(trigger) {
+    this.triggersUp = this.triggersUp.filter(elem => elem != trigger);
+  }
+
+  removeAllUpActions() {
+    this.triggersUp = [];
   }
 
   get height() {

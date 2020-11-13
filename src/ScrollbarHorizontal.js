@@ -24,7 +24,7 @@ export default class ScrollbarHorizontal extends Scrollbar {
   constructor(size, style, parent) {
     super(size, style, parent);
 
-    this.addMoveAction((deltaX, deltaY) => {
+    this.addMoveAction((deltaX) => {
       if(this.parent) {
         this.parent.offsetScrollX -= deltaX;
 
