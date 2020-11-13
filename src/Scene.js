@@ -71,13 +71,13 @@ export default class Scene extends Container {
 
   drawForegroundComponents(menuOpened, ctx, notificationsForeground) {
     menuOpened && menuOpened.draw(ctx);
-    notificationsForeground && notificationsForeground.forEach(notification => notification.draw(ctx));
+    notificationsForeground && notificationsForeground.forEach(notification => this.isComponentVisible(notification) && notification.draw(ctx));
   }
 
   drawBackgroundComponents(componentsBackground, ctx, notificationsBackground, tooltips) {
-    componentsBackground && componentsBackground.forEach(component => component.draw(ctx));
-    notificationsBackground && notificationsBackground.forEach(notification => notification.draw(ctx));
-    tooltips && tooltips.forEach(tooltip => tooltip.draw(ctx));
+    componentsBackground && componentsBackground.forEach(component => this.isComponentVisible(component) && component.draw(ctx));
+    notificationsBackground && notificationsBackground.forEach(notification => this.isComponentVisible(notification) && notification.draw(ctx));
+    tooltips && tooltips.forEach(tooltip => this.isComponentVisible(tooltip) && tooltip.draw(ctx));
   }
 
   get x() {

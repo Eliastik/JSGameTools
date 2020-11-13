@@ -17,6 +17,7 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Box from "./Box";
+import Component from "./Component";
 import Constants from "./Constants";
 import ScrollbarHorizontal from "./ScrollbarHorizontal";
 import ScrollbarVertical from "./ScrollbarVertical";
@@ -185,7 +186,20 @@ export default class Container extends Box {
   }
 
   isComponentVisible(component) {
-    return true; // TODO
+    if(Constants.Setting.DISABLE_OPTIMIZATIONS) return true;
+    
+    if(component instanceof Component) {
+      const width = this.maxWidth || this.width;
+      const height = this.maxHeight || this.height;
+      const componentWidth = component.maxWidth || component.width;
+      const componentHeight = component.maxHeight || component.height;
+
+      if(component.x + componentWidth >= this.x && component.x <= this.x + width && component.y + componentHeight >= this.y && component.y <= this.y + height) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   get defaultStyle() {
