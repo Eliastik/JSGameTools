@@ -62,18 +62,19 @@ export default class Input extends Box {
 
     this.canvasTmp = document.createElement("canvas");
 
-    this.addClickAction(() => this.click());
-    this.addMoveAction((deltaX, deltaY, position) => {
-      const iClick = this.getLetterClicked(position);
-
-      if(iClick != null) {
-        if(iClick > this.positionStartClick) {
-          this.setSelectionRange(this.positionStartClick, iClick, "forward");
-        } else if(iClick < this.positionStartClick) {
-          this.setSelectionRange(iClick, this.positionStartClick, "backward");
+    const moveActionCallback = (deltaX, deltaY, position) => {
+      if(position) {
+        const iClick = this.getLetterClicked(position);
+  
+        if(iClick != null) {
+          if(iClick > this.positionStartClick) {
+            this.setSelectionRange(this.positionStartClick, iClick, "forward");
+          } else if(iClick < this.positionStartClick) {
+            this.setSelectionRange(iClick, this.positionStartClick, "backward");
+          }
         }
       }
-    });
+    };
 
     this.addDownAction(position => {
       const iClick = this.getLetterClicked(position);
@@ -85,6 +86,10 @@ export default class Input extends Box {
 
       this.totalTime = 0;
     });
+
+    this.addClickAction(() => this.click());
+    this.addMoveAction(moveActionCallback);
+    this.addScrollAction(moveActionCallback);
   }
 
   draw(context) {
@@ -298,6 +303,10 @@ export default class Input extends Box {
 
       const offsetX = Math.max(0, Math.round(cursorPositionPos - this.x - this.width + this.style.borderSize + this.style.spaceBetweenComponents * 2));
       const offsetXNeg = Math.max(0, Math.round(cursorPositionNeg - this.x - this.style.borderSize - this.style.spaceBetweenComponents * 2));
+
+      if(this.offsetX < 0) {
+        this.offsetX = 0;
+      }
 
       if(cursorPositionPos - this.offsetX >= this.x + this.width - this.style.borderSize) {
         this.offsetX = offsetX;
