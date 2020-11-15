@@ -24,6 +24,7 @@ import Style from "./Style";
 export default class Input extends Box {
   selectable = true;
   #_positionStart = 0;
+  #_positionStartClick = 0;
   #_positionEnd = 0;
 
   constructor(x, y, width, height, style, defaultText) {
@@ -32,6 +33,7 @@ export default class Input extends Box {
     this.text = defaultText || "";
     this.#_positionStart = 0;
     this.#_positionEnd = 0;
+    this.#_positionStartClick = 0;
     this.lastInputText = false;
     this.offsetX = 0;
     this.lastTime = 0;
@@ -138,8 +140,7 @@ export default class Input extends Box {
   }
 
   drawText(ctxText, currentX) {
-    let positionStart = this.positionStart;
-    let positionEnd = this.positionEnd;
+    let selected = true;
     let sizes;
 
     for(let i = -1; i < this.text.length; i++) {
@@ -154,20 +155,20 @@ export default class Input extends Box {
             this.drawHighlight(ctxText, currentX, sizes);
           }
 
-          if(this.clickStartPosition && this.clickStopPosition && this.clickStartPosition.x == this.clickStopPosition.x && this.isClickCurrentPosition(this.clickStartPosition, currentX, sizes) && this.isClickCurrentPosition(this.clickStopPosition, currentX, sizes)) {
-            positionStart = i;
-            positionEnd = i;
+          if(this.clickStartPosition && this.isClickCurrentPosition(this.clickStartPosition, currentX, sizes)) {
+            this.positionStartClick = i;
+            this.setSelectionRange(i, i, "forward");
             this.clickStartPosition = null;
-            this.clickStopPosition = null;
           }
 
-          if(this.clickCurrentPosition && this.isClickCurrentPosition(this.clickCurrentPosition, currentX, sizes)) {
-            if(i > positionStart) {
-              positionEnd = i;
-            } else {
-              positionStart = i;
+          if(this.positionStartClick && this.clickCurrentPosition && this.isClickCurrentPosition(this.clickCurrentPosition, currentX, sizes)) {
+            if(i > this.positionStartClick) {
+              this.setSelectionRange(this.positionStartClick, i, "forward");
+            } else if(i < this.positionStartClick) {
+              this.setSelectionRange(i, this.positionStartClick, "backward");
             }
-            
+
+            selected = true;
             this.clickCurrentPosition = null;
           }
 
@@ -199,12 +200,15 @@ export default class Input extends Box {
       }
     }
 
-    this.positionStart = positionStart;
-    this.positionEnd = positionEnd;
-
     if(this.clickStopPosition && this.clickStopPosition.x > currentX) {
-      this.positionStart = this.text.length + 1;
-      this.positionEnd = this.text.length + 1;
+      if(selected) {
+        this.positionStartClick = this.text.length + 1;
+        this.setSelectionRange(this.positionStart, this.text.length + 1, "forward");
+      } else {
+        this.positionStartClick = this.text.length + 1;
+        this.setSelectionRange(this.text.length + 1, this.text.length + 1, "forward");
+      }
+
       this.clickStopPosition = null;
     }
 
@@ -245,6 +249,10 @@ export default class Input extends Box {
     return this.#_positionStart;
   }
 
+  get positionStartClick() {
+    return this.#_positionStartClick;
+  }
+
   get positionEnd() {
     return this.#_positionEnd;
   }
@@ -254,9 +262,19 @@ export default class Input extends Box {
     this.#_positionStart = position;
   }
 
+  set positionStartClick(position) {
+    this.#_positionStartClick = position;
+  }
+
   set positionEnd(position) {
     this.input.selectionEnd = position;
     this.#_positionEnd = position;
+  }
+
+  setSelectionRange(start, end, direction) {
+    this.input.setSelectionRange(start, end, direction);
+    this.positionStart = start;
+    this.positionEnd = end;
   }
 
   get height() {
