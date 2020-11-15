@@ -256,12 +256,19 @@ export default class Input extends Box {
       }
       
       if(position < 0) {
-        return this.x + this.style.borderSize;
+        return {
+          "currentLetter": this.textCache.letters[0],
+          "x": this.x + this.style.borderSize
+        }
       }
 
-      if(this.textCache.letters[position]) {
-        const currentLetter = this.textCache.letters[position];
-        return currentLetter.currentX + currentLetter.sizes["width"] + this.style.spaceBetweenComponents;
+      const currentLetter = this.textCache.letters[position];
+
+      if(currentLetter) {
+        return {
+          "currentLetter": currentLetter,
+          "x": currentLetter.currentX
+        };
       }
     }
   }
@@ -285,13 +292,19 @@ export default class Input extends Box {
   autoScroll() {
     if(this.textCache) {
       const cursorPosition = this.cursorPosition;
-      const offsetX = Math.max(0, Math.round(cursorPosition - this.x - this.width + this.style.borderSize + this.style.spaceBetweenComponents * 2));
-      const offsetXNeg = Math.max(0, Math.round(cursorPosition - this.x - this.style.borderSize - this.style.spaceBetweenComponents * 2));
+      const currentLetterSize = cursorPosition.currentLetter ? cursorPosition.currentLetter.sizes["width"] : 0;
+      const cursorPositionPos = cursorPosition.x + currentLetterSize + this.style.spaceBetweenComponents;
+      const cursorPositionNeg = cursorPosition.x - currentLetterSize - this.style.spaceBetweenComponents;
 
-      if(cursorPosition - this.offsetX >= this.x + this.width - this.style.borderSize) {
+      const offsetX = Math.max(0, Math.round(cursorPositionPos - this.x - this.width + this.style.borderSize + this.style.spaceBetweenComponents * 2));
+      const offsetXNeg = Math.max(0, Math.round(cursorPositionNeg - this.x - this.style.borderSize - this.style.spaceBetweenComponents * 2));
+
+      if(cursorPositionPos - this.offsetX >= this.x + this.width - this.style.borderSize) {
         this.offsetX = offsetX;
-      } else if(cursorPosition - this.offsetX <= this.x + this.style.borderSize) {
+        return offsetX;
+      } else if(cursorPositionNeg - this.offsetX <= this.x + this.style.borderSize) {
         this.offsetX = offsetXNeg;
+        return offsetXNeg;
       }
     }
 
