@@ -52,7 +52,7 @@ export default class ProgressBar extends Box {
       animationPercent = this.easingFunction(animationPercent);
     }
     
-    const widthForeground = Math.round(Math.max(0, Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent))));
+    const widthForeground = Math.max(0, Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent)));
 
     if(this.#precPercent != this.percent && !this.style.disableAnimation) {
       if(this.lastTime > 0) offsetTime = time - this.lastTime;

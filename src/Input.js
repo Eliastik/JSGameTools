@@ -160,7 +160,7 @@ export default class Input extends Box {
         const xDraw = currentX - this.offsetX;
         const yDraw = this.y + this.style.borderSize;
 
-        if(xDraw >= this.x - sizes["width"] && xDraw <= this.x + this.width) { // Don't draw the text if it is outside the input (overflow)
+        if(this.isLetterVisible(i)) { // Don't draw the text if it is outside the input (overflow)
           if(this.positionStart != this.positionEnd && i >= this.positionStart && i < this.positionEnd) {
             this.drawHighlight(ctxText, currentX, sizes);
           }
@@ -168,7 +168,7 @@ export default class Input extends Box {
           Utils.drawText(ctxText, this.text[i], this.style.fontColor, this.style.fontSize, this.style.fontFamily, "default", "default", xDraw, yDraw, false);
         }
 
-        currentX += sizes["width"] + 1;
+        currentX += sizes["width"] + this.style.spaceBetweenComponents;
       }
 
       if(this.positionEnd == i + 1 && this.selected) {
@@ -212,13 +212,13 @@ export default class Input extends Box {
       for(let i = 0; i < this.text.length; i++) {
         const sizes = Utils.wrapTextLines(ctx, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);
         this.textCache.letters[i] = {"text": this.text[i], "currentX": currentX, "sizes": sizes }; 
-        currentX += sizes["width"] + 1;
+        currentX += sizes["width"] + this.style.spaceBetweenComponents;
       }
     }
   }
 
   isClickCurrentPosition(position, currentX, sizes) {
-    if(position.x + this.offsetX <= currentX + sizes["width"] + 1 && position.x + this.offsetX >= currentX) {
+    if(position.x + this.offsetX <= currentX + sizes["width"] + this.style.spaceBetweenComponents && position.x + this.offsetX >= currentX) {
       return true;
     }
 
@@ -226,7 +226,7 @@ export default class Input extends Box {
   }
 
   isClickAfterPosition(position, currentX, sizes) {
-    if(position.x + this.offsetX >= currentX + sizes["width"] + 1) {
+    if(position.x + this.offsetX >= currentX + sizes["width"] + this.style.spaceBetweenComponents) {
       return true;
     }
 
@@ -247,27 +247,51 @@ export default class Input extends Box {
     }
   }
 
+  get cursorPosition() {
+    if(this.textCache) {
+      let position = this.positionEnd - 1;
+
+      if(this.positionEnd != this.positionStart && this.positionEnd == this.positionStartClick && this.positionStart < this.positionStartClick) {
+        position = this.positionStart - 1;
+      }
+      
+      if(position < 0) {
+        return this.x + this.style.borderSize;
+      }
+
+      if(this.textCache.letters[position]) {
+        const currentLetter = this.textCache.letters[position];
+        return currentLetter.currentX + currentLetter.sizes["width"] + this.style.spaceBetweenComponents;
+      }
+    }
+  }
+
+  isLetterVisible(letterId) {
+    if(this.textCache) {
+      const letter = this.textCache.letters[letterId];
+
+      if(letter) {
+        const xDraw = letter.currentX - this.offsetX;
+  
+        if(xDraw >= this.x - letter.sizes["width"] && xDraw <= this.x + this.width) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   autoScroll() {
     if(this.textCache) {
-      for(let i = 0; i < this.text.length; i++) {
-        const letter = this.textCache.letters[i];
-        const offsetX = Math.max(0, Math.round(letter.currentX - this.x - this.width + 8));
-      
-        if(this.positionEnd == i + 1) {
-          if((this.lastInputText && letter.currentX + letter.sizes["width"] + 1 >= this.x + this.width + this.offsetX)) {
-            this.offsetX = offsetX + letter.sizes["width"] + 1;
-            this.lastInputText = false;
-            return true;
-          } else if(letter.currentX - this.offsetX <= this.x) {
-            if(i > 0) {
-              this.offsetX -= letter.sizes["width"];
-              return true;
-            } else {
-              this.offsetX = 0;
-              return true;
-            }
-          }
-        }
+      const cursorPosition = this.cursorPosition;
+      const offsetX = Math.max(0, Math.round(cursorPosition - this.x - this.width + this.style.borderSize + this.style.spaceBetweenComponents * 2));
+      const offsetXNeg = Math.max(0, Math.round(cursorPosition - this.x - this.style.borderSize - this.style.spaceBetweenComponents * 2));
+
+      if(cursorPosition - this.offsetX >= this.x + this.width - this.style.borderSize) {
+        this.offsetX = offsetX;
+      } else if(cursorPosition - this.offsetX <= this.x + this.style.borderSize) {
+        this.offsetX = offsetXNeg;
       }
     }
 
@@ -326,7 +350,8 @@ export default class Input extends Box {
       "backgroundColor": Constants.Setting.INPUT_DEFAULT_BACKGROUND_COLOR,
       "borderColor": Constants.Setting.INPUT_DEFAULT_BORDER_COLOR,
       "borderColorSelected": Constants.Setting.INPUT_DEFAULT_BORDER_COLOR_SELECTED,
-      "selectColor": Constants.Setting.INPUT_DEFAULT_SELECT_COLOR
+      "selectColor": Constants.Setting.INPUT_DEFAULT_SELECT_COLOR,
+      "spaceBetweenComponents": 1
     });
   }
 }
