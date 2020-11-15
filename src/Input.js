@@ -47,12 +47,18 @@ export default class Input extends Box {
     this.input.style.position = "absolute";
     this.input.style.left = "-9999px";
     this.input.tabIndex = -1;
+    this.input.addEventListener("blur", () => this.selected = false);
+    this.input.addEventListener("focus", () => this.selected = true);
     this.input.addEventListener("input", () => {
       this.totalTime = 0
       this.lastInputText = true;
+      this.positionStart = this.input.selectionStart;
+      this.positionEnd = this.input.selectionEnd;
+      this.clickStartPosition = null;
+      this.clickStopPosition = null;
+      this.clickCurrentPosition = null;
     });
-    this.input.addEventListener("blur", () => this.selected = false);
-    this.input.addEventListener("focus", () => this.selected = true);
+
     document.body.appendChild(this.input);
 
     this.appendToCanvas = false;
@@ -140,7 +146,6 @@ export default class Input extends Box {
   }
 
   drawText(ctxText, currentX) {
-    let selected = true;
     let sizes;
 
     for(let i = -1; i < this.text.length; i++) {
@@ -155,21 +160,44 @@ export default class Input extends Box {
             this.drawHighlight(ctxText, currentX, sizes);
           }
 
-          if(this.clickStartPosition && this.isClickCurrentPosition(this.clickStartPosition, currentX, sizes)) {
-            this.positionStartClick = i;
-            this.setSelectionRange(i, i, "forward");
-            this.clickStartPosition = null;
-          }
+          if(this.clickStartPosition) {
+            let iClick = null;
 
-          if(this.positionStartClick && this.clickCurrentPosition && this.isClickCurrentPosition(this.clickCurrentPosition, currentX, sizes)) {
-            if(i > this.positionStartClick) {
-              this.setSelectionRange(this.positionStartClick, i, "forward");
-            } else if(i < this.positionStartClick) {
-              this.setSelectionRange(i, this.positionStartClick, "backward");
+            if(i <= 0 && this.isClickFirstPosition(this.clickStartPosition, Math.round(currentX), sizes)) {
+              iClick = 0;
+            } else if(this.isClickCurrentPosition(this.clickStartPosition, Math.round(currentX), sizes)) {
+              iClick = i;
+            } else if(i >= this.text.length - 1 && this.isClickAfterPosition(this.clickStartPosition, Math.round(currentX), sizes)) {
+              iClick = i + 1;
             }
 
-            selected = true;
-            this.clickCurrentPosition = null;
+            if(iClick != null) {
+              this.positionStartClick = iClick;
+              this.setSelectionRange(iClick, iClick, "forward");
+              this.clickStartPosition = null;
+            }
+          }
+
+          if(this.positionStartClick && this.clickCurrentPosition) {
+            let iClick = null;
+
+            if(i <= 0 && this.isClickFirstPosition(this.clickCurrentPosition, Math.round(currentX), sizes)) {
+              iClick = 0;
+            } else if(this.isClickCurrentPosition(this.clickCurrentPosition, Math.round(currentX), sizes)) {
+              iClick = i;
+            } else if(i >= this.text.length - 1 && this.isClickAfterPosition(this.clickCurrentPosition, Math.round(currentX), sizes)) {
+              iClick = i + 1;
+            }
+
+            if(iClick != null) {
+              if(iClick > this.positionStartClick) {
+                this.setSelectionRange(this.positionStartClick, iClick, "forward");
+              } else if(iClick < this.positionStartClick) {
+                this.setSelectionRange(iClick, this.positionStartClick, "backward");
+              }
+
+              this.clickCurrentPosition = null;
+            }
           }
 
           Utils.drawText(ctxText, this.text[i], this.style.fontColor, this.style.fontSize, this.style.fontFamily, "default", "default", xDraw, yDraw, false);
@@ -200,18 +228,6 @@ export default class Input extends Box {
       }
     }
 
-    if(this.clickStopPosition && this.clickStopPosition.x > currentX) {
-      if(selected) {
-        this.positionStartClick = this.text.length + 1;
-        this.setSelectionRange(this.positionStart, this.text.length + 1, "forward");
-      } else {
-        this.positionStartClick = this.text.length + 1;
-        this.setSelectionRange(this.text.length + 1, this.text.length + 1, "forward");
-      }
-
-      this.clickStopPosition = null;
-    }
-
     return currentX;
   }
 
@@ -231,6 +247,22 @@ export default class Input extends Box {
 
   isClickCurrentPosition(position, currentX, sizes) {
     if(position.x + this.offsetX <= currentX + sizes["width"] + 1 && position.x + this.offsetX >= currentX) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isClickAfterPosition(position, currentX, sizes) {
+    if(position.x + this.offsetX >= currentX + sizes["width"] + 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isClickFirstPosition(position, currentX, sizes) {
+    if(position.x + this.offsetX <= currentX + sizes["width"] + 1) {
       return true;
     }
 
