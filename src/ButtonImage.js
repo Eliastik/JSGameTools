@@ -30,6 +30,7 @@ export default class ButtonImage extends Button {
     });
 
     super(x, y, width, height, style, new ImageContainer(imgSrc, x, y, width, height, style, imageLoader));
+    console && console.warn && console.warn("Notice: JSGameTools.ButtonImage is deprecated. Please use a Button with an ImageContainer instead.");
   }
 
   loadImage(imageLoader) {

@@ -22,11 +22,18 @@ import Component from "./Component";
 export default class ImageContainer extends Component {
   selectable = false;
 
-  constructor(imgSrc, x, y, width, height, style, imageLoader) {
+  constructor(image, x, y, width, height, style, imageLoader) {
     super(x, y, width, height, style);
     this.image;
-    this.imgSrc = imgSrc;
+    this.imgSrc;
     this.imageLoader = imageLoader;
+
+    if(image instanceof Image) {
+      this.image = image;
+      this.imgSrc = image.src;
+    } else {
+      this.imgSrc = image;
+    }
   }
 
   draw(context) {
