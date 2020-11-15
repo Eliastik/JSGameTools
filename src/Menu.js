@@ -83,6 +83,14 @@ export default class Menu extends Col {
                 if(component.selectable) {
                   component.selected = true;
                 }
+
+                if(!this.isComponentVisible(component)) {
+                  const componentHeight = component.maxHeight || component.height;
+                  const deltaY = (this.maxHeight - this.offsetScrollY) - (component.y + componentHeight);
+                  this.offsetScrollY = -deltaY;
+
+                  this.controlScrolling(null, -deltaY);
+                }
               } else {
                 component.selected = false;
               }
