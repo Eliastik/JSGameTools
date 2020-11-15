@@ -38,9 +38,8 @@ export default class Input extends Box {
     this.offsetX = 0;
     this.lastTime = 0;
     this.totalTime = 0;
-    this.clickStartPosition = null;
-    this.clickStopPosition = null;
     this.clickCurrentPosition = null;
+    this.textCache = null;
 
     this.input = document.createElement("input");
     this.input.setAttribute("type", "text");
@@ -54,9 +53,6 @@ export default class Input extends Box {
       this.lastInputText = true;
       this.positionStart = this.input.selectionStart;
       this.positionEnd = this.input.selectionEnd;
-      this.clickStartPosition = null;
-      this.clickStopPosition = null;
-      this.clickCurrentPosition = null;
     });
 
     document.body.appendChild(this.input);
@@ -67,15 +63,26 @@ export default class Input extends Box {
     this.canvasTmp = document.createElement("canvas");
 
     this.addClickAction(() => this.click());
-    this.addMoveAction((deltaX, deltaY, position) => this.clickCurrentPosition = position);
+    this.addMoveAction((deltaX, deltaY, position) => {
+      const iClick = this.getLetterClicked(position);
 
-    this.addDownAction(position => {
-      this.clickStartPosition = position;
-      this.totalTime = 0;
+      if(iClick != null) {
+        if(iClick > this.positionStartClick) {
+          this.setSelectionRange(this.positionStartClick, iClick, "forward");
+        } else if(iClick < this.positionStartClick) {
+          this.setSelectionRange(iClick, this.positionStartClick, "backward");
+        }
+      }
     });
 
-    this.addUpAction(position => {
-      this.clickStopPosition = position;
+    this.addDownAction(position => {
+      const iClick = this.getLetterClicked(position);
+
+      if(iClick != null) {
+        this.positionStartClick = iClick;
+        this.setSelectionRange(iClick, iClick, "forward");
+      }
+
       this.totalTime = 0;
     });
   }
@@ -124,9 +131,9 @@ export default class Input extends Box {
     const ctxText = this.canvasTmp.getContext("2d");
     Utils.clear(ctxText);
 
-    let currentX = this.x + 5;
-
-    currentX = this.drawText(ctxText, currentX);
+    this.updateTextCache(this.x + 5);
+    this.autoScroll();
+    this.drawText(ctxText, this.x + 5);
 
     Utils.drawImageData(ctx, this.canvasTmp, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2);
 
@@ -146,11 +153,9 @@ export default class Input extends Box {
   }
 
   drawText(ctxText, currentX) {
-    let sizes;
-
     for(let i = -1; i < this.text.length; i++) {
       if(i > -1) {
-        sizes = Utils.wrapTextLines(ctxText, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);
+        const sizes = this.textCache.letters[i].sizes;
 
         const xDraw = currentX - this.offsetX;
         const yDraw = this.y + this.style.borderSize;
@@ -158,46 +163,6 @@ export default class Input extends Box {
         if(xDraw >= this.x - sizes["width"] && xDraw <= this.x + this.width) { // Don't draw the text if it is outside the input (overflow)
           if(this.positionStart != this.positionEnd && i >= this.positionStart && i < this.positionEnd) {
             this.drawHighlight(ctxText, currentX, sizes);
-          }
-
-          if(this.clickStartPosition) {
-            let iClick = null;
-
-            if(i <= 0 && this.isClickFirstPosition(this.clickStartPosition, Math.round(currentX), sizes)) {
-              iClick = 0;
-            } else if(this.isClickCurrentPosition(this.clickStartPosition, Math.round(currentX), sizes)) {
-              iClick = i;
-            } else if(i >= this.text.length - 1 && this.isClickAfterPosition(this.clickStartPosition, Math.round(currentX), sizes)) {
-              iClick = i + 1;
-            }
-
-            if(iClick != null) {
-              this.positionStartClick = iClick;
-              this.setSelectionRange(iClick, iClick, "forward");
-              this.clickStartPosition = null;
-            }
-          }
-
-          if(this.positionStartClick && this.clickCurrentPosition) {
-            let iClick = null;
-
-            if(i <= 0 && this.isClickFirstPosition(this.clickCurrentPosition, Math.round(currentX), sizes)) {
-              iClick = 0;
-            } else if(this.isClickCurrentPosition(this.clickCurrentPosition, Math.round(currentX), sizes)) {
-              iClick = i;
-            } else if(i >= this.text.length - 1 && this.isClickAfterPosition(this.clickCurrentPosition, Math.round(currentX), sizes)) {
-              iClick = i + 1;
-            }
-
-            if(iClick != null) {
-              if(iClick > this.positionStartClick) {
-                this.setSelectionRange(this.positionStartClick, iClick, "forward");
-              } else if(iClick < this.positionStartClick) {
-                this.setSelectionRange(iClick, this.positionStartClick, "backward");
-              }
-
-              this.clickCurrentPosition = null;
-            }
           }
 
           Utils.drawText(ctxText, this.text[i], this.style.fontColor, this.style.fontSize, this.style.fontFamily, "default", "default", xDraw, yDraw, false);
@@ -211,19 +176,6 @@ export default class Input extends Box {
           this.drawCursor(ctxText, currentX);
         } else if(this.totalTime > 1000) {
           this.totalTime = 0;
-        }
-
-        const offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
-  
-        if((this.lastInputText && this.positionEnd >= this.text.length - 1) || offsetX >= this.offsetX) {
-          this.offsetX = offsetX;
-          this.lastInputText = false;
-        } else if(currentX - this.offsetX <= this.x) {
-          if(sizes) {
-            this.offsetX -= sizes["width"] - 1;
-          } else {
-            this.offsetX = 0;
-          }
         }
       }
     }
@@ -245,6 +197,26 @@ export default class Input extends Box {
     ctxText.fillRect(currentX - this.offsetX, this.y + this.style.borderSize, sizes["width"] + 2, this.height - this.style.borderSize * 2);
   }
 
+  updateTextCache(currentX) {
+    const ctx = this.canvas ? this.canvas.getContext("2d") : null;
+
+    if(Constants.Setting.DISABLE_OPTIMIZATIONS || !this.textCache || this.textCache.fontSize != this.style.fontSize || this.textCache.fontFamily != this.style.fontFamily || this.text != this.textCache.text || (ctx && ctx.canvas.width != this.textCache.canvasWidth)) {
+      this.textCache = {
+        "fontSize": this.style.fontSize,
+        "fontFamily": this.style.fontFamily,
+        "text": this.text,
+        "canvasWidth": ctx.canvas.width,
+        "letters": []
+      };
+
+      for(let i = 0; i < this.text.length; i++) {
+        const sizes = Utils.wrapTextLines(ctx, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);
+        this.textCache.letters[i] = {"text": this.text[i], "currentX": currentX, "sizes": sizes }; 
+        currentX += sizes["width"] + 1;
+      }
+    }
+  }
+
   isClickCurrentPosition(position, currentX, sizes) {
     if(position.x + this.offsetX <= currentX + sizes["width"] + 1 && position.x + this.offsetX >= currentX) {
       return true;
@@ -261,9 +233,42 @@ export default class Input extends Box {
     return false;
   }
 
-  isClickFirstPosition(position, currentX, sizes) {
-    if(position.x + this.offsetX <= currentX + sizes["width"] + 1) {
-      return true;
+  getLetterClicked(position) {
+    if(this.textCache) {
+      for(let i = 0; i < this.text.length; i++) {
+        const letter = this.textCache.letters[i];
+        
+        if(this.isClickCurrentPosition(position, Math.round(letter.currentX), letter.sizes)) {
+          return i;
+        } else if(i >= this.text.length - 1 && this.isClickAfterPosition(position, Math.round(letter.currentX), letter.sizes)) {
+          return i + 1;
+        }
+      }
+    }
+  }
+
+  autoScroll() {
+    if(this.textCache) {
+      for(let i = 0; i < this.text.length; i++) {
+        const letter = this.textCache.letters[i];
+        const offsetX = Math.max(0, Math.round(letter.currentX - this.x - this.width + 8));
+      
+        if(this.positionEnd == i + 1) {
+          if((this.lastInputText && letter.currentX + letter.sizes["width"] + 1 >= this.x + this.width + this.offsetX)) {
+            this.offsetX = offsetX + letter.sizes["width"] + 1;
+            this.lastInputText = false;
+            return true;
+          } else if(letter.currentX - this.offsetX <= this.x) {
+            if(i > 0) {
+              this.offsetX -= letter.sizes["width"];
+              return true;
+            } else {
+              this.offsetX = 0;
+              return true;
+            }
+          }
+        }
+      }
     }
 
     return false;
