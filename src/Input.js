@@ -38,6 +38,7 @@ export default class Input extends Box {
     this.totalTime = 0;
     this.clickStartPosition = null;
     this.clickStopPosition = null;
+    this.clickCurrentPosition = null;
 
     this.input = document.createElement("input");
     this.input.setAttribute("type", "text");
@@ -58,8 +59,17 @@ export default class Input extends Box {
     this.canvasTmp = document.createElement("canvas");
 
     this.addClickAction(() => this.click());
-    this.addDownAction(position => this.clickStartPosition = position);
-    this.addUpAction(position => this.clickStopPosition = position);
+    this.addMoveAction((deltaX, deltaY, position) => this.clickCurrentPosition = position);
+
+    this.addDownAction(position => {
+      this.clickStartPosition = position;
+      this.totalTime = 0;
+    });
+
+    this.addUpAction(position => {
+      this.clickStopPosition = position;
+      this.totalTime = 0;
+    });
   }
 
   draw(context) {
@@ -128,6 +138,8 @@ export default class Input extends Box {
   }
 
   drawText(ctxText, currentX) {
+    let positionStart = this.positionStart;
+    let positionEnd = this.positionEnd;
     let sizes;
 
     for(let i = -1; i < this.text.length; i++) {
@@ -138,16 +150,25 @@ export default class Input extends Box {
         const yDraw = this.y + this.style.borderSize;
 
         if(xDraw >= this.x - sizes["width"] && xDraw <= this.x + this.width) { // Don't draw the text if it is outside the input (overflow)
-          if(this.positionStart != this.positionEnd && i >= this.positionStart && i <= this.positionEnd) {
+          if(this.positionStart != this.positionEnd && i >= this.positionStart && i < this.positionEnd) {
             this.drawHighlight(ctxText, currentX, sizes);
           }
 
-          if(this.clickStopPosition) {
-            if(this.clickStopPosition.x + this.offsetX >= currentX && this.clickStopPosition.x + this.offsetX <= currentX + sizes["width"] + 1) {
-              this.positionStart = i;
-              this.positionEnd = i;
-              this.clickStopPosition = null;
+          if(this.clickStartPosition && this.clickStopPosition && this.clickStartPosition.x == this.clickStopPosition.x && this.isClickCurrentPosition(this.clickStartPosition, currentX, sizes) && this.isClickCurrentPosition(this.clickStopPosition, currentX, sizes)) {
+            positionStart = i;
+            positionEnd = i;
+            this.clickStartPosition = null;
+            this.clickStopPosition = null;
+          }
+
+          if(this.clickCurrentPosition && this.isClickCurrentPosition(this.clickCurrentPosition, currentX, sizes)) {
+            if(i > positionStart) {
+              positionEnd = i;
+            } else {
+              positionStart = i;
             }
+            
+            this.clickCurrentPosition = null;
           }
 
           Utils.drawText(ctxText, this.text[i], this.style.fontColor, this.style.fontSize, this.style.fontFamily, "default", "default", xDraw, yDraw, false);
@@ -164,7 +185,7 @@ export default class Input extends Box {
         }
 
         const offsetX = Math.max(0, Math.round(currentX - this.x - this.width + 8));
-
+  
         if((this.lastInputText && this.positionEnd >= this.text.length - 1) || offsetX >= this.offsetX) {
           this.offsetX = offsetX;
           this.lastInputText = false;
@@ -177,6 +198,9 @@ export default class Input extends Box {
         }
       }
     }
+
+    this.positionStart = positionStart;
+    this.positionEnd = positionEnd;
 
     if(this.clickStopPosition && this.clickStopPosition.x > currentX) {
       this.positionStart = this.text.length + 1;
@@ -199,6 +223,14 @@ export default class Input extends Box {
   drawHighlight(ctxText, currentX, sizes) {
     ctxText.fillStyle = this.style.selectColor;
     ctxText.fillRect(currentX - this.offsetX, this.y + this.style.borderSize, sizes["width"] + 2, this.height - this.style.borderSize * 2);
+  }
+
+  isClickCurrentPosition(position, currentX, sizes) {
+    if(position.x + this.offsetX <= currentX + sizes["width"] + 1 && position.x + this.offsetX >= currentX) {
+      return true;
+    }
+
+    return false;
   }
 
   click() {
