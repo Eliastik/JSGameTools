@@ -124,7 +124,7 @@ export default class Component {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(canvas, event);
 
-          if(this.isInside(mousePosition)) {
+          if(this.isInside(mousePosition) && this.hovered) {
             if(this.triggersClick != null) {
               this.triggersClick.forEach(trigger => trigger(mousePosition));
             }
