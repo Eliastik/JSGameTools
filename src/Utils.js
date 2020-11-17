@@ -262,6 +262,23 @@ export default {
     
     ctx.restore();
   },
+  drawTriangle: function(ctx, x, y, width, height, lineWidth, color) {
+    ctx.save();
+
+    ctx.lineCap = "round";
+    ctx.lineWidth = lineWidth || Constants.Setting.TRIANGLE_DEFAULT_LINE_SIZE;
+    ctx.strokeStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
+    ctx.filter = "";
+  
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width, y);
+    ctx.lineTo(x + width / 2, y + height);
+    ctx.lineTo(x, y);
+    ctx.fill();
+    
+    ctx.restore();
+  },
   clear: function(ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   },

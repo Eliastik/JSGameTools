@@ -46,6 +46,7 @@ export default class Label extends Component {
 
   get sizes() {
     const ctx = this.canvas ? this.canvas.getContext("2d") : null;
+    if(!ctx) console.log(ctx, this);
     
     if(Constants.Setting.DISABLE_OPTIMIZATIONS || this.sizesCache.fontSize != this.style.fontSize || this.sizesCache.fontFamily != this.style.fontFamily || this.sizesCache.wrap != this.style.wrap || this.text != this.sizesCache.text || (ctx && ctx.canvas.width != this.sizesCache.canvasWidth) || this.sizesCache.value == null) {
       const sizes = Utils.wrapTextLines(ctx, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap);
@@ -59,11 +60,13 @@ export default class Label extends Component {
   }
 
   get height() {
-    return this.sizes["height"];
+    const sizes = this.sizes;
+    return sizes && sizes["height"];
   }
 
   get width() {
-    return this.sizes["width"];
+    const sizes = this.sizes;
+    return sizes && sizes["width"];
   }
 
   get defaultStyle() {

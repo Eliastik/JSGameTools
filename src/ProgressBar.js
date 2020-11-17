@@ -46,14 +46,6 @@ export default class ProgressBar extends Box {
     const time = performance.now();
     let offsetTime = 0;
 
-    let animationPercent = (this.#precPercent != this.percent && !this.style.disableAnimation ? this.totalTime / (this.style.animationDuration) : 1);
-
-    if(this.easingFunction) {
-      animationPercent = this.easingFunction(animationPercent);
-    }
-    
-    const widthForeground = Math.max(0, Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * animationPercent)));
-
     if(this.#precPercent != this.percent && !this.style.disableAnimation) {
       if(this.lastTime > 0) offsetTime = time - this.lastTime;
       this.totalTime += offsetTime;
@@ -71,16 +63,30 @@ export default class ProgressBar extends Box {
     }
 
     this.drawBackground(ctx);
-    this.drawForeground(ctx, widthForeground);
+    this.drawForeground(ctx, this.widthForeground);
 
     ctx.restore();
+  }
+
+  get animationPercent() {
+    let animationPercent = (this.#precPercent != this.percent && !this.style.disableAnimation ? this.totalTime / (this.style.animationDuration) : 1);
+
+    if(this.easingFunction) {
+      animationPercent = this.easingFunction(animationPercent);
+    }
+
+    return animationPercent;
+  }
+
+  get widthForeground() {
+    return Math.max(0, Math.min(this.width, this.width * (this.#precPercent + (this.percent - this.#precPercent) * this.animationPercent)));
   }
 
   drawForeground(ctx, widthForeground) {
     ctx.save();
 
     ctx.fillStyle = this.style.foregroundColor;
-    ctx.fillRect(this.x, this.y, widthForeground, this.height); // Foreground
+    ctx.fillRect(this.x, this.y, widthForeground, this.height);
 
     ctx.restore();
   }

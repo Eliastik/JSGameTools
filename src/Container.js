@@ -78,15 +78,13 @@ export default class Container extends Box {
   }
 
   add(component) {
-    this.addAll(component);
+    this.#components.push(component);
+    component.parent = this;
+    if(super.canvas) component.canvas = super.canvas;
   }
 
   addAll(...components) {
-    components.forEach(component => {
-      this.#components.push(component);
-      component.parent = this;
-      if(super.canvas) component.canvas = super.canvas;
-    });
+    components.forEach(component => this.add(component));
   }
 
   remove(component) {
@@ -147,6 +145,16 @@ export default class Container extends Box {
 
   get canvas() {
     return super.canvas;
+  }
+
+  getComponentId(component) {
+    let result = null;
+
+    this.#components.forEach((c, i) => {
+      if(c == component) result = i;
+    });
+
+    return result;
   }
 
   controlScrolling(deltaX, deltaY) {
