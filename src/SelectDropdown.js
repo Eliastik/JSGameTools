@@ -23,8 +23,8 @@ import Constants from "./Constants";
 export default class SelectDropdown extends Col {
   #_selectedOption;
 
-  constructor(maxHeightDropdown, ...options) {
-    super(null, null, null, maxHeightDropdown, null, ...options);
+  constructor(maxHeightDropdown, style, ...options) {
+    super(null, null, null, maxHeightDropdown, style, ...options);
     this.#_selectedOption = 0;
   }
 
@@ -43,8 +43,8 @@ export default class SelectDropdown extends Col {
   }
 
   get y() {
-    const parentHeight = (this.parent && this.parent.maxHeight) || (this.parent && this.parent.height);
-    const height = this.maxHeight || this.height;
+    const parentHeight = (this.parent && this.parent.height);
+    const height = this.height;
     const y = this.parent && this.parent.y;
 
     if(this.canvas && y + parentHeight + height >= this.canvas.height) {
@@ -54,12 +54,8 @@ export default class SelectDropdown extends Col {
     return y + parentHeight;
   }
 
-  get maxWidth() {
-    return (this.parent && this.parent.maxWidth) || (this.parent && this.parent.maxWidth);
-  }
-
-  get maxHeight() {
-    return this.height;
+  get width() {
+    return this.parent && this.parent.width;
   }
 
   get canvas() {
@@ -103,8 +99,9 @@ export default class SelectDropdown extends Col {
     return new Style({
       "padding": 0,
       "spaceBetweenComponents": 0,
-      "backgroundColor": "white",
+      "backgroundColor": Constants.Setting.SELECT_DEFAULT_BACKGROUND,
       "backgroundColorHover": null,
+      "backgroundColorDown": null,
       "scrollXDisabled": false,
       "scrollYDisabled": false
     });

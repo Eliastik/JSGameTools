@@ -46,6 +46,6 @@ export default class ScrollbarHorizontal extends Scrollbar {
   }
 
   get y() {
-    return this.parent ? this.parent.y + Math.min(this.parent.height, this.parent.maxHeight) - this.size : null;
+    return this.parent ? this.parent.y + this.parent.height - this.size : null;
   }
 }

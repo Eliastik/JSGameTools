@@ -46,6 +46,6 @@ export default class ScrollbarVertical extends Scrollbar {
   }
 
   get x() {
-    return this.parent ? this.parent.x + Math.min(this.parent.width, this.parent.maxWidth) - this.size : 0;
+    return this.parent ? this.parent.x + this.parent.width - this.size : 0;
   }
 }

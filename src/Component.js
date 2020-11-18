@@ -250,7 +250,7 @@ export default class Component {
   }
   
   isInside(pos) {
-    return pos.x > this.x && pos.x < this.x + this.maxWidth && pos.y < this.y + this.maxHeight && pos.y > this.y;
+    return pos.x > this.x && pos.x < this.x + this.width && pos.y < this.y + this.height && pos.y > this.y;
   }
   
   disable() {
@@ -377,12 +377,30 @@ export default class Component {
     this.#_height = height;
   }
 
+  get maxWidth() {
+    return this.width;
+  }
+
+  get maxHeight() {
+    return this.height;
+  }
+
+  get innerWidth() {
+    return this.width;
+  }
+
+  get innerHeight() {
+    return this.height;
+  }
+
   get x() {
     if(this.style.alignement && this.parent) {
+      const parentWidth = this.parent.width;
+
       if(this.style.alignement == Constants.Alignement.CENTER) {
-        return this.parent.x + (this.parent.width / 2) - (this.width / 2);
+        return this.parent.x + (parentWidth / 2) - (this.width / 2);
       } else if(this.style.alignement == Constants.Alignement.RIGHT) {
-        return this.parent.x + (this.parent.width) - (this.width) - 5;
+        return this.parent.x + (parentWidth) - (this.width) - 5;
       } else if(this.style.alignement == Constants.Alignement.LEFT) {
         return this.parent.x + 5;
       }
@@ -397,10 +415,12 @@ export default class Component {
 
   get y() {
     if(this.style.verticalAlignement && this.parent) {
+      const parentHeight = this.parent.height;
+
       if(this.style.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        return this.parent.y + (this.parent.height) - (this.height) - 5;
+        return this.parent.y + (parentHeight) - (this.height) - 5;
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        return this.parent.y + (this.parent.height / 2) - (this.height / 2);
+        return this.parent.y + (parentHeight / 2) - (this.height / 2);
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
         return this.parent.y + 5;
       }
@@ -411,14 +431,6 @@ export default class Component {
 
   set y(y) {
     this.#_y = y;
-  }
-
-  get maxWidth() {
-    return this.width;
-  }
-
-  get maxHeight() {
-    return this.height;
   }
 
   get defaultStyle() {

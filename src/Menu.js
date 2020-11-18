@@ -85,7 +85,7 @@ export default class Menu extends Col {
                 }
 
                 if(!this.isComponentVisible(component)) {
-                  const componentHeight = component.maxHeight || component.height;
+                  const componentHeight = component.height;
                   const deltaY = (this.maxHeight - this.offsetScrollY) - (component.y + componentHeight);
                   this.offsetScrollY = -deltaY;
 

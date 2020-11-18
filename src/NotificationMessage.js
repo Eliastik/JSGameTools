@@ -170,14 +170,6 @@ export default class NotificationMessage extends Col {
     return super.height - this.closeButton.height;
   }
 
-  get maxWidth() {
-    return this.width;
-  }
-
-  get maxHeight() {
-    return this.height;
-  }
-
   get defaultStyle() {
     return new Style({
       "alignement": Constants.Alignement.CENTER,

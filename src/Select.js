@@ -23,6 +23,7 @@ import SelectOption from "./SelectOption";
 import Triangle from "./Triangle";
 import Style from "./Style";
 import Row from "./Row";
+import Constants from "./Constants";
 
 export default class Select extends Button {
   #optionContainer;
@@ -30,12 +31,16 @@ export default class Select extends Button {
   constructor(x, y, maxWidth, maxHeight, maxHeightDropdown, style, ...options) {
     super(x, y, maxWidth, maxHeight, style);
 
-    this.#optionContainer = new SelectDropdown(maxHeightDropdown, ...options);
+    this.#optionContainer = new SelectDropdown(maxHeightDropdown, style, ...options);
     this.#optionContainer.parent = this;
-    this.label = new Label("", x, y, style);
-    this.triangle = new Triangle(null, null, 12, 12, new Style({ "alignement": "right", "verticalAlignement": "center" }));
 
-    super.add(new Row(null, null, null, null, new Style({ "spaceBetweenComponents": 15 }), this.label, this.triangle));
+    this.label = new Label("", x, y, style);
+    this.label.style.setAll({ "alignement": Constants.Alignement.LEFT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
+    this.triangle = new Triangle(null, null, 10, 10, style);
+    this.triangle.style.setAll({ "alignement": Constants.Alignement.RIGHT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
+    this.row = new Row(null, null, null, null, new Style({ "spaceBetweenComponents": 15 }), this.label, this.triangle);
+
+    super.add(this.row);
   }
 
   draw(context) {
@@ -43,6 +48,8 @@ export default class Select extends Button {
     if(this.selectedOption && this.selectedOption.label) {
       this.label.text = this.selectedOption.label.text;
     }
+
+    this.row.maxWidth = this.width - this.style.padding;
 
     super.draw(context);
     this.#optionContainer.draw(context);
@@ -56,9 +63,23 @@ export default class Select extends Button {
     this.#optionContainer.selectedOption = id;
   }
 
+  get width() {
+    let maxWidth = this.label.width;
+
+    return maxWidth + this.style.padding + this.triangle.width + 15;
+  }
+
   add(component) {
     if(component instanceof SelectOption) {
       this.#optionContainer.add(component);
     }
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "backgroundColor": Constants.Setting.SELECT_DEFAULT_BACKGROUND,
+      "backgroundColorHover": Constants.Setting.SELECT_DEFAULT_HOVER_BACKGROUND,
+      "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND
+    });
   }
 }

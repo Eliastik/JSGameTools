@@ -46,7 +46,7 @@ export default class Box extends Component {
       ctx.save();
   
       ctx.fillStyle = color;
-      ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.maxWidth), Math.round(this.maxHeight));
+      ctx.fillRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
 
       ctx.restore();
     }
@@ -75,7 +75,7 @@ export default class Box extends Component {
       ctx.strokeStyle = color;
       ctx.lineWidth = this.style.borderSize;
       
-      ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.maxWidth), Math.round(this.maxHeight));
+      ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
   
       ctx.restore();
     }

@@ -52,24 +52,6 @@ export default class Button extends Col {
     return super.width + this.style.padding;
   }
 
-  set width(width) {
-    super.width = width;
-    this.autoWidth = false;
-  }
-
-  set height(height) {
-    super.height = height;
-    this.autoHeight = false;
-  }
-
-  get maxWidth() {
-    return super.maxWidth ? super.maxWidth : this.width;
-  }
-
-  get maxHeight() {
-    return super.maxHeight ? super.maxHeight : this.height;
-  }
-
   get defaultStyle() {
     return new Style({
       "backgroundColor": Constants.Setting.BUTTON_DEFAULT_BACKGROUND,

@@ -54,7 +54,7 @@ export default class Col extends Container {
       });
     }
     
-    if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.maxWidth, this.maxHeight, this.x, this.y, this.maxWidth, this.maxHeight);
+    if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x, this.y, this.width, this.height);
     super.drawScrollbars(ctx);
     
     ctx.restore();
@@ -78,16 +78,24 @@ export default class Col extends Container {
     return currentY;
   }
 
-  get height() {
+  get innerHeight() {
     let totalHeight = 0;
     super.components.forEach(component => totalHeight += component.height);
     return totalHeight + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
   }
 
-  get width() {
+  get innerWidth() {
     let maxWidth = 0;
     super.components.forEach(component => { if(component.width > maxWidth) maxWidth = component.width; });
     return maxWidth + this.style.padding;
+  }
+
+  get width() {
+    return this.maxWidth || this.innerWidth || this.parent.width;
+  }
+
+  get height() {
+    return this.maxHeight || this.innerHeight || this.parent.width;
   }
 
   get defaultStyle() {

@@ -17,6 +17,8 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Button from "./Button";
+import Constants from "./Constants";
+import Label from "./Label";
 
 export default class SelectOption extends Button {
   constructor(label) {
@@ -33,10 +35,20 @@ export default class SelectOption extends Button {
   }
 
   get width() {
-    return this.parent && this.parent.maxWidth;
+    return this.parent && this.parent.width;
   }
 
-  get maxWidth() {
-    return this.parent && this.parent.maxWidth;
+  add(component) {
+    if(component instanceof Label) {
+      super.add(component);
+    }
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "backgroundColor": Constants.Setting.SELECT_DEFAULT_BACKGROUND,
+      "backgroundColorHover": Constants.Setting.SELECT_DEFAULT_HOVER_BACKGROUND,
+      "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND
+    });
   }
 }

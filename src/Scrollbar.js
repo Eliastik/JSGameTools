@@ -46,6 +46,14 @@ export default class Scrollbar extends Box {
     return this.parent ? this.parent.maxHeight - Math.abs(Math.min(0, this.parent.y)) : 0;
   }
 
+  get innerWidthParent() {
+    return this.parent ? this.parent.innerWidth - Math.abs(Math.min(0, this.parent.x)) : 0;
+  }
+
+  get innerHeightParent() {
+    return this.parent ? this.parent.innerHeight - Math.abs(Math.min(0, this.parent.y)) : 0;
+  }
+
   get maxWidth() {
     return this.width;
   }
@@ -55,11 +63,11 @@ export default class Scrollbar extends Box {
   }
 
   get contentRatioX() {
-    return this.parent ? this.maxWidthParent / this.parent.width : 0;
+    return this.parent ? this.maxWidthParent / this.innerWidthParent : 0;
   }
 
   get contentRatioY() {
-    return this.parent ? this.maxHeightParent / this.parent.height : 0;
+    return this.parent ? this.maxHeightParent / this.innerHeightParent : 0;
   }
 
   get width() {
@@ -71,11 +79,11 @@ export default class Scrollbar extends Box {
   }
 
   get windowScrollSizeX() {
-    return this.parent ? this.parent.width - this.maxWidthParent : 0;
+    return this.innerWidthParent - this.maxWidthParent;
   }
 
   get windowScrollSizeY() {
-    return this.parent ? this.parent.height - this.maxHeightParent : 0;
+    return this.innerHeightParent - this.maxHeightParent;
   }
 
   get percentScrollbarX() {

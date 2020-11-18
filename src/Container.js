@@ -112,11 +112,19 @@ export default class Container extends Box {
   }
 
   get width() {
-    return this.parent.width;
+    return this.maxWidth || this.parent.width;
   }
 
   get height() {
-    return this.parent.height;
+    return this.maxHeight || this.parent.height;
+  }
+
+  set width(width) {
+    this.maxWidth = width;
+  }
+
+  set width(height) {
+    this.maxHeight = height;
   }
 
   get maxWidth() {
@@ -158,8 +166,8 @@ export default class Container extends Box {
   }
 
   controlScrolling(deltaX, deltaY) {
-    const scrollAreaSizeY = this.height - this.maxHeight;
-    const scrollAreaSizeX = this.width - this.maxWidth;
+    const scrollAreaSizeY = this.innerHeight - this.height;
+    const scrollAreaSizeX = this.innerWidth - this.width;
 
     if(!this.style.scrollYDisabled) {
       if(scrollAreaSizeY <= 0) {
@@ -198,10 +206,10 @@ export default class Container extends Box {
     if(Constants.Setting.DISABLE_OPTIMIZATIONS) return true;
     
     if(component instanceof Component && !(component.style && component.style.hidden)) {
-      const width = this.maxWidth || this.width;
-      const height = this.maxHeight || this.height;
-      const componentWidth = component.maxWidth || component.width;
-      const componentHeight = component.maxHeight || component.height;
+      const width = this.width;
+      const height = this.height;
+      const componentWidth = component.width;
+      const componentHeight = component.height;
 
       if(component.x + componentWidth >= this.x && component.x <= this.x + width && component.y + componentHeight >= this.y && component.y <= this.y + height) {
         return true;

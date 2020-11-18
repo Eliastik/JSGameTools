@@ -65,14 +65,6 @@ export default class Tooltip extends Col {
     super.height = height;
   }
 
-  get maxWidth() {
-    return this.width;
-  }
-
-  get maxHeight() {
-    return this.height;
-  }
-
   get defaultStyle() {
     return new Style({
       "backgroundColor": Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND
