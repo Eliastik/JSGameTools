@@ -44,7 +44,7 @@ export default class Select extends Button {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     if(this.selectedOption && this.selectedOption.label) {
       this.label.text = this.selectedOption.label.text;
     }

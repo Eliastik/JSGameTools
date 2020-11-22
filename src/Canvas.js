@@ -18,6 +18,7 @@
  */
 import Constants from "./Constants";
 import Utils from "./Utils";
+import Scene from "./Scene";
 
 export default class Canvas {
   #lastFrameTime;
@@ -32,14 +33,22 @@ export default class Canvas {
     this.scene = scene;
     this.container.appendChild(this.canvas);
     this.started = false;
+    this.init = false;
     this.maxFPS = maxFPS || -1;
     this.#lastFrameTime = 0;
-    if(autoResize) this.autoResize();
+    
+    this.triggersClick = [];
+    this.triggersHover = [];
+    this.triggersDown = [];
+    this.triggersWheel = [];
+    this.triggersMove = [];
+    this.triggersUp = [];
+    this.triggersTouchStart = [];
+    this.triggersTouchEnd = [];
+    this.triggersTouchMove = [];
 
-    if(this.scene) {
-      this.scene.parent = this;
-      this.scene.canvas = this;
-    }
+    if(autoResize) this.autoResize();
+    this.createEvents();
   }
 
   draw() {
@@ -80,6 +89,120 @@ export default class Canvas {
 
   stopDraw() {
     this.started = false;
+  }
+
+  createEvents() {
+    if(!this.init && this.canvas) {
+      this.canvas.addEventListener("mousemove", event => {
+        const mousePosition = this.getMousePos(event);
+        this.doEvents(event, this.triggersMove, this.triggersMove, mousePosition);
+      }, false);
+
+      this.canvas.addEventListener("click", event => {
+        const mousePosition = this.getMousePos(event);
+        this.doEvents(event, this.triggersClick, this.triggersClick, mousePosition);
+      }, false);
+
+      this.canvas.addEventListener("mousedown", event => {
+        const mousePosition = this.getMousePos(event);
+        this.doEvents(event, this.triggersDown, this.triggersDown, mousePosition);
+      }, false);
+
+      this.canvas.addEventListener("mouseup", event => {
+        const mousePosition = this.getMousePos(event);
+        this.doEvents(event, this.triggersUp, this.triggersUp, mousePosition);
+      }, false);
+
+      this.canvas.addEventListener("wheel", event => {
+        const mousePosition = this.getMousePos(event);
+        this.doEvents(event, this.triggersWheel, this.triggersWheel, mousePosition);
+      });
+
+      this.canvas.addEventListener("touchstart", event => {
+        const changedTouches = event.changedTouches[0];
+        const position = this.getMousePos(changedTouches);
+        this.doEvents(event, this.triggersTouchStart, this.triggersTouchStart, position);
+      });
+
+      this.canvas.addEventListener("touchend", event => {
+        const changedTouches = event.changedTouches[0];
+        const position = this.getMousePos(changedTouches);
+        this.doEvents(event, this.triggersTouchEnd, this.triggersTouchEnd, position);
+      });
+
+      this.canvas.addEventListener("touchmove", event => {
+        const changedTouches = event.changedTouches[0];
+        const position = this.getMousePos(changedTouches);
+        this.doEvents(event, this.triggersTouchMove, this.triggersTouchMove, position);
+      });
+
+      this.init = true;
+    }
+  }
+
+  doEvents(event, triggers, initialTriggers, mousePosition, excludes = []) {
+    let elementFound = false;
+
+    this.sortTriggers(triggers).reverse().forEach(trigger => {
+      const component = trigger.component;
+      const func = trigger.trigger;
+
+      if(component.isInside(mousePosition) && !elementFound && !component.hidden && !component.disabled) {
+        func(event, true);
+        const parentTriggers = [...initialTriggers].filter(t => t && t.component == component.parent);
+        parentTriggers.forEach(trigger => excludes.push(trigger.component));
+        this.doEvents(event, parentTriggers, initialTriggers, mousePosition, excludes);
+        elementFound = true;
+      } else if(excludes.indexOf(component) < 0) {
+        func(event, false);
+      }
+    });
+  }
+
+  addEventListener(event, component, trigger) {
+    const o = {
+      "component": component,
+      "trigger": trigger
+    };
+
+    switch(event) {
+      case "mousemove":
+        this.triggersMove.push(o);
+        break;
+      case "click":
+        this.triggersClick.push(o);
+        break;
+      case "mousedown":
+        this.triggersDown.push(o);
+        break;
+      case "mouseup":
+        this.triggersUp.push(o);
+        break;
+      case "wheel":
+        this.triggersWheel.push(o);
+        break;
+      case "touchstart":
+        this.triggersTouchStart.push(o);
+        break;
+      case "touchend":
+        this.triggersTouchEnd.push(o);
+        break;
+      case "touchmove":
+        this.triggersTouchMove.push(o);
+        break;
+    }
+  }
+
+  sortTriggers(triggers) {
+    return [...triggers].sort(Canvas.compareTriggers);
+  }
+
+  static compareTriggers(current, other) {
+    return Scene.compareComponents(current.component, other.component);
+  }
+  
+  getMousePos(event) {
+    return Utils.getMousePos(this.canvas, event);
   }
 
   appendTo(element) {

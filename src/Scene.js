@@ -24,13 +24,16 @@ import Input from "./Input";
 import Container from "./Container";
 
 export default class Scene extends Container {
+  selectable = false;
+  enableEvents = false;
+
   constructor(...components) {
     super();
     this.addAll(...components);
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     super.draw(context);
 
     const canvas = context.canvas;
@@ -39,53 +42,50 @@ export default class Scene extends Container {
 
     canvas.style.cursor = "default";
 
-    const componentsBackground = super.components.filter(component => component && component instanceof Component && !(component instanceof Menu) && !(component instanceof Tooltip) && !(component instanceof NotificationMessage));
-    const menus = super.components.filter(component => component  && component instanceof Menu)
-    const menuOpened = menus.filter(menu => !menu.disabled)[0];
-    const tooltips = super.components.filter(component => component && component instanceof Tooltip);
     const inputs = super.components.filter(component => component && component instanceof Input);
-    const notificationsBackground = super.components.filter(component => component && component instanceof NotificationMessage && ((component.style && !component.style.foreground) || !component.style));
-    const notificationsForeground = super.components.filter(component => component && component instanceof NotificationMessage && component.style && component.style.foreground);
-
-    // Set inputs canvas
-    inputs && inputs.forEach(input => input.canvas = this.canvas);
-
-    // Disable background components if a menu is opened
-    this.disableBackgroundComponents(menuOpened, componentsBackground);
-
-    // Draw background components, background notifications and tooltips
-    this.drawBackgroundComponents(componentsBackground, ctx, notificationsBackground, tooltips);
-
-    // Draw menu and foreground notifications
-    this.drawForegroundComponents(menuOpened, ctx, notificationsForeground);
+    
+    inputs && inputs.forEach(input => input.canvas = this.canvas); // Set inputs canvas
+    this.drawComponents(ctx); // Draw sorted components
 
     ctx.restore();
   }
 
-  disableBackgroundComponents(menuOpened, componentsBackground) {
-    if(menuOpened) {
-      componentsBackground && componentsBackground.forEach(component => component.disable());
+  drawComponents(ctx) {
+    this.components.sort(Scene.compareComponents).forEach(component => component.draw(ctx));
+  }
+
+  static compareComponents(component, other) {
+    const isNotification = component instanceof NotificationMessage;
+    const otherIsNotification = other instanceof NotificationMessage;
+    const isTooltip = component instanceof Tooltip;
+    const otherIsTooltip = other instanceof Tooltip;
+    const isMenu = component instanceof Menu;
+    const otherIsMenu = other instanceof Menu;
+    const isForeground = component.style && component.style.foreground;
+    const otherIsForeground = other.style && other.style.foreground;
+
+    if(component.parent == other) {
+      return 1;
+    } else if(other.parent == component) {
+      return -1;
+    } else if(isForeground && !otherIsForeground) {
+      return 1
+    } else if(!isForeground && otherIsForeground) {
+      return -1;
+    } if(isTooltip && !otherIsTooltip) {
+      return 1
+    } else if(!isTooltip && otherIsTooltip) {
+      return -1;
+    } else if(isMenu && !otherIsMenu) {
+      return 1
+    } else if(!isMenu && otherIsMenu) {
+      return -1;
+    } else if(isNotification && !otherIsNotification) {
+      return 1;
+    } else if(!isNotification && otherIsNotification) {
+      return -1;
     } else {
-      componentsBackground && componentsBackground.forEach(component => component.enable());
+      return 0;
     }
-  }
-
-  drawForegroundComponents(menuOpened, ctx, notificationsForeground) {
-    menuOpened && menuOpened.draw(ctx);
-    notificationsForeground && notificationsForeground.forEach(notification => this.isComponentVisible(notification) && notification.draw(ctx));
-  }
-
-  drawBackgroundComponents(componentsBackground, ctx, notificationsBackground, tooltips) {
-    componentsBackground && componentsBackground.forEach(component => this.isComponentVisible(component) && component.draw(ctx));
-    notificationsBackground && notificationsBackground.forEach(notification => this.isComponentVisible(notification) && notification.draw(ctx));
-    tooltips && tooltips.forEach(tooltip => this.isComponentVisible(tooltip) && tooltip.draw(ctx));
-  }
-
-  get x() {
-    return 0;
-  }
-
-  get y() {
-    return 0;
   }
 }

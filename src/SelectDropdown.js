@@ -29,11 +29,11 @@ export default class SelectDropdown extends Col {
   }
 
   draw(context) {
-    if(this.selected && this.parent) {
+    /*if(this.selected && this.parent) {
       this.parent.selected = true;
-    }
+    }*/
 
-    if(this.parent && this.parent.selected) {
+    if(!this.hidden) {
       super.draw(context);
     }
   }
@@ -47,7 +47,7 @@ export default class SelectDropdown extends Col {
     const height = this.height;
     const y = this.parent && this.parent.y;
 
-    if(this.canvas && y + parentHeight + height >= this.canvas.height) {
+    if(this.canvas && this.canvas.scene && y + parentHeight + height >= this.canvas.scene.height) {
       return y - height;
     }
 
@@ -105,5 +105,9 @@ export default class SelectDropdown extends Col {
       "scrollXDisabled": false,
       "scrollYDisabled": false
     });
+  }
+
+  get hidden() {
+    return super.hidden || (this.parent && !this.parent.selected) || !this.parent;
   }
 }

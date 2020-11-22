@@ -40,7 +40,7 @@ export default class NotificationMessage extends Col {
   }
   
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     this.closeButton.canvas = this.canvas;
 
     const canvas = context.canvas;
@@ -64,6 +64,7 @@ export default class NotificationMessage extends Col {
     if(this.animationTime >= this.delayBeforeClosing * 1000 && !this.closing && !this.closed) {
       this.close();
     }
+
     if(!this.closing) {
       this.animationTime += offsetTime;
     } else {
@@ -118,7 +119,7 @@ export default class NotificationMessage extends Col {
       return (this.height * (offsetY <= 1 ? offsetY : 1)) - this.height;
     } 
     
-    return this.canvas.height - (this.height * (offsetY <= 1 ? offsetY : 1));
+    return this.canvas.scene.height - (this.height * (offsetY <= 1 ? offsetY : 1));
   }
 
   set y(y) {
@@ -176,5 +177,19 @@ export default class NotificationMessage extends Col {
       "backgroundColor": Constants.Setting.NOTIFICATION_DEFAULT_BACKGROUND,
       "animationDuration": Constants.Setting.NOTIFICATION_DEFAULT_ANIMATION_DURATION
     });
+  }
+
+  get hidden() {
+    super.hidden || this.closed;
+  }
+
+  set hidden(hidden) {
+    super.hidden = hidden;
+
+    if(hidden) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 }

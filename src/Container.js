@@ -43,7 +43,7 @@ export default class Container extends Box {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
@@ -59,11 +59,17 @@ export default class Container extends Box {
   }
 
   drawVerticalScrollBar(ctx) {
-    if(this.scrollbarVertical) this.scrollbarVertical.draw(ctx);
+    if(this.scrollbarVertical) {
+      this.scrollbarVertical.canvas = this.canvas;
+      this.scrollbarVertical.draw(ctx);
+    }
   }
 
   drawHorizontalScrollBar(ctx) {
-    if(this.scrollbarHorizontal) this.scrollbarHorizontal.draw(ctx);
+    if(this.scrollbarHorizontal) {
+      this.scrollbarHorizontal.canvas = this.canvas;
+      this.scrollbarHorizontal.draw(ctx);
+    }
   }
 
   drawScrollbars(ctx) {
@@ -80,7 +86,7 @@ export default class Container extends Box {
   add(component) {
     this.#components.push(component);
     component.parent = this;
-    if(super.canvas) component.canvas = super.canvas;
+    if(this.canvas) component.canvas = this.canvas;
   }
 
   addAll(...components) {

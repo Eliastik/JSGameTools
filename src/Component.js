@@ -18,6 +18,7 @@
  */
 import Constants from "./Constants";
 import Style from "./Style";
+import Utils from "./Utils";
 
 export default class Component {
   selectable = true;
@@ -77,8 +78,8 @@ export default class Component {
     if(this.style && this.style.hidden) return;
     const canvas = (this.canvas && this.canvas.canvas ? this.canvas.canvas : context.canvas);
 
-    if(!this.initEvents && canvas != null) {
-      canvas.addEventListener("mousemove", event => {
+    if(!this.initEvents && this.canvas != null) {
+      this.canvas.addEventListener("mousemove", this, (event, result) => {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(canvas, event);
 
@@ -97,7 +98,7 @@ export default class Component {
             this.moveEventStartY = mousePosition.y;
           }
 
-          if(this.isInside(mousePosition)) {
+          if(result) {
             if(this.triggersHover != null && !this.disabled) {
               this.triggersHover.forEach(trigger => trigger(mousePosition));
             }
@@ -118,13 +119,13 @@ export default class Component {
           this.clicked = false;
           if(this.tooltip) this.tooltip.disable();
         }
-      }, false);
+      });
       
-      canvas.addEventListener("click", event => {
+      this.canvas.addEventListener("click", this, (event, result) => {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(canvas, event);
 
-          if(this.isInside(mousePosition) && this.hovered) {
+          if(result && this.hovered) {
             if(this.triggersClick != null) {
               this.triggersClick.forEach(trigger => trigger(mousePosition));
             }
@@ -138,13 +139,13 @@ export default class Component {
           this.hovered = false;
           this.clicked = false;
         }
-      }, false);
+      });
       
-      canvas.addEventListener("mousedown", event => {
+      this.canvas.addEventListener("mousedown", this, (event, result) => {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(canvas, event);
 
-          if(this.isInside(mousePosition)) {
+          if(result) {
             if(this.triggersDown != null) {
               this.triggersDown.forEach(trigger => trigger(mousePosition));
             }
@@ -157,9 +158,9 @@ export default class Component {
           this.hovered = false;
           this.clicked = false;
         }
-      }, false);
+      });
       
-      canvas.addEventListener("mouseup", (event) => {
+      this.canvas.addEventListener("mouseup", this, (event) => {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(canvas, event);
 
@@ -169,9 +170,9 @@ export default class Component {
           
           this.clicked = false;
         }
-      }, false);
+      });
 
-      canvas.addEventListener("wheel", event => {
+      this.canvas.addEventListener("wheel", this, (event) => {
         if(this.hovered && !this.disabled && !this.scrollDisabled) {
           this.offsetScrollX += event.deltaX;
           this.offsetScrollY += event.deltaY;
@@ -182,7 +183,7 @@ export default class Component {
         }
       });
 
-      const touchScrollEvent = event => {
+      const touchScrollEvent = (event) => {
         const changedTouches = event.changedTouches[0];
         const position = this.getMousePos(canvas, changedTouches);
 
@@ -202,11 +203,11 @@ export default class Component {
         }
       };
 
-      const touchStartEndEvent = event => {
+      const touchStartEndEvent = (event, result) => {
         const changedTouches = event.changedTouches[0];
         const position = this.getMousePos(canvas, changedTouches);
         
-        if(this.isInside(position)) {
+        if(result) {
           this.hovered = true;
           this.selected = true;
         } else {
@@ -221,10 +222,10 @@ export default class Component {
         }
       };
 
-      canvas.addEventListener("touchstart", touchStartEndEvent);
-      canvas.addEventListener("touchend", touchStartEndEvent);
+      this.canvas.addEventListener("touchstart", this, touchStartEndEvent);
+      this.canvas.addEventListener("touchend", this, touchStartEndEvent);
 
-      canvas.addEventListener("touchmove", event => {
+      this.canvas.addEventListener("touchmove", this, (event) => {
         touchScrollEvent(event);
         event.preventDefault();
       });
@@ -241,12 +242,7 @@ export default class Component {
   }
   
   getMousePos(canvas, event) {
-    const rect = canvas.getBoundingClientRect();
-    
-    return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-    };
+    return Utils.getMousePos(canvas, event);
   }
   
   isInside(pos) {
@@ -451,5 +447,14 @@ export default class Component {
     if(style && style instanceof Style) {
       this.#_style.setAll(style.getStyles());
     }
+  }
+
+  get hidden() {
+    return this.disabled && this.style.hidden;
+  }
+
+  set hidden(hidden) {
+    this.disabled = hidden;
+    if(this.style) this.style.hidden = hidden;
   }
 }
