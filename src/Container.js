@@ -114,6 +114,23 @@ export default class Container extends Box {
     return components;
   }
 
+  getComponentsTree(start = this) {
+    const components = {
+      "component": start,
+      "childs": []
+    };
+
+    if(start.allComponents) {
+      start.allComponents.forEach(component => components.childs.push(this.getComponentsTree(component)));
+    }
+
+    return components;
+  }
+
+  static sortComponentsTree(component, other) {
+    return component.component.compareTo(other.component);
+  }
+
   disable() {
     super.disable();
     this.#components.forEach(component => component && component.disable && component.disable());

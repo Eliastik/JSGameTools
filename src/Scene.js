@@ -53,23 +53,4 @@ export default class Scene extends Container {
   get height() {
     return (this.canvas && this.canvas.height);
   }
-
-  static compareComponents(component, other) {
-    return component.compareTo(other);
-  }
-
-  getAllComponents(start = this) {
-    const components = {
-      "component": start,
-      "childs": []
-    };
-
-    if(start.allComponents) {
-      for(let i = 0; i < start.allComponents.length; i++) {
-        components.childs.push(this.getAllComponents(start.allComponents[i]));
-      }
-    }
-
-    return components;
-  }
 }

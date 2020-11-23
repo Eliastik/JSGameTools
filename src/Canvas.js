@@ -91,6 +91,48 @@ export default class Canvas {
     this.started = false;
   }
 
+  appendTo(element) {
+    element.appendChild(this.container);
+  }
+
+  toggleFullscreen() {
+    Utils.toggleFullscreen(this.canvas, this.container);
+  }
+
+  autoResize() {
+    Utils.enableAutoResizeCanvas(this.canvas, this.width, this.height);
+  }
+
+  get x() {
+    return 0;
+  }
+
+  get y() {
+    return 0;
+  }
+
+  get width() {
+    return this.canvas ? this.canvas.width : this.#_width;
+  }
+
+  get height() {
+    return this.canvas ? this.canvas.height : this.#_height;
+  }
+
+  set width(width) {
+    this.#_width = width;
+    this.canvas.width = width;
+  }
+
+  set height(height) {
+    this.#_height = height;
+    this.canvas.height = height;
+  }
+
+  getContext(context) {
+    return this.canvas ? this.canvas.getContext(context ? context : "2d") : null;
+  }
+
   createEvents() {
     if(!this.init && this.canvas) {
       this.canvas.addEventListener("mousemove", event => {
@@ -141,7 +183,7 @@ export default class Canvas {
   }
 
   doEvents(event, triggers, mousePosition) {
-    const components = this.getComponentsPosition(mousePosition);
+    const components = this.getComponentsAtPosition(mousePosition);
     const triggersMap = triggers.map(element => element.component);
 
     triggers.forEach(trigger => {
@@ -199,65 +241,19 @@ export default class Canvas {
     return this.scene.getAllComponents(start);
   }
 
-  static sortAllComponents(component, other) {
-    return Scene.compareComponents(component.component, other.component);
-  }
-
-  getComponentsPosition(mousePosition, start = this.scene) {
-    const allComponents = this.getAllComponents(start);
+  getComponentsAtPosition(mousePosition, start = this.scene) {
+    const allComponents = this.scene.getComponentsTree(start);
     const result = [start];
 
     if(allComponents.childs) {
-      allComponents.childs.sort(Canvas.sortAllComponents).reverse().some(child => {
+      allComponents.childs.sort(Scene.sortComponentsTree).reverse().some(child => {
         if(child.component.isInside(mousePosition) && !child.component.hidden && !child.component.disabled) {
-          result.push(...this.getComponentsPosition(mousePosition, child.component));
+          result.push(...this.getComponentsAtPosition(mousePosition, child.component));
           return true;
         }
       });
     }
 
     return result;
-  }
-
-  appendTo(element) {
-    element.appendChild(this.container);
-  }
-
-  toggleFullscreen() {
-    Utils.toggleFullscreen(this.canvas, this.container);
-  }
-
-  autoResize() {
-    Utils.enableAutoResizeCanvas(this.canvas, this.width, this.height);
-  }
-
-  get x() {
-    return 0;
-  }
-
-  get y() {
-    return 0;
-  }
-
-  get width() {
-    return this.canvas ? this.canvas.width : this.#_width;
-  }
-
-  get height() {
-    return this.canvas ? this.canvas.height : this.#_height;
-  }
-
-  set width(width) {
-    this.#_width = width;
-    this.canvas.width = width;
-  }
-
-  set height(height) {
-    this.#_height = height;
-    this.canvas.height = height;
-  }
-
-  getContext(context) {
-    return this.canvas ? this.canvas.getContext(context ? context : "2d") : null;
   }
 }

@@ -473,6 +473,10 @@ export default class Component {
     return res;
   }
 
+  static compareComponents(component, other) {
+    return component.compareTo(other);
+  }
+
   compareTo(otherComponent) {
     const isForeground = this.style && this.style.foreground;
     const otherIsForeground = otherComponent.style && otherComponent.style.foreground;
