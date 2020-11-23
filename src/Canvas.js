@@ -95,74 +95,64 @@ export default class Canvas {
     if(!this.init && this.canvas) {
       this.canvas.addEventListener("mousemove", event => {
         const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersMove, this.triggersMove, mousePosition);
+        this.doEvents(event, this.triggersMove, mousePosition);
       }, false);
 
       this.canvas.addEventListener("click", event => {
         const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersClick, this.triggersClick, mousePosition);
+        this.doEvents(event, this.triggersClick, mousePosition);
       }, false);
 
       this.canvas.addEventListener("mousedown", event => {
         const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersDown, this.triggersDown, mousePosition);
+        this.doEvents(event, this.triggersDown, mousePosition);
       }, false);
 
       this.canvas.addEventListener("mouseup", event => {
         const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersUp, this.triggersUp, mousePosition);
+        this.doEvents(event, this.triggersUp, mousePosition);
       }, false);
 
       this.canvas.addEventListener("wheel", event => {
         const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersWheel, this.triggersWheel, mousePosition);
+        this.doEvents(event, this.triggersWheel, mousePosition);
       });
 
       this.canvas.addEventListener("touchstart", event => {
         const changedTouches = event.changedTouches[0];
         const position = this.getMousePos(changedTouches);
-        this.doEvents(event, this.triggersTouchStart, this.triggersTouchStart, position);
+        this.doEvents(event, this.triggersTouchStart, position);
       });
 
       this.canvas.addEventListener("touchend", event => {
         const changedTouches = event.changedTouches[0];
         const position = this.getMousePos(changedTouches);
-        this.doEvents(event, this.triggersTouchEnd, this.triggersTouchEnd, position);
+        this.doEvents(event, this.triggersTouchEnd, position);
       });
 
       this.canvas.addEventListener("touchmove", event => {
         const changedTouches = event.changedTouches[0];
         const position = this.getMousePos(changedTouches);
-        this.doEvents(event, this.triggersTouchMove, this.triggersTouchMove, position);
+        this.doEvents(event, this.triggersTouchMove, position);
       });
 
       this.init = true;
     }
   }
 
-  doEvents(event, triggers, initialTriggers, mousePosition, excludes = []) {
-    let elementFound = false;
+  doEvents(event, triggers, mousePosition) {
     const components = this.getComponentsPosition(mousePosition);
     const triggersMap = triggers.map(element => element.component);
 
     triggers.forEach(trigger => {
-      if(excludes.indexOf(trigger.component) < 0) {
-        const func = trigger.trigger;
-        func(event, false);
-      }
+      const func = trigger.trigger;
+      func(event, false);
     });
 
-    [...components].sort(Scene.compareComponents).reverse().forEach(component => {
+    [...components].reverse().forEach(component => {
       if(triggersMap.indexOf(component) != -1) {
         const func = triggers[triggersMap.indexOf(component)].trigger;
-  
-        if(!elementFound && !component.hidden && !component.disabled) {
-          func(event, true);
-          const parentTriggers = [...initialTriggers].filter(t => t && t.component == component.parent);
-          parentTriggers.forEach(trigger => excludes.push(trigger.component));
-          this.doEvents(event, parentTriggers, initialTriggers, mousePosition, excludes);
-          elementFound = true;
-        }
+        func(event, true);
       }
     });
   }
@@ -218,10 +208,10 @@ export default class Canvas {
     const result = [start];
 
     if(allComponents.childs) {
-      allComponents.childs.sort(Canvas.sortAllComponents).forEach(child => {
-        if(child.component.isInside(mousePosition)) {
+      allComponents.childs.sort(Canvas.sortAllComponents).reverse().some(child => {
+        if(child.component.isInside(mousePosition) && !child.component.hidden && !child.component.disabled) {
           result.push(...this.getComponentsPosition(mousePosition, child.component));
-          return result;
+          return true;
         }
       });
     }

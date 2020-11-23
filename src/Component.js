@@ -183,7 +183,7 @@ export default class Component {
 
       const touchScrollEvent = (event) => {
         const changedTouches = event.changedTouches[0];
-        const position = this.getMousePos(canvas, changedTouches);
+        const position = this.getMousePos(changedTouches);
 
         if(this.hovered && !this.disabled && !this.scrollDisabled) {
           const deltaX = this.touchEventStartX - position.x;
@@ -203,7 +203,7 @@ export default class Component {
 
       const touchStartEndEvent = (event, result) => {
         const changedTouches = event.changedTouches[0];
-        const position = this.getMousePos(canvas, changedTouches);
+        const position = this.getMousePos(changedTouches);
         
         if(result) {
           this.hovered = true;

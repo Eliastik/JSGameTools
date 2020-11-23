@@ -77,7 +77,6 @@ export default class Select extends Button {
 
   get allComponents() {
     const components = [];
-    components.push(this.#optionContainer);
     components.push(...super.allComponents);
     return components;
   }
