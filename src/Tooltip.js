@@ -29,24 +29,22 @@ export default class Tooltip extends Col {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
-    if(!this.disabled) {
-      const canvas = context.canvas;
-      const ctx = canvas.getContext("2d");
-      ctx.save();
+    if(this.hidden) return;
+    const canvas = context.canvas;
+    const ctx = canvas.getContext("2d");
+    ctx.save();
 
-      if(this.x + this.width + this.style.padding > canvas.width) {
-        this.x -= (this.width + this.style.padding);
-      }
-
-      if(this.y + this.height + this.style.padding > canvas.height) {
-        this.y -= (this.height + this.style.padding);
-      }
-  
-      super.draw(ctx);
-      
-      ctx.restore();
+    if(this.x + this.width + this.style.padding > canvas.width) {
+      this.x -= (this.width + this.style.padding);
     }
+
+    if(this.y + this.height + this.style.padding > canvas.height) {
+      this.y -= (this.height + this.style.padding);
+    }
+
+    super.draw(ctx);
+    
+    ctx.restore();
   }
 
   get width() {
@@ -69,5 +67,30 @@ export default class Tooltip extends Col {
     return new Style({
       "backgroundColor": Constants.Setting.TOOLTIP_DEFAULT_BACKGROUND
     });
+  }
+
+  compareToComponent(otherComponent) {
+    return otherComponent.compareToTooltip(this);
+  }
+
+  compareToMenu(otherComponent) {
+    return 1;
+  }
+
+  compareToTooltip(otherComponent) {
+    return 0;
+  }
+
+  compareToNotification(otherComponent) {
+    return 1;
+  }
+
+  get hidden() {
+    return super.hidden || this.disabled;
+  }
+
+  set hidden(hidden) {
+    super.hidden = hidden;
+    this.disabled = hidden;
   }
 }

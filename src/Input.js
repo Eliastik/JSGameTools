@@ -93,7 +93,7 @@ export default class Input extends Box {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     super.draw(context);
     
     const canvas = context.canvas;
@@ -361,7 +361,8 @@ export default class Input extends Box {
   }
 
   get height() {
-    return super.height ? super.height : this.style.fontSize + this.style.borderSize * 2;
+    const borderSize = this.style && this.style.borderSize ? this.style.borderSize : 0;
+    return super.height ? super.height : this.style.fontSize + borderSize * 2;
   }
 
   get defaultStyle() {

@@ -29,13 +29,13 @@ export default class SelectDropdown extends Col {
   }
 
   draw(context) {
-    /*if(this.selected && this.parent) {
+    if(this.hidden) return;
+    
+    if(this.selected && this.parent) {
       this.parent.selected = true;
-    }*/
-
-    if(!this.hidden) {
-      super.draw(context);
     }
+
+    super.draw(context);
   }
 
   get x() {
@@ -109,5 +109,9 @@ export default class SelectDropdown extends Col {
 
   get hidden() {
     return super.hidden || (this.parent && !this.parent.selected) || !this.parent;
+  }
+
+  compareToSelect(otherComponent) {
+    return -1;
   }
 }

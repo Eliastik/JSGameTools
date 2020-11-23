@@ -35,80 +35,77 @@ export default class Menu extends Col {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
 
-    if(!this.disabled) {
-      if(this.style.blurBackground) {
-        this.drawBlur(ctx);
-      }
-  
-      ctx.save();
-  
-      this.drawComponents(ctx);
-
-      if(!this.init) {
-        document.addEventListener("keydown", event => {
-          if(!this.disabled) {
-            this.lastKey = event.keyCode;
-          }
-        });
-  
-        this.init = true;
-      }
-
-      let keyAction = false;
-    
-      if(this.components != null) {
-        if(this.lastKey == Constants.Key.UP) {
-          this.select(this.selectedComponent - 1);
-          keyAction = true;
-        } else if(this.lastKey == Constants.Key.BOTTOM) {
-          this.select(this.selectedComponent + 1);
-          keyAction = true;
-        } else if(this.lastKey == Constants.Key.ECHAP) {
-          this.disable();
-          keyAction = true;
-        } else {
-          this.components.forEach((component, i) => {
-            if(component.selected) this.select(i);
-          });
-        }
-
-        this.components.forEach((component, i) => {
-          if(component instanceof Component) {
-            if(keyAction) {
-              if(this.selectedComponent == i) {
-                if(component.selectable) {
-                  component.selected = true;
-                }
-
-                if(!this.isComponentVisible(component)) {
-                  const componentHeight = component.height;
-                  const deltaY = (this.maxHeight - this.offsetScrollY) - (component.y + componentHeight);
-                  this.offsetScrollY = -deltaY;
-
-                  this.controlScrolling(null, -deltaY);
-                }
-              } else {
-                component.selected = false;
-              }
-            }
-      
-            if(this.selectedComponent == i && this.lastKey == Constants.Key.ENTER && component.triggersClick != null && component.triggersClick.length > 0 && !component.disabled) {
-              this.lastKey = -1;
-              this.selectedComponent = 0;
-              component.triggersClick.forEach(trigger => trigger());
-              return;
-            }
-          }
-        });
-      }
-      
-      ctx.restore();
+    if(this.style.blurBackground) {
+      this.drawBlur(ctx);
     }
+
+    ctx.save();
+
+    this.drawComponents(ctx);
+
+    if(!this.init) {
+      document.addEventListener("keydown", event => {
+        if(!this.disabled) {
+          this.lastKey = event.keyCode;
+        }
+      });
+
+      this.init = true;
+    }
+
+    let keyAction = false;
   
+    if(this.components != null) {
+      if(this.lastKey == Constants.Key.UP) {
+        this.select(this.selectedComponent - 1);
+        keyAction = true;
+      } else if(this.lastKey == Constants.Key.BOTTOM) {
+        this.select(this.selectedComponent + 1);
+        keyAction = true;
+      } else if(this.lastKey == Constants.Key.ECHAP) {
+        this.disable();
+        keyAction = true;
+      } else {
+        this.components.forEach((component, i) => {
+          if(component.selected) this.select(i);
+        });
+      }
+
+      this.components.forEach((component, i) => {
+        if(component instanceof Component) {
+          if(keyAction) {
+            if(this.selectedComponent == i) {
+              if(component.selectable) {
+                component.selected = true;
+              }
+
+              if(!this.isComponentVisible(component)) {
+                const componentHeight = component.height;
+                const deltaY = (this.maxHeight - this.offsetScrollY) - (component.y + componentHeight);
+                this.offsetScrollY = -deltaY;
+
+                this.controlScrolling(null, -deltaY);
+              }
+            } else {
+              component.selected = false;
+            }
+          }
+    
+          if(this.selectedComponent == i && this.lastKey == Constants.Key.ENTER && component.triggersClick != null && component.triggersClick.length > 0 && !component.disabled) {
+            this.lastKey = -1;
+            this.selectedComponent = 0;
+            component.triggersClick.forEach(trigger => trigger());
+            return;
+          }
+        }
+      });
+    }
+    
+    ctx.restore();
     this.lastKey = -1;
   }
 
@@ -157,8 +154,20 @@ export default class Menu extends Col {
     return this.parent.width;
   }
 
+  get height() {
+    return this.innerHeight || this.parent.height;
+  }
+
+  get scrollAreaSizeX() {
+    return this.innerWidth - this.maxWidth;
+  }
+
+  get scrollAreaSizeY() {
+    return this.innerHeight - this.maxHeight;
+  }
+
   get maxHeight() {
-    return (super.maxHeight || (this.canvas && this.canvas.height));
+    return super.maxHeight || (this.canvas && this.canvas.height);
   }
 
   get maxWidth() {
@@ -173,7 +182,33 @@ export default class Menu extends Col {
     return new Style({
       "blurBackground": Constants.Setting.MENU_DEFAULT_BLUR_BACKGROUND,
       "backgroundColor": Constants.Setting.MENU_DEFAULT_BACKGROUND,
-      "verticalAlignement": Constants.VerticalAlignement.CENTER
+      "verticalAlignement": Constants.VerticalAlignement.CENTER,
+      "scrollXDisabled": true
     });
+  }
+
+  compareToComponent(otherComponent) {
+    return otherComponent.compareToMenu(this);
+  }
+
+  compareToMenu(otherComponent) {
+    return 0;
+  }
+
+  compareToTooltip(otherComponent) {
+    return -1;
+  }
+
+  compareToNotification(otherComponent) {
+    return 1;
+  }
+
+  get hidden() {
+    return super.hidden || this.disabled;
+  }
+
+  set hidden(hidden) {
+    super.hidden = hidden;
+    this.disabled = hidden;
   }
 }

@@ -54,38 +54,11 @@ export default class Scene extends Container {
     this.components.sort(Scene.compareComponents).forEach(component => component.draw(ctx));
   }
 
-  static compareComponents(component, other) {
-    const isNotification = component instanceof NotificationMessage;
-    const otherIsNotification = other instanceof NotificationMessage;
-    const isTooltip = component instanceof Tooltip;
-    const otherIsTooltip = other instanceof Tooltip;
-    const isMenu = component instanceof Menu;
-    const otherIsMenu = other instanceof Menu;
-    const isForeground = component.style && component.style.foreground;
-    const otherIsForeground = other.style && other.style.foreground;
+  get height() {
+    return (this.canvas && this.canvas.height);
+  }
 
-    if(component.parent == other) {
-      return 1;
-    } else if(other.parent == component) {
-      return -1;
-    } else if(isForeground && !otherIsForeground) {
-      return 1
-    } else if(!isForeground && otherIsForeground) {
-      return -1;
-    } if(isTooltip && !otherIsTooltip) {
-      return 1
-    } else if(!isTooltip && otherIsTooltip) {
-      return -1;
-    } else if(isMenu && !otherIsMenu) {
-      return 1
-    } else if(!isMenu && otherIsMenu) {
-      return -1;
-    } else if(isNotification && !otherIsNotification) {
-      return 1;
-    } else if(!isNotification && otherIsNotification) {
-      return -1;
-    } else {
-      return 0;
-    }
+  static compareComponents(component, other) {
+    return component.compareTo(other);
   }
 }

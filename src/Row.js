@@ -28,7 +28,7 @@ export default class Row extends Container {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     super.draw(context);
 
     const canvas = context.canvas;

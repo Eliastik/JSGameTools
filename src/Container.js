@@ -73,8 +73,8 @@ export default class Container extends Box {
   }
 
   drawScrollbars(ctx) {
-    if(!this.style.scrollXDisabled) this.drawVerticalScrollBar(ctx);
-    if(!this.style.scrollYDisabled) this.drawHorizontalScrollBar(ctx);
+    if(!this.style.scrollXDisabled) this.drawHorizontalScrollBar(ctx);
+    if(!this.style.scrollYDisabled) this.drawVerticalScrollBar(ctx);
   }
 
   set(...components) {
@@ -171,20 +171,25 @@ export default class Container extends Box {
     return result;
   }
 
-  controlScrolling(deltaX, deltaY) {
-    const scrollAreaSizeY = this.innerHeight - this.height;
-    const scrollAreaSizeX = this.innerWidth - this.width;
+  get scrollAreaSizeX() {
+    return this.innerWidth - this.width;
+  }
 
+  get scrollAreaSizeY() {
+    return this.innerHeight - this.height;
+  }
+
+  controlScrolling(deltaX, deltaY) {
     if(!this.style.scrollYDisabled) {
-      if(scrollAreaSizeY <= 0) {
+      if(this.scrollAreaSizeY <= 0) {
         this.offsetScrollY = 0;
       } else {
-        const percentScrollbarY = this.offsetScrollY / scrollAreaSizeY;
+        const percentScrollbarY = this.offsetScrollY / this.scrollAreaSizeY;
   
         if(percentScrollbarY <= 0 && deltaY < 0) {
           this.offsetScrollY = Math.min(0, this.y);
         } else if(percentScrollbarY > 1 && deltaY > 0) {
-          this.offsetScrollY = scrollAreaSizeY;
+          this.offsetScrollY = this.scrollAreaSizeY;
         }
       }
     } else {
@@ -192,15 +197,15 @@ export default class Container extends Box {
     }
 
     if(!this.style.scrollXDisabled) {
-      if(scrollAreaSizeX <= 0) {
+      if(this.scrollAreaSizeX <= 0) {
         this.offsetScrollX = 0;
       } else {
-        const percentScrollbarX = this.offsetScrollX / scrollAreaSizeX;
+        const percentScrollbarX = this.offsetScrollX / this.scrollAreaSizeX;
   
         if(percentScrollbarX <= 0 && deltaX < 0) {
           this.offsetScrollX = Math.min(0, this.x);
         } else if(percentScrollbarX > 1 && deltaX > 0) {
-          this.offsetScrollX = scrollAreaSizeX;
+          this.offsetScrollX = this.scrollAreaSizeX;
         }
       }
     } else {

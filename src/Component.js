@@ -75,7 +75,7 @@ export default class Component {
   }
 
   draw(context) {
-    if(this.style && this.style.hidden) return;
+    if(this.hidden) return;
     const canvas = (this.canvas && this.canvas.canvas ? this.canvas.canvas : context.canvas);
 
     if(!this.initEvents && this.canvas != null) {
@@ -390,15 +390,15 @@ export default class Component {
   }
 
   get x() {
-    if(this.style.alignement && this.parent) {
-      const parentWidth = this.parent.width;
+    const parent = this.parent || this.canvas;
 
+    if(this.style.alignement && parent) {
       if(this.style.alignement == Constants.Alignement.CENTER) {
-        return this.parent.x + (parentWidth / 2) - (this.width / 2);
+        return parent.x + (parent.width / 2) - (this.width / 2);
       } else if(this.style.alignement == Constants.Alignement.RIGHT) {
-        return this.parent.x + (parentWidth) - (this.width) - 5;
+        return parent.x + (parent.width) - (this.width) - 5;
       } else if(this.style.alignement == Constants.Alignement.LEFT) {
-        return this.parent.x + 5;
+        return parent.x + 5;
       }
     }
     
@@ -410,15 +410,15 @@ export default class Component {
   }
 
   get y() {
-    if(this.style.verticalAlignement && this.parent) {
-      const parentHeight = this.parent.height;
+    const parent = this.parent || this.canvas;
 
+    if(this.style.verticalAlignement && parent) {
       if(this.style.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        return this.parent.y + (parentHeight) - (this.height) - 5;
+        return parent.y + (parent.height) - (this.height) - 5;
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        return this.parent.y + (parentHeight / 2) - (this.height / 2);
+        return parent.y + (parent.height / 2) - (this.height / 2);
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
-        return this.parent.y + 5;
+        return parent.y + 5;
       }
     }
     
@@ -450,11 +450,48 @@ export default class Component {
   }
 
   get hidden() {
-    return this.disabled && this.style.hidden;
+    return (this.style && this.style.hidden) || (this.parent && this.parent.hidden);
   }
 
   set hidden(hidden) {
     this.disabled = hidden;
     if(this.style) this.style.hidden = hidden;
+  }
+
+  compareTo(otherComponent) {
+    const isForeground = this.style && this.style.foreground;
+    const otherIsForeground = otherComponent.style && otherComponent.style.foreground;
+
+    if(this.parent == otherComponent) {
+      return 1;
+    } else if(otherComponent.parent == this) {
+      return -1;
+    } else if(isForeground && !otherIsForeground) {
+      return 1
+    } else if(!isForeground && otherIsForeground) {
+      return -1;
+    }
+
+    return otherComponent.compareToComponent(this);
+  }
+
+  compareToComponent(otherComponent) {
+    return 0;
+  }
+
+  compareToMenu(otherComponent) {
+    return -1;
+  }
+
+  compareToTooltip(otherComponent) {
+    return -1;
+  }
+
+  compareToNotification(otherComponent) {
+    return -1;
+  }
+
+  compareToSelect(otherComponent) {
+    return 0;
   }
 }

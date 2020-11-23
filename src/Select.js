@@ -82,4 +82,9 @@ export default class Select extends Button {
       "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND
     });
   }
+  
+  compareToComponent(otherComponent) {
+    console.log(otherComponent, this, otherComponent.compareToSelect(this));
+    return otherComponent.compareToSelect(this);
+  }
 }

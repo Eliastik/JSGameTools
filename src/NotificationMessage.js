@@ -180,16 +180,32 @@ export default class NotificationMessage extends Col {
   }
 
   get hidden() {
-    super.hidden || this.closed;
+    return super.hidden || this.closed;
   }
 
   set hidden(hidden) {
     super.hidden = hidden;
 
     if(hidden) {
-      this.close();
+      this.forceClose();
     } else {
       this.open();
     }
+  }
+
+  compareToComponent(otherComponent) {
+    return otherComponent.compareToNotification(this);
+  }
+
+  compareToTooltip(otherComponent) {
+    return -1;
+  }
+
+  compareToNotification(otherComponent) {
+    return 0;
+  }
+
+  compareToMenu(otherComponent) {
+    return -1;
   }
 }

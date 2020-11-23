@@ -37,6 +37,7 @@ export default class ImageContainer extends Component {
   }
 
   draw(context) {
+    if(this.hidden) return;
     super.draw(context);
     
     const canvas = context.canvas;
