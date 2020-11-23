@@ -186,9 +186,9 @@ export default class Container extends Box {
       } else {
         const percentScrollbarY = this.offsetScrollY / this.scrollAreaSizeY;
   
-        if(percentScrollbarY <= 0 && deltaY < 0) {
+        if(percentScrollbarY <= 0 && deltaY <= 0) {
           this.offsetScrollY = Math.min(0, this.y);
-        } else if(percentScrollbarY > 1 && deltaY > 0) {
+        } else if(percentScrollbarY > 1 && deltaY >= 0) {
           this.offsetScrollY = this.scrollAreaSizeY;
         }
       }
@@ -202,9 +202,9 @@ export default class Container extends Box {
       } else {
         const percentScrollbarX = this.offsetScrollX / this.scrollAreaSizeX;
   
-        if(percentScrollbarX <= 0 && deltaX < 0) {
+        if(percentScrollbarX <= 0 && deltaX <= 0) {
           this.offsetScrollX = Math.min(0, this.x);
-        } else if(percentScrollbarX > 1 && deltaX > 0) {
+        } else if(percentScrollbarX > 1 && deltaX >= 0) {
           this.offsetScrollX = this.scrollAreaSizeX;
         }
       }
@@ -216,9 +216,9 @@ export default class Container extends Box {
   isComponentVisible(component) {
     if(Constants.Setting.DISABLE_OPTIMIZATIONS) return true;
     
-    if(component instanceof Component && !(component.style && component.style.hidden)) {
-      const width = this.width;
-      const height = this.height;
+    if(component instanceof Component && !component.hidden) {
+      const width = this.maxWidth || this.width;
+      const height = this.maxHeight || this.height;
       const componentWidth = component.width;
       const componentHeight = component.height;
 

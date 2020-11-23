@@ -41,7 +41,7 @@ export default class Box extends Component {
 
   drawBackground(ctx) {
     const color = this.backgroundColor;
-    
+
     if(color) {
       ctx.save();
   
@@ -75,7 +75,7 @@ export default class Box extends Component {
       ctx.strokeStyle = color;
       ctx.lineWidth = this.style.borderSize;
       
-      ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width), Math.round(this.height));
+      ctx.strokeRect(Math.round(this.x), Math.round(this.y), Math.round(this.width - this.style.borderSize / 2), Math.round(this.height - this.style.borderSize / 2));
   
       ctx.restore();
     }

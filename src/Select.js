@@ -84,7 +84,10 @@ export default class Select extends Button {
   }
   
   compareToComponent(otherComponent) {
-    console.log(otherComponent, this, otherComponent.compareToSelect(this));
     return otherComponent.compareToSelect(this);
+  }
+
+  compareToSelect(otherComponent) {
+    return 0;
   }
 }

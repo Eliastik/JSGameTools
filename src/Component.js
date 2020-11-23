@@ -491,6 +491,10 @@ export default class Component {
     return -1;
   }
 
+  compareToScrollbar(otherComponent) {
+    return -1;
+  }
+
   compareToSelect(otherComponent) {
     return 0;
   }

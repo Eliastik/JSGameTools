@@ -118,4 +118,12 @@ export default class Scrollbar extends Box {
       "borderSize": 0
     });
   }
+
+  compareToComponent(otherComponent) {
+    return otherComponent.compareToScrollbar(this);
+  }
+
+  compareToScrollbar(otherComponent) {
+    return 0;
+  }
 }
