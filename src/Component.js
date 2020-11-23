@@ -50,7 +50,7 @@ export default class Component {
 
     // State
     this.init = false;
-    this.initEvents = false;
+    this.hasInitEvents = false;
     this.selected = false;
     this.clicked = false;
     this.hovered = false;
@@ -72,16 +72,14 @@ export default class Component {
     this.touchEventStartTimestamp = 0;
 
     this.tooltip;
+    this.initEvents();
   }
 
-  draw(context) {
-    if(this.hidden) return;
-    const canvas = (this.canvas && this.canvas.canvas ? this.canvas.canvas : context.canvas);
-
-    if(!this.initEvents && this.canvas != null) {
+  initEvents() {
+    if(!this.hasInitEvents && this.canvas != null) {
       this.canvas.addEventListener("mousemove", this, (event, result) => {
         if(!this.disabled) {
-          const mousePosition = this.getMousePos(canvas, event);
+          const mousePosition = this.getMousePos(event);
 
           if(this.clicked) {
             const deltaX = this.moveEventStartX - mousePosition.x;
@@ -123,7 +121,7 @@ export default class Component {
       
       this.canvas.addEventListener("click", this, (event, result) => {
         if(!this.disabled) {
-          const mousePosition = this.getMousePos(canvas, event);
+          const mousePosition = this.getMousePos(event);
 
           if(result && this.hovered) {
             if(this.triggersClick != null) {
@@ -143,7 +141,7 @@ export default class Component {
       
       this.canvas.addEventListener("mousedown", this, (event, result) => {
         if(!this.disabled) {
-          const mousePosition = this.getMousePos(canvas, event);
+          const mousePosition = this.getMousePos(event);
 
           if(result) {
             if(this.triggersDown != null) {
@@ -162,7 +160,7 @@ export default class Component {
       
       this.canvas.addEventListener("mouseup", this, (event) => {
         if(!this.disabled) {
-          const mousePosition = this.getMousePos(canvas, event);
+          const mousePosition = this.getMousePos(event);
 
           if(this.triggersUp != null) {
             this.triggersUp.forEach(trigger => trigger(mousePosition));
@@ -229,7 +227,14 @@ export default class Component {
         touchScrollEvent(event);
         event.preventDefault();
       });
+
+      this.hasInitEvents = true;
     }
+  }
+
+  draw(context) {
+    if(this.hidden) return;
+    this.initEvents();
 
     if(this.disabled) {
       this.selected = false;
@@ -237,12 +242,10 @@ export default class Component {
       this.hovered = false;
       if(this.tooltip) this.tooltip.disabled = true;
     }
-
-    this.initEvents = true;
   }
   
-  getMousePos(canvas, event) {
-    return Utils.getMousePos(canvas, event);
+  getMousePos(event) {
+    return this.canvas.getMousePos(event);
   }
   
   isInside(pos) {
@@ -458,6 +461,18 @@ export default class Component {
     if(this.style) this.style.hidden = hidden;
   }
 
+  getAllParents() {
+    let parent = this.parent;
+    let res = [];
+
+    while(parent) {
+      res.push(parent);
+      parent = parent.parent;
+    }
+
+    return res;
+  }
+
   compareTo(otherComponent) {
     const isForeground = this.style && this.style.foreground;
     const otherIsForeground = otherComponent.style && otherComponent.style.foreground;
@@ -493,9 +508,5 @@ export default class Component {
 
   compareToScrollbar(otherComponent) {
     return -1;
-  }
-
-  compareToSelect(otherComponent) {
-    return 0;
   }
 }

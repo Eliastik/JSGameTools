@@ -142,19 +142,27 @@ export default class Canvas {
 
   doEvents(event, triggers, initialTriggers, mousePosition, excludes = []) {
     let elementFound = false;
+    const components = this.getComponentsPosition(mousePosition);
+    const triggersMap = triggers.map(element => element.component);
 
-    this.sortTriggers(triggers).reverse().forEach(trigger => {
-      const component = trigger.component;
-      const func = trigger.trigger;
-
-      if(component.isInside(mousePosition) && !elementFound && !component.hidden && !component.disabled) {
-        func(event, true);
-        const parentTriggers = [...initialTriggers].filter(t => t && t.component == component.parent);
-        parentTriggers.forEach(trigger => excludes.push(trigger.component));
-        this.doEvents(event, parentTriggers, initialTriggers, mousePosition, excludes);
-        elementFound = true;
-      } else if(excludes.indexOf(component) < 0) {
+    triggers.forEach(trigger => {
+      if(excludes.indexOf(trigger.component) < 0) {
+        const func = trigger.trigger;
         func(event, false);
+      }
+    });
+
+    [...components].sort(Scene.compareComponents).reverse().forEach(component => {
+      if(triggersMap.indexOf(component) != -1) {
+        const func = triggers[triggersMap.indexOf(component)].trigger;
+  
+        if(!elementFound && !component.hidden && !component.disabled) {
+          func(event, true);
+          const parentTriggers = [...initialTriggers].filter(t => t && t.component == component.parent);
+          parentTriggers.forEach(trigger => excludes.push(trigger.component));
+          this.doEvents(event, parentTriggers, initialTriggers, mousePosition, excludes);
+          elementFound = true;
+        }
       }
     });
   }
@@ -192,17 +200,33 @@ export default class Canvas {
         break;
     }
   }
-
-  sortTriggers(triggers) {
-    return [...triggers].sort(Canvas.compareTriggers);
-  }
-
-  static compareTriggers(current, other) {
-    return Scene.compareComponents(current.component, other.component);
-  }
   
   getMousePos(event) {
     return Utils.getMousePos(this.canvas, event);
+  }
+
+  getAllComponents(start = this.scene) {
+    return this.scene.getAllComponents(start);
+  }
+
+  static sortAllComponents(component, other) {
+    return Scene.compareComponents(component.component, other.component);
+  }
+
+  getComponentsPosition(mousePosition, start = this.scene) {
+    const allComponents = this.getAllComponents(start);
+    const result = [start];
+
+    if(allComponents.childs) {
+      allComponents.childs.sort(Canvas.sortAllComponents).forEach(child => {
+        if(child.component.isInside(mousePosition)) {
+          result.push(...this.getComponentsPosition(mousePosition, child.component));
+          return result;
+        }
+      });
+    }
+
+    return result;
   }
 
   appendTo(element) {

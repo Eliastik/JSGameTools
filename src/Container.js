@@ -107,6 +107,13 @@ export default class Container extends Box {
     return components;
   }
 
+  get allComponents() {
+    const components = this.components;
+    components.push(this.scrollbarHorizontal);
+    components.push(this.scrollbarVertical);
+    return components;
+  }
+
   disable() {
     super.disable();
     this.#components.forEach(component => component && component.disable && component.disable());

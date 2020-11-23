@@ -30,11 +30,6 @@ export default class SelectDropdown extends Col {
 
   draw(context) {
     if(this.hidden) return;
-    
-    if(this.selected && this.parent) {
-      this.parent.selected = true;
-    }
-
     super.draw(context);
   }
 
@@ -109,9 +104,5 @@ export default class SelectDropdown extends Col {
 
   get hidden() {
     return super.hidden || (this.parent && !this.parent.selected) || !this.parent;
-  }
-
-  compareToSelect(otherComponent) {
-    return -1;
   }
 }

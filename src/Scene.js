@@ -16,10 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Component from "./Component";
-import Menu from "./Menu";
-import NotificationMessage from "./NotificationMessage";
-import Tooltip from "./Tooltip";
 import Input from "./Input";
 import Container from "./Container";
 
@@ -60,5 +56,20 @@ export default class Scene extends Container {
 
   static compareComponents(component, other) {
     return component.compareTo(other);
+  }
+
+  getAllComponents(start = this) {
+    const components = {
+      "component": start,
+      "childs": []
+    };
+
+    if(start.allComponents) {
+      for(let i = 0; i < start.allComponents.length; i++) {
+        components.childs.push(this.getAllComponents(start.allComponents[i]));
+      }
+    }
+
+    return components;
   }
 }

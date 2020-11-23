@@ -51,8 +51,4 @@ export default class SelectOption extends Button {
       "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND
     });
   }
-
-  compareToSelect(otherComponent) {
-    return -1;
-  }
 }
