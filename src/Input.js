@@ -199,7 +199,7 @@ export default class Input extends Box {
 
   drawHighlight(ctxText, currentX, sizes) {
     ctxText.fillStyle = this.style.selectColor;
-    ctxText.fillRect(currentX - this.offsetX, this.y + this.style.borderSize, sizes["width"] + 2, this.height - this.style.borderSize * 2);
+    ctxText.fillRect(currentX - this.offsetX, this.y + this.style.borderSize, sizes["width"] + 2, this.height - this.style.borderSize * 2 - 1);
   }
 
   updateTextCache(currentX) {

@@ -510,7 +510,7 @@ export default class Component {
       return -1;
     }
 
-    return otherComponent.compareToComponent(this);
+    return otherComponent.compareToComponent(this) || -this.compareToComponent(otherComponent);
   }
 
   compareToComponent(otherComponent) {
