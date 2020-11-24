@@ -30,7 +30,6 @@ export default class Select extends Button {
     super(x, y, maxWidth, maxHeight, style);
 
     this.optionContainer = optionContainer;
-    this.optionContainer.select = this;
 
     this.label = new Label("", x, y, style);
     this.label.style.setAll({ "alignement": Constants.Alignement.LEFT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
@@ -55,7 +54,11 @@ export default class Select extends Button {
     this.row.maxWidth = this.width - this.style.padding;
 
     super.draw(context);
-    this.optionContainer.draw(context);
+
+    if(this.optionContainer) {
+      this.optionContainer.select = this;
+      this.optionContainer.draw(context);
+    }
   }
 
   get selectedOption() {

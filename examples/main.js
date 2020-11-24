@@ -87,7 +87,8 @@ const buttonArrow = new JGT.Button(5, 150, null, null, buttonStyle, new JGT.Arro
 const colScrollable = new JGT.Col(255, 250, 250, 42, new JGT.Style({ "backgroundColor": "#fff"}), new JGT.Row(null, null, null, null, null, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12")));
 colScrollable.style.padding = 10;
 colScrollable.style.spaceBetweenComponents = 0;
-const options = new JGT.SelectOptionsContainer(75, null, new JGT.SelectOption(new JGT.Label("First choice")), new JGT.SelectOption(new JGT.Label("Second choice")));
+const optionLast = new JGT.SelectOption(new JGT.Label("Removed in 5s"));
+const options = new JGT.SelectOptionsContainer(75, null, new JGT.SelectOption(new JGT.Label("First choice")), new JGT.SelectOption(new JGT.Label("Second choice")), new JGT.SelectOption(new JGT.Label("Third choice")), optionLast);
 const select = new JGT.Select(255, 315, null, null, null, options);
 
 // Custom component
@@ -113,8 +114,8 @@ class Box extends JGT.Component {
 // Create scene (containing components) and canvas
 const box = new Box(new JGT.Style({ "backgroundColor": "#888888" }));
 const scene = new JGT.Scene(box, buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable, select, options);
-/*scene.maxHeight = 250;*/
-/*scene.x = 50;
+/*scene.maxHeight = 250;
+scene.x = 50;
 scene.y = 50;*/
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
@@ -159,4 +160,9 @@ imageLoader.load(["pause.png"], () => {
 
     tooltip3.components[0].text = "Current: " + Math.round((Math.round(progress.percent * 100) / 100) * 100) + "%";
   }, 3000);
+
+  // Remove the last option element
+  setTimeout(() => {
+    options.remove(optionLast);
+  }, 5000)
 });

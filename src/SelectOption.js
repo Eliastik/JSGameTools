@@ -23,12 +23,14 @@ import Style from "./Style";
 
 export default class SelectOption extends Button {
   constructor(label, style) {
-    super(null, null, null, null, style, label);
-    this.label = label;
+    const defaultLabel = new Label("Option");
+    super(null, null, null, null, style, label || defaultLabel);
+    this.label = label || defaultLabel;
   }
 
   add(component) {
     if(component instanceof Label) {
+      this.clear();
       super.add(component);
     }
   }

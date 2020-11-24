@@ -58,7 +58,7 @@ export default class SelectDropdown extends Col {
   }
 
   get selectedOption() {
-    return this.#_selectedOption;
+    return Math.max(0, Math.min(this.components.length - 1, this.#_selectedOption));
   }
 
   set selectedOption(id) {
