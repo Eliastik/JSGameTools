@@ -119,7 +119,7 @@ export default class Menu extends Col {
 
   drawBackground(ctx) {
     ctx.fillStyle = this.style.backgroundColor;
-    ctx.fillRect(0, 0, this.maxWidth, this.maxHeight);
+    ctx.fillRect(this.parent ? this.parent.x : 0, this.parent ? this.parent.y : 0, this.maxWidth, this.maxHeight);
   }
 
   disable() {

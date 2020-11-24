@@ -114,8 +114,9 @@ class Box extends JGT.Component {
 // Create scene (containing components) and canvas
 const box = new Box(new JGT.Style({ "backgroundColor": "#888888" }));
 const scene = new JGT.Scene(box, buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable, select, options);
-/*scene.maxHeight = 250;
-scene.x = 50;
+/*scene.maxHeight = 350;
+scene.maxWidth = 300;
+scene.x = 300;
 scene.y = 50;*/
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
@@ -164,5 +165,5 @@ imageLoader.load(["pause.png"], () => {
   // Remove the last option element
   setTimeout(() => {
     options.remove(optionLast);
-  }, 5000)
+  }, 5000);
 });

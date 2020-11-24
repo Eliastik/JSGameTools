@@ -146,7 +146,7 @@ export default class Input extends Box {
       if(this.canvas && this.canvas.canvas) {
         this.canvas.canvas.style.cursor = "text";
       } else {
-        canvas.style.cursor = "text";
+        canvas.style.cursor = "default";
       }
     }
 
@@ -204,15 +204,10 @@ export default class Input extends Box {
 
   updateTextCache(currentX) {
     const ctx = this.canvas ? this.canvas.getContext("2d") : null;
+    const parent = this.canvas.scene || this.canvas || (ctx && ctx.canvas);
 
-    if(Constants.Setting.DISABLE_OPTIMIZATIONS || !this.textCache || this.textCache.fontSize != this.style.fontSize || this.textCache.fontFamily != this.style.fontFamily || this.text != this.textCache.text || (ctx && ctx.canvas.width != this.textCache.canvasWidth)) {
-      this.textCache = {
-        "fontSize": this.style.fontSize,
-        "fontFamily": this.style.fontFamily,
-        "text": this.text,
-        "canvasWidth": ctx.canvas.width,
-        "letters": []
-      };
+    if(Constants.Setting.DISABLE_OPTIMIZATIONS || !this.textCache || this.textCache.fontSize != this.style.fontSize || this.textCache.fontFamily != this.style.fontFamily || this.text != this.textCache.text || (parent && parent.width != this.textCache.parentWidth)) {
+      this.textCache = { "fontSize": this.style.fontSize, "fontFamily": this.style.fontFamily, "text": this.text, "parentWidth": parent.width, "letters": [] };
 
       for(let i = 0; i < this.text.length; i++) {
         const sizes = Utils.wrapTextLines(ctx, this.text[i], this.width, this.style.fontSize, this.style.fontFamily, true);

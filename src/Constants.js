@@ -18,7 +18,7 @@
  */
 export default {
   Setting: {
-    DISABLE_OPTIMIZATIONS: false, // true to disable optimizations, can fix some problems, disabling optimization can reduces performance
+    DISABLE_OPTIMIZATIONS: false, // true to disable optimizations, can fix some problems, disabling optimization reduces performance
     FONT_FAMILY: "sans-serif",
     FONT_SIZE: 28,
     CANVAS_WIDTH: 600,

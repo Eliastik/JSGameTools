@@ -34,11 +34,11 @@ export default class Tooltip extends Col {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    if(this.x + this.width + this.style.padding > canvas.width) {
+    if(this.x + this.width + this.style.padding > this.parent.width) {
       this.x -= (this.width + this.style.padding);
     }
 
-    if(this.y + this.height + this.style.padding > canvas.height) {
+    if(this.y + this.height + this.style.padding > this.parent.height) {
       this.y -= (this.height + this.style.padding);
     }
 
