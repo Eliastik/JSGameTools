@@ -27,6 +27,7 @@ export default class Component {
   #_x = 0;
   #_y = 0;
   #_disabled = false;
+  #_selected = false;
   #_style;
 
   constructor(x, y, width, height, style) {
@@ -51,7 +52,7 @@ export default class Component {
     // State
     this.init = false;
     this.hasInitEvents = false;
-    this.selected = false;
+    this.#_selected = false;
     this.clicked = false;
     this.hovered = false;
     this.#_disabled = false;
@@ -403,6 +404,8 @@ export default class Component {
       } else if(this.style.alignement == Constants.Alignement.LEFT) {
         return parent.x + 5;
       }
+    } else if(parent) {
+      return parent.x + this.#_x;
     }
     
     return this.#_x;
@@ -423,6 +426,8 @@ export default class Component {
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
         return parent.y + 5;
       }
+    } else if(parent) {
+      return parent.y + this.#_y;
     }
     
     return this.#_y;
@@ -458,7 +463,15 @@ export default class Component {
 
   set hidden(hidden) {
     this.disabled = hidden;
-    if(this.style) this.style.hidden = hidden;
+    if(this.style) this.style.set("hidden", hidden);
+  }
+
+  get selected() {
+    return this.#_selected;
+  }
+
+  set selected(selected) {
+    this.#_selected = selected;
   }
 
   getAllParents() {

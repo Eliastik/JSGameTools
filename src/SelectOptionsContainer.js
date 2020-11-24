@@ -26,50 +26,35 @@ export default class SelectDropdown extends Col {
   constructor(maxHeightDropdown, style, ...options) {
     super(null, null, null, maxHeightDropdown, style, ...options);
     this.#_selectedOption = 0;
+    this.select = null;
   }
 
   draw(context) {
-    if(this.hidden) return;
     super.draw(context);
+
+    if(this.selected && this.selected) {
+      this.select.selected = true;
+    }
   }
 
   get x() {
-    return this.parent && this.parent.x;
+    return this.select && this.select.x;
   }
 
   get y() {
-    const parentHeight = (this.parent && this.parent.height);
+    const selectHeight = (this.select && this.select.height);
     const height = this.height;
-    const y = this.parent && this.parent.y;
+    const y = this.select && this.select.y;
 
-    if(this.canvas && this.canvas.scene && y + parentHeight + height >= this.canvas.scene.height) {
+    if(this.canvas && this.canvas.scene && y + selectHeight + height >= this.canvas.scene.height) {
       return y - height;
     }
 
-    return y + parentHeight;
+    return y + selectHeight;
   }
 
   get width() {
-    return this.parent && this.parent.width;
-  }
-
-  get canvas() {
-    return this.parent && this.parent.canvas;
-  }
-
-  get style() {
-    const style = this.parent && this.parent.style && this.parent.style.copy();
-
-    if(style) {
-      style.setAll(this.defaultStyle.getStyles());
-      return style;
-    }
-    
-    return this.defaultStyle;
-  }
-
-  set style(style) {
-    if(this.parent) this.parent.style = style;
+    return this.select && this.select.width;
   }
 
   get selectedOption() {
@@ -86,8 +71,9 @@ export default class SelectDropdown extends Col {
     component.addClickAction(() => {
       this.#_selectedOption = this.getComponentId(component);
       this.selected = false;
-      if(this.parent) this.parent.selected = false;
-   });
+      this.hidden = true;
+      if(this.select) this.select.selected = false;
+    });
   }
 
   get defaultStyle() {
@@ -103,6 +89,18 @@ export default class SelectDropdown extends Col {
   }
 
   get hidden() {
-    return super.hidden || (this.parent && !this.parent.selected) || !this.parent;
+    return super.hidden || (this.select && !this.select.selected) || !this.select;
+  }
+
+  set hidden(hidden) {
+    return super.hidden = hidden;
+  }
+
+  get selected() {
+    return super.selected || (this.select && this.select.selected);
+  }
+
+  set selected(selected) {
+    super.selected = selected;
   }
 }

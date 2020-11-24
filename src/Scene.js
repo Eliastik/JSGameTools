@@ -18,6 +18,7 @@
  */
 import Input from "./Input";
 import Container from "./Container";
+import Utils from "./Utils";
 
 export default class Scene extends Container {
   selectable = false;
@@ -35,22 +36,22 @@ export default class Scene extends Container {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
-
     canvas.style.cursor = "default";
 
+    let ctxTemp = ctx;
+    if(this.maxWidth || this.maxHeight) ctxTemp = this.canvasTmp.getContext("2d");
+
     const inputs = super.components.filter(component => component && component instanceof Input);
-    
     inputs && inputs.forEach(input => input.canvas = this.canvas); // Set inputs canvas
-    this.drawComponents(ctx); // Draw sorted components
+    this.drawComponents(ctxTemp); // Draw sorted components
+    
+    if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x, this.y, this.width, this.height);
+    super.drawScrollbars(ctx);
 
     ctx.restore();
   }
 
   drawComponents(ctx) {
     this.components.sort(Scene.compareComponents).forEach(component => component.draw(ctx));
-  }
-
-  get height() {
-    return (this.canvas && this.canvas.height);
   }
 }

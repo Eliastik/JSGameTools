@@ -18,7 +18,7 @@
  */
 import Label from "./Label";
 import Button from "./Button";
-import SelectDropdown from "./SelectDropdown";
+import SelectDropdown from "./SelectOptionsContainer";
 import SelectOption from "./SelectOption";
 import Triangle from "./Triangle";
 import Style from "./Style";
@@ -26,13 +26,11 @@ import Row from "./Row";
 import Constants from "./Constants";
 
 export default class Select extends Button {
-  #optionContainer;
-
-  constructor(x, y, maxWidth, maxHeight, maxHeightDropdown, style, ...options) {
+  constructor(x, y, maxWidth, maxHeight, style, optionContainer) {
     super(x, y, maxWidth, maxHeight, style);
 
-    this.#optionContainer = new SelectDropdown(maxHeightDropdown, style, ...options);
-    this.#optionContainer.parent = this;
+    this.optionContainer = optionContainer;
+    this.optionContainer.select = this;
 
     this.label = new Label("", x, y, style);
     this.label.style.setAll({ "alignement": Constants.Alignement.LEFT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
@@ -41,6 +39,9 @@ export default class Select extends Button {
     this.row = new Row(null, null, null, null, new Style({ "spaceBetweenComponents": 15 }), this.label, this.triangle);
 
     super.add(this.row);
+    this.addClickAction(() => {
+      if(this.optionContainer) this.optionContainer.hidden = false;
+    });
   }
 
   draw(context) {
@@ -52,26 +53,36 @@ export default class Select extends Button {
     this.row.maxWidth = this.width - this.style.padding;
 
     super.draw(context);
-    this.#optionContainer.draw(context);
+    this.optionContainer.draw(context);
   }
 
   get selectedOption() {
-    return this.#optionContainer.components[this.#optionContainer.selectedOption];
+    return this.optionContainer ? this.optionContainer.components[this.optionContainer.selectedOption] : null;
   }
 
   set selectedOption(id) {
-    this.#optionContainer.selectedOption = id;
+    this.optionContainer.selectedOption = id;
   }
 
   get width() {
     let maxWidth = this.label.width;
+
+    if(this.optionContainer) {
+      this.optionContainer.components.forEach(component => {
+        const label = component.label;
+
+        if(label) {
+          if(label.width > maxWidth) maxWidth = label.width;
+        }
+      });
+    }
 
     return maxWidth + this.style.padding + this.triangle.width + 15;
   }
 
   add(component) {
     if(component instanceof SelectOption) {
-      this.#optionContainer.add(component);
+      this.optionContainer.add(component);
     }
   }
 

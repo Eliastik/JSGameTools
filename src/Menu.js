@@ -119,7 +119,7 @@ export default class Menu extends Col {
 
   drawBackground(ctx) {
     ctx.fillStyle = this.style.backgroundColor;
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillRect(0, 0, this.maxWidth, this.maxHeight);
   }
 
   disable() {
@@ -167,11 +167,11 @@ export default class Menu extends Col {
   }
 
   get maxHeight() {
-    return super.maxHeight || (this.canvas && this.canvas.height);
+    return super.maxHeight || (this.canvas && this.canvas.scene && this.canvas.scene.height);
   }
 
   get maxWidth() {
-    return this.canvas.width;
+    return (this.canvas && this.canvas.scene && this.canvas.scene.width);
   }
 
   get y() {

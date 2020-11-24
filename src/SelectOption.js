@@ -19,23 +19,12 @@
 import Button from "./Button";
 import Constants from "./Constants";
 import Label from "./Label";
+import Style from "./Style";
 
 export default class SelectOption extends Button {
-  constructor(label) {
-    super(null, null, null, null, null, label);
+  constructor(label, style) {
+    super(null, null, null, null, style, label);
     this.label = label;
-  }
-
-  get style() {
-    return this.parent && this.parent.parent && this.parent.parent.style;
-  }
-
-  set style(style) {
-    if(this.parent && this.parent.parent) this.parent.parent.style = style;
-  }
-
-  get width() {
-    return this.parent && this.parent.width;
   }
 
   add(component) {
@@ -44,11 +33,16 @@ export default class SelectOption extends Button {
     }
   }
 
+  get width() {
+    return this.parent && this.parent.width;
+  }
+
   get defaultStyle() {
     return new Style({
       "backgroundColor": Constants.Setting.SELECT_DEFAULT_BACKGROUND,
       "backgroundColorHover": Constants.Setting.SELECT_DEFAULT_HOVER_BACKGROUND,
-      "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND
+      "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND,
+      "padding": Constants.Setting.DEFAULT_PADDING
     });
   }
 }

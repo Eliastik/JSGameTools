@@ -164,7 +164,7 @@ export default class NotificationMessage extends Col {
   }
 
   get width() {
-    return this.canvas ? this.canvas.width : null;
+    return this.canvas && this.canvas.scene ? this.canvas.scene.width : null;
   }
 
   get height() {

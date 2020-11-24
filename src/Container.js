@@ -22,6 +22,7 @@ import Constants from "./Constants";
 import ScrollbarHorizontal from "./ScrollbarHorizontal";
 import ScrollbarVertical from "./ScrollbarVertical";
 import Style from "./Style";
+import Utils from "./Utils";
 
 export default class Container extends Box {
   selectable = false;
@@ -47,6 +48,12 @@ export default class Container extends Box {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
+
+    if((this.maxWidth || this.maxHeight) && this.canvasTmp) {
+      this.canvasTmp.width = canvas.width;
+      this.canvasTmp.height = canvas.height;
+      Utils.clear(this.canvasTmp.getContext("2d"));
+    }
     
     this.components.forEach(component => {
       if(this.canvas) component.canvas = this.canvas;
@@ -142,11 +149,11 @@ export default class Container extends Box {
   }
 
   get width() {
-    return this.maxWidth || this.parent.width;
+    return this.maxWidth || (this.parent && this.parent.width) || 0;
   }
 
   get height() {
-    return this.maxHeight || this.parent.height;
+    return this.maxHeight || (this.parent && this.parent.height) || 0;
   }
 
   set width(width) {

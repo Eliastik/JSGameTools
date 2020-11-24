@@ -35,19 +35,11 @@ export default class Col extends Container {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    let ctxTemp;
-
-    if(this.maxWidth || this.maxHeight) {
-      this.canvasTmp.width = canvas.width;
-      this.canvasTmp.height = canvas.height;
-      ctxTemp = this.canvasTmp.getContext("2d");
-      Utils.clear(ctxTemp);
-    } else {
-      ctxTemp = ctx;
-    }
+    let ctxTemp = ctx;
+    if(this.maxWidth || this.maxHeight) ctxTemp = this.canvasTmp.getContext("2d");
   
     if(super.components != null) {
-      let currentY = (this.y + this.style.padding) || this.style.padding;
+      let currentY = this.style.padding;
 
       super.components.forEach(component => {
         currentY = this.drawComponent(component, currentY, ctxTemp);
@@ -62,7 +54,7 @@ export default class Col extends Container {
 
   drawComponent(component, currentY, ctx) {
     if(component instanceof Component) {
-      if(this.x) component.x = (this.x + this.style.padding) - this.offsetScrollX;
+      component.x = this.style.padding - this.offsetScrollX;
       component.y = currentY - this.offsetScrollY;
       
       if(this.isComponentVisible(component)) {
