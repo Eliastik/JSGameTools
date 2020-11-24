@@ -40,7 +40,9 @@ export default class Select extends Button {
 
     super.add(this.row);
     this.addClickAction(() => {
-      if(this.optionContainer) this.optionContainer.hidden = false;
+      if(this.optionContainer) {
+        this.optionContainer.hidden = false;
+      }
     });
   }
 

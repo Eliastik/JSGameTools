@@ -493,6 +493,8 @@ export default class Component {
   compareTo(otherComponent) {
     const isForeground = this.style && this.style.foreground;
     const otherIsForeground = otherComponent.style && otherComponent.style.foreground;
+    const zIndex = this.style && this.style.zIndex;
+    const otherzIndex = otherComponent.style && otherComponent.style.zIndex;
 
     if(this.parent == otherComponent) {
       return 1;
@@ -501,6 +503,10 @@ export default class Component {
     } else if(isForeground && !otherIsForeground) {
       return 1
     } else if(!isForeground && otherIsForeground) {
+      return -1;
+    } else if(zIndex > otherzIndex) {
+      return 1;
+    } else if(zIndex < otherzIndex) {
       return -1;
     }
 

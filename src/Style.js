@@ -145,6 +145,10 @@ export default class Style {
     return this.#styles.foreground;
   }
 
+  get zIndex() {
+    return this.#styles.zIndex != null ? this.#styles.zIndex : 0;
+  }
+
   set(style, value) {
     this.#styles[style] = value;
   }
