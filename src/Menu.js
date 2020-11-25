@@ -155,7 +155,7 @@ export default class Menu extends Col {
   }
 
   get height() {
-    return this.innerHeight || this.parent.height;
+    return this.parent.height;
   }
 
   get scrollAreaSizeX() {

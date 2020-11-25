@@ -45,11 +45,11 @@ export default class Button extends Col {
   }
 
   get height() {
-    return super.height + this.style.padding;
+    return (this.maxHeight || super.height) + this.style.padding;
   }
 
   get width() {
-    return super.width + this.style.padding;
+    return (this.maxWidth || super.width) + this.style.padding;
   }
 
   get defaultStyle() {

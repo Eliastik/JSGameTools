@@ -29,6 +29,8 @@ export default class Container extends Box {
   #components = [];
   #_maxWidth = 0;
   #_maxHeight = 0;
+  #_minWidth = 0;
+  #_minHeight = 0;
 
   constructor(x, y, maxWidth, maxHeight, style, ...components) {
     super(x, y, null, null, style);
@@ -149,19 +151,15 @@ export default class Container extends Box {
   }
 
   get width() {
-    return this.maxWidth || (this.parent && this.parent.width) || 0;
+    const width = (this.parent && this.parent.width);
+    const min = this.maxWidth ? Math.min(this.maxWidth, width) : null;
+    return this.minWidth ? Math.max(this.minWidth, min || width) : width;
   }
 
   get height() {
-    return this.maxHeight || (this.parent && this.parent.height) || 0;
-  }
-
-  set width(width) {
-    this.maxWidth = width;
-  }
-
-  set width(height) {
-    this.maxHeight = height;
+    const height = (this.parent && this.parent.height);
+    const min = this.maxWidth ? Math.min(this.maxHeight, height) : null;
+    return this.minHeight ? Math.max(this.minHeight, min || height) : height;
   }
 
   get maxWidth() {
@@ -178,6 +176,22 @@ export default class Container extends Box {
 
   set maxHeight(maxHeight) {
     this.#_maxHeight = maxHeight;
+  }
+
+  get minWidth() {
+    return this.#_minWidth;
+  }
+
+  get minHeight() {
+    return this.#_minHeight;
+  }
+
+  set minWidth(minWidth) {
+    this.#_minWidth = minWidth;
+  }
+
+  set minHeight(minHeight) {
+    this.#_minHeight = minHeight;
   }
 
   set canvas(canvas) {
@@ -248,8 +262,8 @@ export default class Container extends Box {
     if(Constants.Setting.DISABLE_OPTIMIZATIONS) return true;
     
     if(component instanceof Component && !component.hidden) {
-      const width = this.maxWidth || this.width;
-      const height = this.maxHeight || this.height;
+      const width = this.width;
+      const height = this.height;
       const componentWidth = component.width;
       const componentHeight = component.height;
 

@@ -51,13 +51,12 @@ export default class Select extends Button {
       this.label.text = this.selectedOption.label.text;
     }
 
-    this.row.maxWidth = this.width - this.style.padding;
+    this.row.minWidth = this.width - this.style.padding;
 
     super.draw(context);
 
     if(this.optionContainer) {
       this.optionContainer.select = this;
-      this.optionContainer.draw(context);
     }
   }
 

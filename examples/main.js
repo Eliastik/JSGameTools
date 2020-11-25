@@ -89,7 +89,7 @@ colScrollable.style.padding = 10;
 colScrollable.style.spaceBetweenComponents = 0;
 const optionLast = new JGT.SelectOption(new JGT.Label("Removed in 5s"));
 const options = new JGT.SelectOptionsContainer(75, null, new JGT.SelectOption(new JGT.Label("First choice")), new JGT.SelectOption(new JGT.Label("Second choice")), new JGT.SelectOption(new JGT.Label("Third choice")), optionLast);
-const select = new JGT.Select(255, 315, null, null, null, options);
+const select = new JGT.Select(255, 315, null, null, new JGT.Style({ "verticalAlignement": "bottom" }), options);
 
 // Custom component
 class Box extends JGT.Component {
@@ -114,10 +114,6 @@ class Box extends JGT.Component {
 // Create scene (containing components) and canvas
 const box = new Box(new JGT.Style({ "backgroundColor": "#888888" }));
 const scene = new JGT.Scene(box, buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable, select, options);
-/*scene.maxHeight = 350;
-scene.maxWidth = 300;
-scene.x = 300;
-scene.y = 50;*/
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
 

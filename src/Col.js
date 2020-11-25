@@ -83,11 +83,15 @@ export default class Col extends Container {
   }
 
   get width() {
-    return this.maxWidth || this.innerWidth || this.parent.width;
+    const width = this.innerWidth || (this.parent && this.parent.width);
+    const min = this.maxWidth ? Math.min(this.maxWidth, width) : null;
+    return this.minWidth ? Math.max(this.minWidth, min || width) : min || width;
   }
 
   get height() {
-    return this.maxHeight || this.innerHeight || this.parent.width;
+    const height = this.innerHeight || (this.parent && this.parent.height);
+    const min = this.maxHeight ? Math.min(this.maxHeight, height) : null;
+    return this.minHeight ? Math.max(this.minHeight, min || height) : min || height;
   }
 
   get defaultStyle() {
