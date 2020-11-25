@@ -52,17 +52,18 @@ buttonMenu2.addClickAction(() => {
 const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "center", "verticalAlignement": "center" }));
 
 // Events, game variables and logic
-const buttons = [];
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
 const sizeBoard = [3, 3];
-let gameBoard;
+let buttons = [];
+let gameBoard = [];
 
 function createBoard() {
   col.clear();
   col.add(gameTitle);
   gameBoard = [];
+  buttons = [];
 
   for(let i = 0; i < sizeBoard[0]; i++) {
     const row = new JGT.Row();
@@ -77,6 +78,8 @@ function createBoard() {
   
     col.add(row);
   }
+
+  buttons.forEach(button => button.addClickAction(() => gameAction(button)));
 }
 
 createBoard();
@@ -182,17 +185,17 @@ function gameAction(buttonClicked) {
   let currentCellNumber = buttons.indexOf(buttonClicked);
 
   if(currentCellNumber != -1) {
-    let currentCell = gameBoard[Math.floor(currentCellNumber / 3)][currentCellNumber % 3];
+    let currentCell = gameBoard[Math.floor(currentCellNumber / sizeBoard[0])][currentCellNumber % sizeBoard[1]];
   
     if(currentCell == MARK_TYPE.EMPTY) {
       if(currentPlayer == PLAYER_NUM.PLAYER_ONE) {
         mark = new JGT.Cross(null, null, 25, 25, new JGT.Style({ "alignement": "center", "verticalAlignement": "center", "lineWidth": 5, "color": "white" }));
         currentPlayer = PLAYER_NUM.PLAYER_TWO;
-        gameBoard[Math.floor(currentCellNumber / 3)][currentCellNumber % 3] = PLAYER_NUM.PLAYER_ONE;
+        gameBoard[Math.floor(currentCellNumber / sizeBoard[0])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_ONE;
       } else {
         mark = new JGT.Label("-", null, null, new JGT.Style({ "alignement": "center", "verticalAlignement": "center", "fontSize": 50, "fontColor": "white" }));
         currentPlayer = PLAYER_NUM.PLAYER_ONE;
-        gameBoard[Math.floor(currentCellNumber / 3)][currentCellNumber % 3] = PLAYER_NUM.PLAYER_TWO;
+        gameBoard[Math.floor(currentCellNumber / sizeBoard[0])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_TWO;
       }
   
       buttonClicked.set(mark);
@@ -202,8 +205,6 @@ function gameAction(buttonClicked) {
   checkWin();
 }
 
-buttons.forEach(button => button.addClickAction(() => gameAction(button)));
-
 buttonMenu1.addClickAction(() => {
   currentPlayer = PLAYER_NUM.PLAYER_ONE;
   createBoard();
@@ -212,7 +213,7 @@ buttonMenu1.addClickAction(() => {
 });
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(box, fpsMeter, col, pauseButton, menu);
+const scene = new JGT.Scene(box, col, pauseButton, menu, fpsMeter);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
 col.maxHeight = canvas.height;

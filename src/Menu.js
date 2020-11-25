@@ -150,14 +150,6 @@ export default class Menu extends Col {
     }
   }
 
-  get width() {
-    return this.parent.width;
-  }
-
-  get height() {
-    return this.parent.height;
-  }
-
   get scrollAreaSizeX() {
     return this.innerWidth - this.maxWidth;
   }
@@ -174,8 +166,8 @@ export default class Menu extends Col {
     return (this.canvas && this.canvas.scene && this.canvas.scene.width);
   }
 
-  get y() {
-    return Math.max(0, super.y);
+  get minWidth() {
+    return this.parent.width;
   }
 
   get defaultStyle() {
@@ -210,5 +202,9 @@ export default class Menu extends Col {
   set hidden(hidden) {
     super.hidden = hidden;
     this.disabled = hidden;
+  }
+
+  isInside(pos) {
+    return !this.hidden;
   }
 }
