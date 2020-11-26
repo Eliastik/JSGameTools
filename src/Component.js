@@ -48,6 +48,7 @@ export default class Component {
     this.triggersScroll = [];
     this.triggersMove = [];
     this.triggersUp = [];
+    this.triggersOnChange = [];
 
     // State
     this.init = false;
@@ -347,6 +348,18 @@ export default class Component {
 
   removeAllMoveActions() {
     this.triggersMove = [];
+  }
+  
+  addChangeAction(trigger) {
+    this.triggersOnChange.push(trigger);
+  }
+  
+  removeChangeAction(trigger) {
+    this.triggersOnChange = this.triggersOnChange.filter(elem => elem != trigger);
+  }
+
+  removeAllChangeActions() {
+    this.triggersOnChange = [];
   }
   
   addUpAction(trigger) {

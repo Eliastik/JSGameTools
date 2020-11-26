@@ -49,6 +49,14 @@ export default class Canvas {
 
     if(autoResize) this.autoResize();
     this.createEvents();
+
+    if(Constants.Setting.DISABLE_OPTIMIZATIONS) {
+      console && console.warn("Notice: Optimizations are disabled. You may notice low performance.");
+    }
+
+    if(Constants.Setting.DISABLE_CONTAINERS_CUTTING) {
+      console && console.warn("Notice: Containers cutting is disabled.");
+    }
   }
 
   draw() {
@@ -70,7 +78,7 @@ export default class Canvas {
     Utils.clear(ctx);
   }
 
-  startDraw() {
+  startDraw(func) {
     this.started = true;
 
     requestAnimationFrame(time => {
@@ -83,6 +91,7 @@ export default class Canvas {
         }
         
         this.startDraw();
+        if(func) func();
       }
     });
   }
@@ -97,6 +106,10 @@ export default class Canvas {
 
   toggleFullscreen() {
     Utils.toggleFullscreen(this.canvas, this.container);
+  }
+
+  toggleFullpage() {
+    Utils.toggleFullpage(this.canvas, this.container);
   }
 
   autoResize() {

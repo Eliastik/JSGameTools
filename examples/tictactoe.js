@@ -55,7 +55,7 @@ const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "c
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
-const sizeBoard = [3, 3];
+const sizeBoard = [10, 10];
 let buttons = [];
 let gameBoard = [];
 
@@ -192,7 +192,6 @@ function gameAction(buttonClicked) {
   let currentCellNumber = buttons.indexOf(buttonClicked);
 
   if(currentCellNumber != -1) {
-    console.log(currentCellNumber, Math.floor(currentCellNumber / sizeBoard[1]), currentCellNumber % sizeBoard[1]);
     let currentCell = gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]];
   
     if(currentCell == MARK_TYPE.EMPTY) {
@@ -225,11 +224,20 @@ buttonMenu1.addClickAction(() => {
 const scene = new JGT.Scene(box, col, pauseButton, menu, fpsMeter);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
+canvas.toggleFullpage();
+
 col.maxHeight = canvas.height;
 col.maxWidth = canvas.width;
+box.height = canvas.height;
+box.width = canvas.width;
 
 // Load pause image and start the canvas rendering
 imageLoader.load(["pause.png"], () => {
   pauseImage.loadImage(imageLoader);
-  canvas.startDraw();
+  canvas.startDraw(() => {
+    col.maxHeight = canvas.height;
+    col.maxWidth = canvas.width;
+    box.height = canvas.height;
+    box.width = canvas.width;
+  });
 });

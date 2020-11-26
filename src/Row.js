@@ -17,14 +17,27 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Component from "./Component";
+import Constants from "./Constants";
 import Container from "./Container";
 import Utils from "./Utils";
 
 export default class Row extends Container {
   selectable = false;
+  #_innerHeight = 0;
+  #_innerWidth = 0;
 
   constructor(x, y, maxWidth, maxHeight, style, ...components) {
     super(x, y, maxWidth, maxHeight, style, ...components);
+    
+    if(!Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) {
+      this.updateInnerWidth();
+      this.updateInnerHeight();
+
+      this.addChangeAction(() => {
+        this.updateInnerWidth();
+        this.updateInnerHeight();
+      });
+    }
   }
 
   draw(context) {
@@ -36,7 +49,10 @@ export default class Row extends Container {
     ctx.save();
 
     let ctxTemp = ctx;
-    if(this.maxWidth || this.maxHeight) ctxTemp = this.canvasTmp.getContext("2d");
+    
+    if(this.isCutting) {
+      ctxTemp = this.canvasTmp.getContext("2d");
+    }
   
     if(super.components != null) {
       let currentX = this.style.padding;
@@ -45,8 +61,11 @@ export default class Row extends Container {
         currentX = this.drawComponent(component, currentX, ctxTemp);
       });
     }
+    
+    if(this.isCutting) {
+      Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x, this.y, this.width, this.height);
+    }
 
-    if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x, this.y, this.width, this.height);
     super.drawScrollbars(ctx);
 
     ctx.restore();
@@ -70,16 +89,26 @@ export default class Row extends Container {
     return currentX;
   }
 
-  get innerHeight() {
+  updateInnerHeight() {
     let maxHeight = 0;
     super.components.forEach(component => { if(component.height > maxHeight) maxHeight = component.height; });
-    return maxHeight + this.style.padding;
+    this.#_innerHeight = maxHeight + this.style.padding;
+  }
+
+  updateInnerWidth() {
+    let totalWidth = 0;
+    super.components.forEach(component => totalWidth += component.width);
+    this.#_innerWidth = totalWidth + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
+  }
+
+  get innerHeight() {
+    if(Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) this.updateInnerHeight();
+    return this.#_innerHeight;
   }
 
   get innerWidth() {
-    let totalWidth = 0;
-    super.components.forEach(component => totalWidth += component.width);
-    return totalWidth + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
+    if(Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) this.updateInnerWidth();
+    return this.#_innerWidth;
   }
 
   get width() {

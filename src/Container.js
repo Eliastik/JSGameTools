@@ -51,7 +51,7 @@ export default class Container extends Box {
     const ctx = canvas.getContext("2d");
     ctx.save();
 
-    if((this.maxWidth || this.maxHeight) && this.canvasTmp) {
+    if(this.isCutting) {
       this.canvasTmp.width = canvas.width;
       this.canvasTmp.height = canvas.height;
       Utils.clear(this.canvasTmp.getContext("2d"));
@@ -96,6 +96,7 @@ export default class Container extends Box {
     this.#components.push(component);
     component.parent = this;
     if(this.canvas) component.canvas = this.canvas;
+    this.triggersOnChange.forEach(func => func());
   }
 
   addAll(...components) {
@@ -104,10 +105,12 @@ export default class Container extends Box {
 
   remove(component) {
     this.#components = this.#components.filter(current => component != current);
+    this.triggersOnChange.forEach(func => func());
   }
 
   clear() {
     this.#components = [];
+    this.triggersOnChange.forEach(func => func());
   }
 
   get components() {
@@ -172,10 +175,12 @@ export default class Container extends Box {
 
   set maxWidth(maxWidth) {
     this.#_maxWidth = maxWidth;
+    this.triggersOnChange.forEach(func => func());
   }
 
   set maxHeight(maxHeight) {
     this.#_maxHeight = maxHeight;
+    this.triggersOnChange.forEach(func => func());
   }
 
   get minWidth() {
@@ -188,11 +193,17 @@ export default class Container extends Box {
 
   set minWidth(minWidth) {
     this.#_minWidth = minWidth;
+    this.triggersOnChange.forEach(func => func());
   }
 
   set minHeight(minHeight) {
     this.#_minHeight = minHeight;
+    this.triggersOnChange.forEach(func => func());
   }
+
+  updateInnerHeight() { }
+
+  updateInnerWidth() { }
 
   set canvas(canvas) {
     super.canvas = canvas;
@@ -275,6 +286,10 @@ export default class Container extends Box {
     }
 
     return false;
+  }
+
+  get isCutting() {
+    return !Constants.Setting.DISABLE_CONTAINERS_CUTTING && (((this.maxWidth && this.innerWidth > this.maxWidth) || (this.maxHeight && this.innerHeight > this.maxHeight))) && this.canvasTmp != null;
   }
 
   get defaultStyle() {

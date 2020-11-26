@@ -19,6 +19,8 @@
 export default {
   Setting: {
     DISABLE_OPTIMIZATIONS: false, // true to disable optimizations, can fix some problems, disabling optimization reduces performance
+    DISABLE_EXPERIMENTAL_OPTIMIZATIONS: true, // true to disable optimizations that are considered experimental
+    DISABLE_CONTAINERS_CUTTING: false, // disabling containers cutting allow to view the components of a container that are not totally visible, you can also disable optimizations to displays elements that are not drawn for optimization purposes
     FONT_FAMILY: "sans-serif",
     FONT_SIZE: 28,
     CANVAS_WIDTH: 600,

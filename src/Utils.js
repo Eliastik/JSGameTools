@@ -359,6 +359,32 @@ export default {
       });
     }
   },
+  autoResizeCanvasFullpage: function(canvas, container) {
+    if(canvas && canvas.getAttribute("fullpage-canvas-enable") == "true") {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      if(container) {
+        container.width = window.innerWidth;
+        container.height = window.innerHeight;
+        container.style.margin = 0;
+        container.style.padding = 0;
+      }
+
+      document.body.style.margin = 0;
+      document.body.style.padding = 0;
+    }
+  },
+  enableAutoResizeCanvasFullpage: function(canvas, container) {
+    if(canvas && canvas.getAttribute("autoresizefullpage-canvas-event") != "true") {
+      this.autoResizeCanvasFullpage(canvas, container);
+  
+      window.addEventListener("resize", () => {
+        canvas.setAttribute("autoresizefullpage-canvas-event", "true");
+        this.autoResizeCanvasFullpage(canvas, container);
+      });
+    }
+  },
   toggleFullscreen: function(canvas, container) {
     if(canvas) {
       const initialWidth = canvas.width;
@@ -416,6 +442,25 @@ export default {
           document.onofullscreenchange = onfullscreenchange;
         }
       }
+    }
+  },
+  toggleFullpage: function(canvas, container) {
+    if(canvas) {
+      const initialWidth = canvas.width;
+      const initialHeight = canvas.height;
+
+      if(container) {
+        container.width = initialWidth;
+        container.height = initialHeight;
+      }
+
+      if(!canvas.getAttribute("fullpage-canvas-enable") || canvas.getAttribute("fullpage-canvas-enable") == "false") {
+        canvas.setAttribute("fullpage-canvas-enable", "true");
+      } else {
+        canvas.setAttribute("fullpage-canvas-enable", "false");
+      }
+
+      this.enableAutoResizeCanvasFullpage(canvas, container);
     }
   },
   getMousePos(canvas, event) {
