@@ -35,9 +35,8 @@ export default class Select extends Button {
     this.label.style.setAll({ "alignement": Constants.Alignement.LEFT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
     this.triangle = new Triangle(null, null, 10, 10, style);
     this.triangle.style.setAll({ "alignement": Constants.Alignement.RIGHT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
-    this.row = new Row(null, null, null, null, new Style({ "spaceBetweenComponents": 15 }), this.label, this.triangle);
 
-    super.add(this.row);
+    this.addAll(this.label, this.triangle);
     this.addClickAction(() => {
       if(this.optionContainer) {
         this.optionContainer.hidden = false;
@@ -50,8 +49,6 @@ export default class Select extends Button {
     if(this.selectedOption && this.selectedOption.label) {
       this.label.text = this.selectedOption.label.text;
     }
-
-    this.row.minWidth = this.width - this.style.padding;
 
     super.draw(context);
 
@@ -84,12 +81,6 @@ export default class Select extends Button {
     return maxWidth + this.style.padding + this.triangle.width + 15;
   }
 
-  add(component) {
-    if(component instanceof SelectOption) {
-      this.optionContainer.add(component);
-    }
-  }
-
   get allComponents() {
     const components = [];
     components.push(...super.allComponents);
@@ -100,7 +91,8 @@ export default class Select extends Button {
     return new Style({
       "backgroundColor": Constants.Setting.SELECT_DEFAULT_BACKGROUND,
       "backgroundColorHover": Constants.Setting.SELECT_DEFAULT_HOVER_BACKGROUND,
-      "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND
+      "backgroundColorDown": Constants.Setting.SELECT_DEFAULT_CLICK_BACKGROUND,
+      "padding": Constants.Setting.DEFAULT_PADDING
     });
   }
 }

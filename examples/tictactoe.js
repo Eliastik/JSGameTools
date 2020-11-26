@@ -67,15 +67,16 @@ function createBoard() {
 
   for(let i = 0; i < sizeBoard[0]; i++) {
     const row = new JGT.Row();
-    gameBoard.push([]);
+    const line = [];
   
     for(let j = 0; j < sizeBoard[1]; j++) {
       const button = new JGT.Button(null, null, 75, 75, buttonStyle);
       buttons.push(button);
       row.add(button);
-      gameBoard[i][j] = MARK_TYPE.EMPTY;
+      line.push(MARK_TYPE.EMPTY);
     }
-  
+
+    gameBoard.push(line);
     col.add(row);
   }
 
@@ -97,6 +98,9 @@ function checkWinHorizForWin() {
         countCircle = 0;
       } else if(currentLine[j] == MARK_TYPE.CIRCLE) {
         countCircle++;
+        countCross = 0;
+      } else {
+        countCircle = 0;
         countCross = 0;
       }
     }
@@ -127,7 +131,10 @@ function checkWinVertiForWin() {
           countCircle = 0;
         } else if(currentCase == MARK_TYPE.CIRCLE) {
           countCircle++;
+          countCross = 0;
+        } else {
           countCircle = 0;
+          countCross = 0;
         }
       }
 
@@ -185,20 +192,22 @@ function gameAction(buttonClicked) {
   let currentCellNumber = buttons.indexOf(buttonClicked);
 
   if(currentCellNumber != -1) {
-    let currentCell = gameBoard[Math.floor(currentCellNumber / sizeBoard[0])][currentCellNumber % sizeBoard[1]];
+    console.log(currentCellNumber, Math.floor(currentCellNumber / sizeBoard[1]), currentCellNumber % sizeBoard[1]);
+    let currentCell = gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]];
   
     if(currentCell == MARK_TYPE.EMPTY) {
       if(currentPlayer == PLAYER_NUM.PLAYER_ONE) {
         mark = new JGT.Cross(null, null, 25, 25, new JGT.Style({ "alignement": "center", "verticalAlignement": "center", "lineWidth": 5, "color": "white" }));
         currentPlayer = PLAYER_NUM.PLAYER_TWO;
-        gameBoard[Math.floor(currentCellNumber / sizeBoard[0])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_ONE;
+        gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_ONE;
       } else {
         mark = new JGT.Label("-", null, null, new JGT.Style({ "alignement": "center", "verticalAlignement": "center", "fontSize": 50, "fontColor": "white" }));
         currentPlayer = PLAYER_NUM.PLAYER_ONE;
-        gameBoard[Math.floor(currentCellNumber / sizeBoard[0])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_TWO;
+        gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_TWO;
       }
   
       buttonClicked.set(mark);
+      console.log(gameBoard);
     }
   }
 

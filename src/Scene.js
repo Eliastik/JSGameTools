@@ -19,6 +19,8 @@
 import Input from "./Input";
 import Container from "./Container";
 import Utils from "./Utils";
+import Style from "./Style";
+import Constants from "./Constants";
 
 export default class Scene extends Container {
   selectable = false;
@@ -53,5 +55,11 @@ export default class Scene extends Container {
 
   drawComponents(ctx) {
     this.components.sort(Scene.compareComponents).forEach(component => component.draw(ctx));
+  }
+
+  get defaultStyle() {
+    return new Style({
+      "padding": Constants.Setting.DEFAULT_PADDING
+    });
   }
 }

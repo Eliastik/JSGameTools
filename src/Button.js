@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Col from "./Col";
+import Row from "./Row";
 import Constants from "./Constants";
 import Style from "./Style";
 
-export default class Button extends Col {
+export default class Button extends Row {
   selectable = true;
 
   constructor(x, y, maxWidth, maxHeight, style, ...components) {

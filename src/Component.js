@@ -393,16 +393,27 @@ export default class Component {
     return this.height;
   }
 
+  get minWidth() {
+    return this.width;
+  }
+
+  get minHeight() {
+    return this.height;
+  }
+
   get x() {
     const parent = this.parent || this.canvas;
 
     if(this.style.alignement && parent) {
+      const parentWidth = parent.width;
+      const parentPadding = (parent.style && parent.style.padding) || 0;
+
       if(this.style.alignement == Constants.Alignement.CENTER) {
-        return parent.x + (parent.width / 2) - (this.width / 2);
+        return parent.x + (parentWidth / 2) - (this.width / 2);
       } else if(this.style.alignement == Constants.Alignement.RIGHT) {
-        return parent.x + (parent.width) - (this.width) - 5;
+        return parent.x + (parentWidth) - (this.width) - parentPadding;
       } else if(this.style.alignement == Constants.Alignement.LEFT) {
-        return parent.x + 5;
+        return parent.x + parentPadding;
       }
     } else if(parent) {
       return parent.x + this.#_x;
@@ -419,12 +430,15 @@ export default class Component {
     const parent = this.parent || this.canvas;
 
     if(this.style.verticalAlignement && parent) {
+      const parentHeight = parent.height;
+      const parentPadding = (parent.style && parent.style.padding) || 0;
+
       if(this.style.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        return parent.y + (parent.height) - (this.height) - 5;
+        return parent.y + (parentHeight) - (this.height) - parentPadding;
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        return parent.y + (parent.height / 2) - (this.height / 2);
+        return parent.y + (parentHeight / 2) - (this.height / 2);
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
-        return parent.y + 5;
+        return parent.y + parentPadding;
       }
     } else if(parent) {
       return parent.y + this.#_y;

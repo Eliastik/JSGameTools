@@ -204,9 +204,9 @@ export default class Input extends Box {
 
   updateTextCache(currentX) {
     const ctx = this.canvas ? this.canvas.getContext("2d") : null;
-    const parent = this.canvas.scene || this.canvas || (ctx && ctx.canvas);
+    const parent = (this.canvas && this.canvas.scene) || this.canvas || (ctx && ctx.canvas);
 
-    if(Constants.Setting.DISABLE_OPTIMIZATIONS || !this.textCache || this.textCache.fontSize != this.style.fontSize || this.textCache.fontFamily != this.style.fontFamily || this.text != this.textCache.text || (parent && parent.width != this.textCache.parentWidth)) {
+    if(ctx && (Constants.Setting.DISABLE_OPTIMIZATIONS || !this.textCache || this.textCache.fontSize != this.style.fontSize || this.textCache.fontFamily != this.style.fontFamily || this.text != this.textCache.text || (parent && parent.width != this.textCache.parentWidth))) {
       this.textCache = { "fontSize": this.style.fontSize, "fontFamily": this.style.fontFamily, "text": this.text, "parentWidth": parent.width, "letters": [] };
 
       for(let i = 0; i < this.text.length; i++) {

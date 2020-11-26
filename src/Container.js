@@ -266,8 +266,10 @@ export default class Container extends Box {
       const height = this.height;
       const componentWidth = component.width;
       const componentHeight = component.height;
+      const canvasWidth = (this.canvas && this.canvas.width) || width;
+      const canvasHeight = (this.canvas && this.canvas.height) || height;
 
-      if(component.x + componentWidth >= this.x && component.x <= this.x + width && component.y + componentHeight >= this.y && component.y <= this.y + height) {
+      if(component.x + componentWidth >= this.x && component.x <= this.x + width && component.y + componentHeight >= this.y && component.y <= this.y + height && component.x + componentWidth >= 0 && component.x <= canvasWidth && component.y + componentHeight >= 0 && component.y <= canvasHeight) {
         return true;
       }
     }
