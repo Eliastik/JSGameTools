@@ -35,7 +35,7 @@ export default class Triangle extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     
-    Utils.drawTriangle(ctx, this.x, this.y, this.width, this.height, this.style.lineWidth, this.style.color, this.style.lineCap, this.style.fill);
+    Utils.drawTriangle(ctx, this.x, this.y, this.width, this.height, this.style.lineWidth, this.style.color, this.style.lineCap, this.style.fill, this.style.fillColor);
 
     this.init = true;
   }
@@ -61,7 +61,8 @@ export default class Triangle extends Component {
       "lineWidth": Constants.Setting.TRIANGLE_DEFAULT_LINE_SIZE,
       "color": Constants.Setting.TRIANGLE_DEFAULT_COLOR,
       "fill": Constants.Setting.TRIANGLE_DEFAULT_FILL,
-      "lineCap": Constants.Setting.TRIANGLE_DEFAULT_LINE_CAP
+      "lineCap": Constants.Setting.TRIANGLE_DEFAULT_LINE_CAP,
+      "fillColor": Constants.Setting.TRIANGLE_DEFAULT_FILL_COLOR
     });
   }
 }

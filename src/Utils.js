@@ -262,7 +262,7 @@ export default {
     
     ctx.restore();
   },
-  drawTriangle: function(ctx, x, y, width, height, lineWidth, color, lineCap, fill = Constants.Setting.TRIANGLE_DEFAULT_FILL) {
+  drawTriangle: function(ctx, x, y, width, height, lineWidth, color, lineCap, fill = Constants.Setting.TRIANGLE_DEFAULT_FILL, fillColor) {
     ctx.save();
 
     ctx.lineCap = lineCap || Constants.Setting.TRIANGLE_DEFAULT_LINE_CAP;
@@ -270,7 +270,7 @@ export default {
     ctx.filter = "";
 
     if(fill) {
-      ctx.fillStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
+      ctx.fillStyle = fillColor || Constants.Setting.TRIANGLE_DEFAULT_FILL_COLOR;
       ctx.strokeStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
     } else {
       ctx.strokeStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
@@ -291,7 +291,7 @@ export default {
     
     ctx.restore();
   },
-  drawCircle: function(ctx, x, y, radius, lineWidth, color, lineCap, fill = Constants.Setting.CIRCLE_DEFAULT_FILL) {
+  drawCircle: function(ctx, x, y, radius, lineWidth, color, lineCap, fill = Constants.Setting.CIRCLE_DEFAULT_FILL, fillColor) {
     ctx.save();
 
     ctx.lineCap = lineCap || Constants.Setting.CIRCLE_DEFAULT_LINE_CAP;
@@ -299,7 +299,7 @@ export default {
     ctx.filter = "";
 
     if(fill) {
-      ctx.fillStyle = color || Constants.Setting.CIRCLE_DEFAULT_COLOR;
+      ctx.fillStyle = fillColor || Constants.Setting.CIRCLE_DEFAULT_FILL_COLOR;
       ctx.strokeStyle = color || Constants.Setting.CIRCLE_DEFAULT_COLOR;
     } else {
       ctx.strokeStyle = color || Constants.Setting.CIRCLE_DEFAULT_COLOR;

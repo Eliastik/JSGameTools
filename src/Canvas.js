@@ -90,7 +90,7 @@ export default class Canvas {
           this.draw();
         }
         
-        this.startDraw();
+        this.startDraw(func);
         if(func) func();
       }
     });

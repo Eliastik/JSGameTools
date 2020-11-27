@@ -35,7 +35,7 @@ export default class Circle extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     
-    Utils.drawCircle(ctx, this.x, this.y, this.width, this.style.lineWidth, this.style.color, this.style.lineCap, this.style.fill);
+    Utils.drawCircle(ctx, this.x, this.y, this.width, this.style.lineWidth, this.style.color, this.style.lineCap, this.style.fill, this.style.fillColor);
 
     this.init = true;
   }
@@ -61,7 +61,8 @@ export default class Circle extends Component {
       "lineWidth": Constants.Setting.CIRCLE_DEFAULT_LINE_SIZE,
       "color": Constants.Setting.CIRCLE_DEFAULT_COLOR,
       "fill": Constants.Setting.CIRCLE_DEFAULT_FILL,
-      "lineCap": Constants.Setting.CIRCLE_DEFAULT_LINE_CAP
+      "lineCap": Constants.Setting.CIRCLE_DEFAULT_LINE_CAP,
+      "fillColor": Constants.Setting.CIRCLE_DEFAULT_FILL_COLOR
     });
   }
 }

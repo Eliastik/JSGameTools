@@ -157,6 +157,14 @@ export default class Style {
     return this.#styles.fill;
   }
 
+  get fillColor() {
+    return this.#styles.fillColor;
+  }
+
+  get color() {
+    return this.#styles.color;
+  }
+
   set(style, value) {
     this.#styles[style] = value;
   }

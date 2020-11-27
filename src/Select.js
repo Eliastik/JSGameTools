@@ -18,11 +18,8 @@
  */
 import Label from "./Label";
 import Button from "./Button";
-import SelectDropdown from "./SelectOptionsContainer";
-import SelectOption from "./SelectOption";
 import Triangle from "./Triangle";
 import Style from "./Style";
-import Row from "./Row";
 import Constants from "./Constants";
 
 export default class Select extends Button {
@@ -33,7 +30,7 @@ export default class Select extends Button {
 
     this.label = new Label("", x, y, style);
     this.label.style.setAll({ "alignement": Constants.Alignement.LEFT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
-    this.triangle = new Triangle(null, null, 10, 10, style);
+    this.triangle = new Triangle(null, null, 8, 8, style);
     this.triangle.style.setAll({ "alignement": Constants.Alignement.RIGHT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
 
     this.addAll(this.label, this.triangle);
