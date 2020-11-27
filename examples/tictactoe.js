@@ -32,8 +32,12 @@ const box = new JGT.Box(0, 0, 800, 600, new JGT.Style({ "backgroundColor": "ligh
 const gameTitle = new JGT.Label("Tic Tac Toe created\nusing JSGameTools", null, null, new JGT.Style({ "alignement": "center", "fontSize": 30 }));
 const gameInfos = new JGT.Label("", null, null, new JGT.Style({ "alignement": "center", "fontSize": 30 }));
 const fpsMeter = new JGT.FPSMeter(false, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "bottom"}));
+
 const pauseImage = new JGT.ImageContainer("pause.png", null, null, 64, 64, new JGT.Style({ "verticalAlignement": "center", "alignement": "center" }));
-const pauseButton = new JGT.Button(null, 50, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "top" }), new JGT.Row(5, 250, null, null, null, pauseImage));
+const fullscreenImage = new JGT.ImageContainer("fullscreen.png", null, null, 64, 64, new JGT.Style({ "verticalAlignement": "center", "alignement": "center" }));
+const pauseButton = new JGT.Button(null, 50, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "center" }), new JGT.Row(5, 250, null, null, null, pauseImage));
+const fullscreenButton = new JGT.Button(null, 50, null, null, new JGT.Style({ "alignement": "left", "verticalAlignement": "center" }), new JGT.Row(5, 250, null, null, null, fullscreenImage));
+const rowButtons = new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "top" }), fullscreenButton, pauseButton);
 
 const buttonMenu1 = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Reset the game", null, null, labelStyle));
 buttonMenu1.style.set("alignement", "center");
@@ -51,6 +55,10 @@ const menuResult = new JGT.Menu(null, menuResultLabel, buttonMenu3);
 
 pauseButton.addClickAction(() => {
   menu.enable();
+});
+
+fullscreenButton.addClickAction(() => {
+  canvas.toggleFullscreen();
 });
 
 buttonMenu2.addClickAction(() => {
@@ -284,7 +292,7 @@ buttonMenu3.addClickAction(resetGame);
 resetGame();
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(box, col, pauseButton, menu, menuResult, fpsMeter);
+const scene = new JGT.Scene(box, col, rowButtons, menu, menuResult, fpsMeter);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
 canvas.toggleFullpage();
@@ -295,8 +303,9 @@ box.height = canvas.height;
 box.width = canvas.width;
 
 // Load pause image and start the canvas rendering
-imageLoader.load(["pause.png"], () => {
+imageLoader.load(["pause.png", "fullscreen.png"], () => {
   pauseImage.loadImage(imageLoader);
+  fullscreenImage.loadImage(imageLoader);
   
   canvas.startDraw(() => {
     col.maxHeight = canvas.height;
