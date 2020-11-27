@@ -222,10 +222,10 @@ export default {
       };
     }
   },
-  drawArrow: function(ctx, fromx, fromy, tox, toy, lineWidth, headSize, color) {
+  drawArrow: function(ctx, fromx, fromy, tox, toy, lineWidth, headSize, color, lineCap) {
     ctx.save();
 
-    ctx.lineCap = "round";
+    ctx.lineCap = lineCap || Constants.Setting.ARROW_DEFAULT_LINE_CAP;
     ctx.lineWidth = lineWidth || Constants.Setting.ARROW_DEFAULT_LINE_SIZE;
     ctx.strokeStyle = color || Constants.Setting.ARROW_DEFAULT_COLOR;
     ctx.filter = "";
@@ -245,10 +245,10 @@ export default {
     
     ctx.restore();
   },
-  drawCross: function(ctx, x, y, width, height, lineWidth, color) {
+  drawCross: function(ctx, x, y, width, height, lineWidth, color, lineCap) {
     ctx.save();
 
-    ctx.lineCap = "round";
+    ctx.lineCap = lineCap || Constants.Setting.CROSS_DEFAULT_LINE_CAP;
     ctx.lineWidth = lineWidth || Constants.Setting.CROSS_DEFAULT_LINE_SIZE;
     ctx.strokeStyle = color || Constants.Setting.CROSS_DEFAULT_COLOR;
     ctx.filter = "";
@@ -262,20 +262,58 @@ export default {
     
     ctx.restore();
   },
-  drawTriangle: function(ctx, x, y, width, height, lineWidth, color) {
+  drawTriangle: function(ctx, x, y, width, height, lineWidth, color, lineCap, fill = Constants.Setting.TRIANGLE_DEFAULT_FILL) {
     ctx.save();
 
-    ctx.lineCap = "round";
+    ctx.lineCap = lineCap || Constants.Setting.TRIANGLE_DEFAULT_LINE_CAP;
     ctx.lineWidth = lineWidth || Constants.Setting.TRIANGLE_DEFAULT_LINE_SIZE;
-    ctx.strokeStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
     ctx.filter = "";
+
+    if(fill) {
+      ctx.fillStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
+      ctx.strokeStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
+    } else {
+      ctx.strokeStyle = color || Constants.Setting.TRIANGLE_DEFAULT_COLOR;
+    }
   
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(x + width, y);
     ctx.lineTo(x + width / 2, y + height);
     ctx.lineTo(x, y);
-    ctx.fill();
+
+    if(fill) {
+      ctx.fill();
+      ctx.stroke();
+    } else {
+      ctx.stroke();
+    }
+    
+    ctx.restore();
+  },
+  drawCircle: function(ctx, x, y, radius, lineWidth, color, lineCap, fill = Constants.Setting.CIRCLE_DEFAULT_FILL) {
+    ctx.save();
+
+    ctx.lineCap = lineCap || Constants.Setting.CIRCLE_DEFAULT_LINE_CAP;
+    ctx.lineWidth = lineWidth || Constants.Setting.CIRCLE_DEFAULT_LINE_SIZE;
+    ctx.filter = "";
+
+    if(fill) {
+      ctx.fillStyle = color || Constants.Setting.CIRCLE_DEFAULT_COLOR;
+      ctx.strokeStyle = color || Constants.Setting.CIRCLE_DEFAULT_COLOR;
+    } else {
+      ctx.strokeStyle = color || Constants.Setting.CIRCLE_DEFAULT_COLOR;
+    }
+    
+    ctx.beginPath();
+    ctx.arc(x + radius / 2, y + radius / 2, radius / 2, 0, 2 * Math.PI, false);
+
+    if(fill) {
+      ctx.fill();
+      ctx.stroke();
+    } else {
+      ctx.stroke();
+    }
     
     ctx.restore();
   },

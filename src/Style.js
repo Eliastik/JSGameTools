@@ -148,6 +148,14 @@ export default class Style {
   get zIndex() {
     return this.#styles.zIndex != null ? this.#styles.zIndex : 0;
   }
+  
+  get lineCap() {
+    return this.#styles.lineCap;
+  }
+  
+  get fill() {
+    return this.#styles.fill;
+  }
 
   set(style, value) {
     this.#styles[style] = value;

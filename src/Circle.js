@@ -21,11 +21,11 @@ import Constants from "./Constants";
 import Utils from "./Utils";
 import Style from "./Style";
 
-export default class Cross extends Component {
+export default class Circle extends Component {
   selectable = false;
 
-  constructor(x, y, width, height, style) {
-    super(x, y, width, height, style);
+  constructor(x, y, width, style) {
+    super(x, y, width, width, style);
   }
 
   draw(context) {
@@ -35,7 +35,7 @@ export default class Cross extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     
-    Utils.drawCross(ctx, this.x, this.y, this.width, this.height, this.style.lineWidth, this.style.color, this.style.lineCap);
+    Utils.drawCircle(ctx, this.x, this.y, this.width, this.style.lineWidth, this.style.color, this.style.lineCap, this.style.fill);
 
     this.init = true;
   }
@@ -58,9 +58,10 @@ export default class Cross extends Component {
 
   get defaultStyle() {
     return new Style({
-      "lineWidth": Constants.Setting.CROSS_DEFAULT_LINE_SIZE,
-      "color": Constants.Setting.CROSS_DEFAULT_COLOR,
-      "lineCap": Constants.Setting.CROSS_DEFAULT_LINE_CAP
+      "lineWidth": Constants.Setting.CIRCLE_DEFAULT_LINE_SIZE,
+      "color": Constants.Setting.CIRCLE_DEFAULT_COLOR,
+      "fill": Constants.Setting.CIRCLE_DEFAULT_FILL,
+      "lineCap": Constants.Setting.CIRCLE_DEFAULT_LINE_CAP
     });
   }
 }

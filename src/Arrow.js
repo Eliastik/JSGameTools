@@ -38,7 +38,7 @@ export default class Arrow extends Component {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     
-    Utils.drawArrow(ctx, this.x, this.y, this.toX, this.toY, this.style.lineWidth, this.style.headSize, this.style.foregroundColor);
+    Utils.drawArrow(ctx, this.x, this.y, this.toX, this.toY, this.style.lineWidth, this.style.headSize, this.style.color, this.style.lineCap);
 
     this.init = true;
   }
@@ -55,7 +55,8 @@ export default class Arrow extends Component {
     return new Style({
       "lineWidth": Constants.Setting.ARROW_DEFAULT_LINE_SIZE,
       "headSize": Constants.Setting.ARROW_DEFAULT_HEAD_SIZE,
-      "foregroundColor": Constants.Setting.ARROW_DEFAULT_COLOR
+      "color": Constants.Setting.ARROW_DEFAULT_COLOR,
+      "lineCap": Constants.Setting.ARROW_DEFAULT_LINE_CAP
     });
   }
 }

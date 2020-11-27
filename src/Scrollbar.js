@@ -19,7 +19,6 @@
 import Constants from "./Constants";
 import Box from "./Box";
 import Style from "./Style";
-import Component from "./Component";
 
 export default class Scrollbar extends Box {
   selectable = true;
