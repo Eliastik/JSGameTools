@@ -71,9 +71,11 @@ const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "c
 // Events, game variables and logic
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
+const WIN_SITUATION = { PLAYER_ONE: -1, PLAYER_TWO: 1, DRAW: 0 };
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
 const sizeBoard = [3, 3];
 let buttons = [];
+let buttonsBoard = [];
 let gameBoard = [];
 
 function createBoard() {
@@ -85,28 +87,35 @@ function createBoard() {
   for(let i = 0; i < sizeBoard[0]; i++) {
     const row = new JGT.Row();
     const line = [];
+    const lineButton = [];
   
     for(let j = 0; j < sizeBoard[1]; j++) {
       const button = new JGT.Button(null, null, 75, 75, buttonStyle);
       buttons.push(button);
+      lineButton.push(button);
       row.add(button);
       line.push(MARK_TYPE.EMPTY);
     }
 
     gameBoard.push(line);
+    buttonsBoard.push(lineButton);
     col.add(row);
   }
 
-  buttons.forEach(button => button.addClickAction(() => gameAction(button)));
+  buttons.forEach((button, i) => button.addClickAction(() => {
+    const currentCellPosition = [Math.floor(i / sizeBoard[1]), i % sizeBoard[1]];
+    gameAction(gameBoard, currentCellPosition);
+  }));
+
   col.add(gameInfos);
 }
 
-function checkWinHoriz() {
+function checkWinHoriz(board) {
   let countCross = 0;
   let countCircle = 0;
 
-  for(let i = 0; i < gameBoard[0].length; i++) {
-    const currentLine = gameBoard[i];
+  for(let i = 0; i < board[0].length; i++) {
+    const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
       if(currentLine[j] == MARK_TYPE.CROSS) {
@@ -134,15 +143,15 @@ function checkWinHoriz() {
   return null;
 }
 
-function checkWinVerti() {
+function checkWinVerti(board) {
   let countCross = 0;
   let countCircle = 0;
 
-  for(let i = 0; i < gameBoard[0].length; i++) {
-    const currentLine = gameBoard[i];
+  for(let i = 0; i < board[0].length; i++) {
+    const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
-        const currentCase = gameBoard[j][i];
+        const currentCase = board[j][i];
 
         if(currentCase == MARK_TYPE.CROSS) {
           countCross++;
@@ -169,15 +178,15 @@ function checkWinVerti() {
   return null;
 }
 
-function checkWinDiago() {
-  for(let i = 0; i < gameBoard[0].length; i++) {
-    const currentLine = gameBoard[i];
+function checkWinDiago(board) {
+  for(let i = 0; i < board[0].length; i++) {
+    const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
         const cellsToCheck = [[j, i], [j - 1, i - 1], [j - 2, i - 2], [j + 1, i + 1], [j + 2, i + 2]];
         const cellsToCheckAnti = [[j, i], [j - 1, i + 1], [j - 2, i + 2], [j + 1, i - 1], [j + 2, i - 2]];
-        const checkCells = checkCasesDiago(currentLine, cellsToCheck);
-        const checkCellsAnti = checkCasesDiago(currentLine, cellsToCheckAnti);
+        const checkCells = checkCasesDiago(board, currentLine, cellsToCheck);
+        const checkCellsAnti = checkCasesDiago(board, currentLine, cellsToCheckAnti);
 
         if(checkCells) return checkCells;
         if(checkCellsAnti) return checkCellsAnti;
@@ -187,15 +196,15 @@ function checkWinDiago() {
   return null;
 }
 
-function checkCasesDiago(currentLine, cellsToCheck) {
+function checkCasesDiago(board, currentLine, cellsToCheck) {
   let countCross = 0;
   let countCircle = 0;
 
   for(let k = 0; k < cellsToCheck.length; k++) {
     const c = cellsToCheck[k];
 
-    if(c[0] >= 0 && c[0] < currentLine.length && c[1] >= 0 && c[1] <= gameBoard[0].length) {
-      const cell = gameBoard[c[0]][c[1]];
+    if(c[0] >= 0 && c[0] < currentLine.length && c[1] >= 0 && c[1] <= board[0].length) {
+      const cell = board[c[0]][c[1]];
 
       if(cell == MARK_TYPE.CROSS) {
         countCross++;
@@ -217,9 +226,9 @@ function checkCasesDiago(currentLine, cellsToCheck) {
   }
 }
 
-function checkFull() {
-  for(let i = 0; i < gameBoard[0].length; i++) {
-    const currentLine = gameBoard[i];
+function checkFull(board) {
+  for(let i = 0; i < board[0].length; i++) {
+    const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
       const currentCase = currentLine[j];
@@ -233,49 +242,171 @@ function checkFull() {
   return true;
 }
 
-function checkWin() {
-  const checkHoriz = checkWinHoriz();
-  const checkVerti = checkWinVerti();
-  const checkDiag = checkWinDiago();
-  const checkIsFull = checkFull();
+function checkWin(board) {
+  const checkHoriz = checkWinHoriz(board);
+  const checkVerti = checkWinVerti(board);
+  const checkDiag = checkWinDiago(board);
+  const checkIsFull = checkFull(board);
 
   if(checkHoriz == PLAYER_NUM.PLAYER_ONE || checkVerti == PLAYER_NUM.PLAYER_ONE || checkDiag == PLAYER_NUM.PLAYER_ONE) {
+    return WIN_SITUATION.PLAYER_ONE;
+  } else if(checkHoriz == PLAYER_NUM.PLAYER_TWO || checkVerti == PLAYER_NUM.PLAYER_TWO || checkDiag == PLAYER_NUM.PLAYER_TWO) {
+    return WIN_SITUATION.PLAYER_TWO;
+  } else if(checkIsFull) {
+    return WIN_SITUATION.DRAW;
+  }
+}
+
+function displayResultGame(board) {
+  const winner = checkWin(board);
+
+  if(winner == WIN_SITUATION.PLAYER_ONE) {
     menuResultLabel.text = "Player 1 won!";
     menuResult.enable();
-  } else if(checkHoriz == PLAYER_NUM.PLAYER_TWO || checkVerti == PLAYER_NUM.PLAYER_TWO || checkDiag == PLAYER_NUM.PLAYER_TWO) {
+  } else if(winner == WIN_SITUATION.PLAYER_TWO) {
     menuResultLabel.text = "Player 2 won!";
     menuResult.enable();
-  } else if(checkIsFull) {
+  } else if(winner == WIN_SITUATION.DRAW) {
     menuResultLabel.text = "Draw!";
     menuResult.enable();
   }
 }
 
-function gameAction(buttonClicked) {
+function gameAction(board, position) {
   let mark = null;
-  let currentCellNumber = buttons.indexOf(buttonClicked);
 
-  if(currentCellNumber != -1) {
-    let currentCell = gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]];
-  
+  if(position != null) {
+    const currentCell = board[position[0]][position[1]];
+
     if(currentCell == MARK_TYPE.EMPTY) {
       if(currentPlayer == PLAYER_NUM.PLAYER_ONE) {
         mark = new JGT.Cross(null, null, 25, 25, new JGT.Style({ "alignement": "center", "verticalAlignement": "center", "lineWidth": 5, "color": "white" }));
         currentPlayer = PLAYER_NUM.PLAYER_TWO;
         gameInfos.text = "It's the turn of\nplayer 2";
-        gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_ONE;
+        board[position[0]][position[1]] = PLAYER_NUM.PLAYER_ONE;
       } else {
         mark = new JGT.Circle(null, null, 25, new JGT.Style({ "alignement": "center", "verticalAlignement": "center", "lineWidth": 5, "color": "white", "fill": false }));
         currentPlayer = PLAYER_NUM.PLAYER_ONE;
         gameInfos.text = "It's the turn of\nplayer 1";
-        gameBoard[Math.floor(currentCellNumber / sizeBoard[1])][currentCellNumber % sizeBoard[1]] = PLAYER_NUM.PLAYER_TWO;
+        board[position[0]][position[1]] = PLAYER_NUM.PLAYER_TWO;
       }
+    }
+
+    if(mark) buttonsBoard[position[0]][position[1]].set(mark);
   
-      buttonClicked.set(mark);
+    if(currentPlayer == PLAYER_NUM.PLAYER_TWO) {
+      playAi(board);
     }
   }
 
-  checkWin();
+  displayResultGame(board);
+}
+
+/* Functions used for the AI
+  Use the minimax algorithm
+  The PLAYER_TWO is always the ai */
+function copyBoard(boardToCopy) {
+  const gameBoard = [];
+
+  for(let i = 0; i < boardToCopy.length; i++) {
+    gameBoard.push([]);
+    gameBoard[i] = [...boardToCopy[i]];
+  }
+
+  return gameBoard;
+}
+
+function eval(board, player) {
+  const check = checkWin(board);
+
+  if(check) {
+    return checkWin(board) * (player == PLAYER_NUM.PLAYER_TWO ? 1 : -1);
+  }
+
+  return null;
+}
+
+function nextSituations(board, player) {
+  const situs = [];
+
+  for(let i = 0; i < board.length; i++) {
+    for(let j = 0; j < board[i].length; j++) {
+      if(board[i][j] == MARK_TYPE.EMPTY) {
+        board[i][j] = player;
+        const evaluation = eval(board, player);
+
+        situs.push({
+          "position": [i, j],
+          "eval": evaluation == null ? 0 : evaluation
+        });
+
+        board[i][j] = MARK_TYPE.EMPTY;
+      }
+    }
+  }
+
+  return situs;
+}
+
+function max(situations) {
+  let max = situations[0];
+
+  situations.forEach(situation => {
+    if(situation.eval > max.eval) {
+      max = situation;
+    }
+  });
+
+  return max;
+}
+
+function min(situations) {
+  let min = situations[0];
+
+  situations.forEach(situation => {
+    if(situation.eval < min.eval) {
+      min = situation;
+    }
+  });
+
+  return min;
+}
+
+function ai(board, depth, player) {
+  const evaluation = eval(board, player);
+  const situations = nextSituations(board, player);
+
+  if(depth <= 0 || evaluation != null || situations.length <= 0) {
+    return {
+      "position": null,
+      "eval": evaluation
+    };
+  } else {
+    for(let i = 0; i < situations.length; i++) {
+      const situation = situations[i];
+      const position = situation.position;
+      board[position[0]][position[1]] = player;
+
+      if(player == PLAYER_NUM.PLAYER_TWO) { // ai
+        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_ONE).eval;
+        situation.eval += valueNext;
+      } else {
+        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_TWO).eval;
+        situation.eval += valueNext;
+      }
+    }
+
+    if(player == PLAYER_NUM.PLAYER_TWO) { // ai
+      return max(situations);
+    } else {
+      return min(situations);
+    }
+  }
+}
+
+function playAi(board) {
+  const bestMove = ai(copyBoard(board), 10, PLAYER_NUM.PLAYER_TWO);
+  gameAction(board, bestMove.position);
 }
 
 function resetGame() {
