@@ -64,7 +64,7 @@ export default class Select extends Button {
   }
 
   get text() {
-    return this.selectedOption ? this.selectedOptionText : null;
+    return this.selectedOption && this.selectedOption.label ? this.selectedOption.label.text : null;
   }
 
   get width() {

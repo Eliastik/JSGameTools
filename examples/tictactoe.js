@@ -64,7 +64,7 @@ mainMenu.enable();
 
 // Player VS Player settings
 const labelPlayerVSPlayerMenu = new JGT.Label("Player VS Player", null, null, labelStyle);
-const labelGridParamPlayerVSPlayerMenu = new JGT.Label("Grid size : ", null, null, labelStyleDefault);
+const labelGridParamPlayerVSPlayerMenu = new JGT.Label("Grid size: ", null, null, labelStyleDefault);
 const inputRow = new JGT.Input(null, null, 50, null, null, "3");
 const xSign = new JGT.Label("×", null, null, labelStyleDefault);
 const inputCol = new JGT.Input(null, null, 50, null, null, "3");
@@ -74,16 +74,19 @@ const playerVSPlayerMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba
 
 // Player VS AI settings
 const labelPlayerVSAIMenu = new JGT.Label("Player VS AI", null, null, labelStyle);
-const labelGridParamPlayerVSAIMenu = new JGT.Label("Grid size : ", null, null, labelStyleDefault);
+const labelGridParamPlayerVSAIMenu = new JGT.Label("Grid size: ", null, null, labelStyleDefault);
 const inputRowAI = new JGT.Input(null, null, 50, null, null, "3");
 const xSignAI = new JGT.Label("×", null, null, labelStyleDefault);
 const inputColAI = new JGT.Input(null, null, 50, null, null, "3");
-const labelAILevel = new JGT.Label("AI level : ", null, null, labelStyleDefault);
+const labelAILevel = new JGT.Label("AI level: ", null, null, labelStyleDefault);
 const optionsAILevel = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreground": true }), new JGT.SelectOption(new JGT.Label("Low")), new JGT.SelectOption(new JGT.Label("Normal")), new JGT.SelectOption(new JGT.Label("High")));
-const selectAILevel = new JGT.Select(255, 315, null, null, null, optionsAILevel, 3);
+const selectAILevel = new JGT.Select(255, 315, null, null, null, optionsAILevel, 2);
+const labelAIFirstPlayer = new JGT.Label("First player: ", null, null, labelStyleDefault);
+const optionsAIFirstPlayer = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreground": true }), new JGT.SelectOption(new JGT.Label("You")), new JGT.SelectOption(new JGT.Label("AI")));
+const selectAIFirstPlayer = new JGT.Select(255, 315, null, null, null, optionsAIFirstPlayer);
 const validatePlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyleDefault, new JGT.Label("Play", null, null, labelStyle));
 const cancelPlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyleRedDefault, new JGT.Label("Cancel", null, null, labelStyle));
-const playerVSAIMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), labelPlayerVSAIMenu, new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelGridParamPlayerVSAIMenu, inputRowAI, xSignAI, inputColAI), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelAILevel, selectAILevel), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), validatePlayerVSAI, cancelPlayerVSAI));
+const playerVSAIMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), labelPlayerVSAIMenu, new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelGridParamPlayerVSAIMenu, inputRowAI, xSignAI, inputColAI), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelAILevel, selectAILevel), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelAIFirstPlayer, selectAIFirstPlayer), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), validatePlayerVSAI, cancelPlayerVSAI));
 
 pauseButton.addClickAction(() => {
   menu.enable();
@@ -132,6 +135,15 @@ validatePlayerVSAI.addClickAction(() => {
       break;
   }
 
+  switch(selectAIFirstPlayer.text) {
+    case "You":
+      aiPlayer = PLAYER_NUM.PLAYER_TWO;
+      break;
+    case "AI":
+      aiPlayer = PLAYER_NUM.PLAYER_ONE;
+      break;
+  }
+
   runGame(GAME_MODE.PLAYER_VS_AI, [isNaN(inputRowAI.text) ? 3 : parseInt(inputRowAI.text), isNaN(inputColAI.text) ? 3 : parseInt(inputColAI.text)]);
 });
 
@@ -151,7 +163,7 @@ const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
 const WIN_SITUATION = { PLAYER_ONE: -10, PLAYER_TWO: 10, DRAW: 0 };
 const GAME_MODE = { PLAYER_VS_AI: 1, PLAYER_VS_PLAYER: 2 };
-const AI_LEVEL = { HIGH: 10, NORMAL: 3, LOW: 1 };
+const AI_LEVEL = { HIGH: 10, NORMAL: 5, LOW: 3 };
 const DEFAULT_MAX_DEPTH_MINIMAX = AI_LEVEL.HIGH;
 
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
@@ -478,7 +490,7 @@ function ai(board, depth, player) {
           situation.eval = maximum.eval;
         }
       } else {
-        const minimum = min(ai(board, depth - 1, aiPlayer == PLAYER_NUM.PLAYER_TWO ? PLAYER_NUM.PLAYER_TWO : PLAYER_NUM.PLAYER_ONE));
+        const minimum = min(ai(board, depth - 1, aiPlayer));
 
         if(minimum) {
           situation.eval = minimum.eval;
@@ -511,14 +523,13 @@ function getRandomPosition(board) {
 function runGame(gameMode, size) {
   currentPlayer = PLAYER_NUM.PLAYER_ONE;
   gameInfos.text = "It's the turn of\nplayer 1";
-  aiPlayer = randRange(0, 1) == 1 ? PLAYER_NUM.PLAYER_ONE : PLAYER_NUM.PLAYER_TWO;
   if(gameMode) currentGameMode = gameMode;
 
   if(size) {
     sizeBoard[0] = Math.max(3, size[0]);
     sizeBoard[1] = Math.max(3, size[1]);
   }
-  
+
   createBoard();
   closeAllMenus();
 
@@ -541,7 +552,7 @@ function openMainMenu() {
 }
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(box, col, rowButtons, menu, menuResult, mainMenu, playerVSPlayerMenu, playerVSAIMenu, optionsAILevel, fpsMeter);
+const scene = new JGT.Scene(box, col, rowButtons, menu, menuResult, mainMenu, playerVSPlayerMenu, playerVSAIMenu, optionsAILevel, optionsAIFirstPlayer, fpsMeter);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
 canvas.toggleFullpage();
