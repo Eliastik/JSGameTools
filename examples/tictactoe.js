@@ -104,7 +104,7 @@ buttonNewGame.addClickAction(openMainMenu);
 buttonNewGame2.addClickAction(openMainMenu);
 
 validatePlayerVSPlayer.addClickAction(() => {
-  runGame(GAME_MODE.PLAYER_VS_PLAYER, [isNaN(inputRow.text) ? 3 : parseInt(inputRow.text), isNaN(inputCol.text) ? 3 : parseInt(inputCol.text)]);
+  runGame(GAME_MODE.PLAYER_VS_PLAYER, [inputRow.text.trim() == "" || isNaN(inputRow.text) ? 3 : parseInt(inputRow.text), inputCol.text.trim() == "" || isNaN(inputCol.text) ? 3 : parseInt(inputCol.text)]);
 });
 
 buttonPlayerVSPlayer.addClickAction(() => {
@@ -144,7 +144,7 @@ validatePlayerVSAI.addClickAction(() => {
       break;
   }
 
-  runGame(GAME_MODE.PLAYER_VS_AI, [isNaN(inputRowAI.text) ? 3 : parseInt(inputRowAI.text), isNaN(inputColAI.text) ? 3 : parseInt(inputColAI.text)]);
+  runGame(GAME_MODE.PLAYER_VS_AI, [inputRowAI.text.trim() == "" || isNaN(inputRowAI.text) ? 3 : parseInt(inputRowAI.text), inputColAI.text.trim() == "" || isNaN(inputColAI.text) ? 3 : parseInt(inputColAI.text)]);
 });
 
 cancelPlayerVSAI.addClickAction(() => {
@@ -152,8 +152,8 @@ cancelPlayerVSAI.addClickAction(() => {
   playerVSAIMenu.disable();
 });
 
-buttonMenu1.addClickAction(() => runGame());
-buttonMenu3.addClickAction(() => runGame());
+buttonMenu1.addClickAction(() => runGame(currentGameMode, sizeBoard));
+buttonMenu3.addClickAction(() => runGame(currentGameMode, sizeBoard));
 
 // Board col
 const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "center", "verticalAlignement": "center" }));
@@ -163,7 +163,7 @@ const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
 const WIN_SITUATION = { PLAYER_ONE: -10, PLAYER_TWO: 10, DRAW: 0 };
 const GAME_MODE = { PLAYER_VS_AI: 1, PLAYER_VS_PLAYER: 2 };
-const AI_LEVEL = { HIGH: 10, NORMAL: 5, LOW: 3 };
+const AI_LEVEL = { HIGH: 8, NORMAL: 5, LOW: 3 };
 const DEFAULT_MAX_DEPTH_MINIMAX = AI_LEVEL.HIGH;
 
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
@@ -210,7 +210,7 @@ function checkWinHoriz(board) {
   let countCross = 0;
   let countCircle = 0;
 
-  for(let i = 0; i < board[0].length; i++) {
+  for(let i = 0; i < board.length; i++) {
     const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
@@ -244,9 +244,7 @@ function checkWinVerti(board) {
   let countCircle = 0;
 
   for(let i = 0; i < board[0].length; i++) {
-    const currentLine = board[i];
-
-    for(let j = 0; j < currentLine.length; j++) {
+    for(let j = 0; j < board.length; j++) {
         const currentCase = board[j][i];
 
         if(currentCase == MARK_TYPE.CROSS) {
@@ -275,7 +273,7 @@ function checkWinVerti(board) {
 }
 
 function checkWinDiago(board) {
-  for(let i = 0; i < board[0].length; i++) {
+  for(let i = 0; i < board.length; i++) {
     const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
@@ -299,7 +297,7 @@ function checkCasesDiago(board, currentLine, cellsToCheck) {
   for(let k = 0; k < cellsToCheck.length; k++) {
     const c = cellsToCheck[k];
 
-    if(c[0] >= 0 && c[0] < currentLine.length && c[1] >= 0 && c[1] <= board[0].length) {
+    if(c[0] >= 0 && c[0] < board.length && c[1] >= 0 && c[1] < currentLine.length) {
       const cell = board[c[0]][c[1]];
 
       if(cell == MARK_TYPE.CROSS) {
@@ -533,7 +531,7 @@ function runGame(gameMode, size) {
   createBoard();
   closeAllMenus();
 
-  if(aiPlayer == PLAYER_NUM.PLAYER_ONE) {
+  if(gameMode == GAME_MODE.PLAYER_VS_AI && aiPlayer == PLAYER_NUM.PLAYER_ONE) {
     gameAction(gameBoard, getRandomPosition(gameBoard));
   }
 }
