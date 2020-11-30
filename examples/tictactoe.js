@@ -83,6 +83,7 @@ function createBoard() {
   col.add(gameTitle);
   gameBoard = [];
   buttons = [];
+  buttonsBoard = [];
 
   for(let i = 0; i < sizeBoard[0]; i++) {
     const row = new JGT.Row();
@@ -388,10 +389,10 @@ function ai(board, depth, player) {
       board[position[0]][position[1]] = player;
 
       if(player == PLAYER_NUM.PLAYER_TWO) { // ai
-        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_ONE).eval;
+        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_TWO).eval;
         situation.eval += valueNext;
       } else {
-        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_TWO).eval;
+        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_ONE).eval;
         situation.eval += valueNext;
       }
     }
@@ -413,7 +414,6 @@ function resetGame() {
   currentPlayer = PLAYER_NUM.PLAYER_ONE;
   gameInfos.text = "It's the turn of\nplayer 1";
   createBoard();
-  buttons.forEach(button => button.clear());
   menu.disable();
   menuResult.disable();
 }
