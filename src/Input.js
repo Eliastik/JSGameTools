@@ -46,6 +46,7 @@ export default class Input extends Box {
     this.input.style.position = "absolute";
     this.input.style.left = "-9999px";
     this.input.tabIndex = -1;
+    this.input.value = this.text;
     this.input.addEventListener("blur", () => this.selected = false);
     this.input.addEventListener("focus", () => this.selected = true);
     this.input.addEventListener("input", () => {

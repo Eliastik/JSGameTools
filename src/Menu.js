@@ -135,6 +135,9 @@ export default class Menu extends Col {
   select(index) {
     this.selectedComponent = index;
 
+    const selectableComponents = this.components.filter(component => component.selectable);
+    if(selectableComponents.length <= 0) return;
+
     if(this.selectedComponent >= this.components.length) {
       this.selectedComponent = 0;
     } else if(this.selectedComponent < 0) {

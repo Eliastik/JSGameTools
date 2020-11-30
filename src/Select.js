@@ -23,10 +23,11 @@ import Style from "./Style";
 import Constants from "./Constants";
 
 export default class Select extends Button {
-  constructor(x, y, maxWidth, maxHeight, style, optionContainer) {
+  constructor(x, y, maxWidth, maxHeight, style, optionContainer, defaultOption) {
     super(x, y, maxWidth, maxHeight, style);
 
     this.optionContainer = optionContainer;
+    if(defaultOption) this.selectedOption = defaultOption;
 
     this.label = new Label("", x, y, style);
     this.label.style.setAll({ "alignement": Constants.Alignement.LEFT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
@@ -60,6 +61,10 @@ export default class Select extends Button {
 
   set selectedOption(id) {
     this.optionContainer.selectedOption = id;
+  }
+
+  get text() {
+    return this.selectedOption ? this.selectedOptionText : null;
   }
 
   get width() {

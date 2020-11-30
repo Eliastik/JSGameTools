@@ -21,17 +21,20 @@ const JGT = JSGameTools;
 JGT.Constants.Setting.FONT_FAMILY = "Gaegu";
 JGT.Constants.Setting.FONT_SIZE = 35;
 
+// Graphic components
 const imageLoader = new JGT.ImageLoader();
 
 const buttonStyle = new JGT.Style({ "backgroundColor": "gray", "borderSize": 2, "borderColor": "black" });
-const labelStyle = new JGT.Style({ "fontColor": "white" });
-const buttonStyle2 = new JGT.Style({ "backgroundColor": "#2ecc71", "backgroundColorHover": "#1abc9c", "backgroundColorDown": "#16a085" });
-const buttonStyleRed = new JGT.Style({ "backgroundColor": "#CC2F2F", "backgroundColorHover": "#F23838", "backgroundColorDown": "#A62626" });
+const labelStyle = new JGT.Style({ "fontColor": "white", "alignement": "center" });
+const labelStyleDefault = new JGT.Style({ "fontColor": "white" });
+const buttonStyle2 = new JGT.Style({ "backgroundColor": "#2ecc71", "backgroundColorHover": "#1abc9c", "backgroundColorDown": "#16a085", "alignement": "center" });
+const buttonStyleDefault = new JGT.Style({ "backgroundColor": "#2ecc71", "backgroundColorHover": "#1abc9c", "backgroundColorDown": "#16a085" });
+const buttonStyleRed = new JGT.Style({ "backgroundColor": "#CC2F2F", "backgroundColorHover": "#F23838", "backgroundColorDown": "#A62626", "alignement": "center" });
+const buttonStyleRedDefault = new JGT.Style({ "backgroundColor": "#CC2F2F", "backgroundColorHover": "#F23838", "backgroundColorDown": "#A62626" });
 
 const box = new JGT.Box(0, 0, 800, 600, new JGT.Style({ "backgroundColor": "lightgray" }));
-const gameTitle = new JGT.Label("Tic Tac Toe created\nusing JSGameTools", null, null, new JGT.Style({ "alignement": "center", "fontSize": 30 }));
 const gameInfos = new JGT.Label("", null, null, new JGT.Style({ "alignement": "center", "fontSize": 30 }));
-const fpsMeter = new JGT.FPSMeter(false, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "bottom"}));
+const fpsMeter = new JGT.FPSMeter(false, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "bottom", "foreground": true }));
 
 const pauseImage = new JGT.ImageContainer("pause.png", null, null, 64, 64, new JGT.Style({ "verticalAlignement": "center", "alignement": "center" }));
 const fullscreenImage = new JGT.ImageContainer("fullscreen.png", null, null, 64, 64, new JGT.Style({ "verticalAlignement": "center", "alignement": "center" }));
@@ -39,19 +42,48 @@ const pauseButton = new JGT.Button(null, 50, null, null, new JGT.Style({ "aligne
 const fullscreenButton = new JGT.Button(null, 50, null, null, new JGT.Style({ "alignement": "left", "verticalAlignement": "center" }), new JGT.Row(5, 250, null, null, null, fullscreenImage));
 const rowButtons = new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "top" }), fullscreenButton, pauseButton);
 
+// Pause menu
+const buttonNewGame = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("New game", null, null, labelStyle));
 const buttonMenu1 = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Reset the game", null, null, labelStyle));
-buttonMenu1.style.set("alignement", "center");
 const buttonMenu2 = new JGT.Button(5, 5, null, null, buttonStyleRed, new JGT.Label("Close", null, null, labelStyle));
-buttonMenu2.style.set("alignement", "center");
 const menuLabel = new JGT.Label("Pause menu", null, null, labelStyle);
-menuLabel.style.set("alignement", "center");
-const menu = new JGT.Menu(null, menuLabel, buttonMenu1, buttonMenu2);
+const menu = new JGT.Menu(null, menuLabel, buttonNewGame, buttonMenu1, buttonMenu2);
 
+// Result menu
+const buttonNewGame2 = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("New game", null, null, labelStyle));
 const buttonMenu3 = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Reset the game", null, null, labelStyle));
-buttonMenu3.style.set("alignement", "center");
 const menuResultLabel = new JGT.Label("???", null, null, labelStyle);
-menuResultLabel.style.set("alignement", "center");
-const menuResult = new JGT.Menu(null, menuResultLabel, buttonMenu3);
+const menuResult = new JGT.Menu(null, menuResultLabel, buttonNewGame2, buttonMenu3);
+
+// Main menu
+const buttonPlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Player VS AI", null, null, labelStyle));
+const buttonPlayerVSPlayer = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Player VS Player", null, null, labelStyle));
+const mainMenuLabel = new JGT.Label("JSGameTools\nTic Tac Toe example", null, null, labelStyle);
+const mainMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), mainMenuLabel, buttonPlayerVSAI, buttonPlayerVSPlayer);
+mainMenu.enable();
+
+// Player VS Player settings
+const labelPlayerVSPlayerMenu = new JGT.Label("Player VS Player", null, null, labelStyle);
+const labelGridParamPlayerVSPlayerMenu = new JGT.Label("Grid size : ", null, null, labelStyleDefault);
+const inputRow = new JGT.Input(null, null, 50, null, null, "3");
+const xSign = new JGT.Label("×", null, null, labelStyleDefault);
+const inputCol = new JGT.Input(null, null, 50, null, null, "3");
+const validatePlayerVSPlayer = new JGT.Button(5, 5, null, null, buttonStyleDefault, new JGT.Label("Play", null, null, labelStyle));
+const cancelPlayerVSPlayer = new JGT.Button(5, 5, null, null, buttonStyleRedDefault, new JGT.Label("Cancel", null, null, labelStyle));
+const playerVSPlayerMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), labelPlayerVSPlayerMenu, new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelGridParamPlayerVSPlayerMenu, inputRow, xSign, inputCol), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), validatePlayerVSPlayer, cancelPlayerVSPlayer));
+
+// Player VS AI settings
+const labelPlayerVSAIMenu = new JGT.Label("Player VS AI", null, null, labelStyle);
+const labelGridParamPlayerVSAIMenu = new JGT.Label("Grid size : ", null, null, labelStyleDefault);
+const inputRowAI = new JGT.Input(null, null, 50, null, null, "3");
+const xSignAI = new JGT.Label("×", null, null, labelStyleDefault);
+const inputColAI = new JGT.Input(null, null, 50, null, null, "3");
+const labelAILevel = new JGT.Label("AI level : ", null, null, labelStyleDefault);
+const optionsAILevel = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreground": true }), new JGT.SelectOption(new JGT.Label("Low")), new JGT.SelectOption(new JGT.Label("Normal")), new JGT.SelectOption(new JGT.Label("High")));
+const selectAILevel = new JGT.Select(255, 315, null, null, null, optionsAILevel, 3);
+const validatePlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyleDefault, new JGT.Label("Play", null, null, labelStyle));
+const cancelPlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyleRedDefault, new JGT.Label("Cancel", null, null, labelStyle));
+const playerVSAIMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), labelPlayerVSAIMenu, new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelGridParamPlayerVSAIMenu, inputRowAI, xSignAI, inputColAI), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelAILevel, selectAILevel), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), validatePlayerVSAI, cancelPlayerVSAI));
 
 pauseButton.addClickAction(() => {
   menu.enable();
@@ -65,6 +97,52 @@ buttonMenu2.addClickAction(() => {
   menu.disable();
 });
 
+buttonNewGame.addClickAction(openMainMenu);
+buttonNewGame2.addClickAction(openMainMenu);
+
+validatePlayerVSPlayer.addClickAction(() => {
+  runGame(GAME_MODE.PLAYER_VS_PLAYER, [isNaN(inputRow.text) ? 3 : parseInt(inputRow.text), isNaN(inputCol.text) ? 3 : parseInt(inputCol.text)]);
+});
+
+buttonPlayerVSPlayer.addClickAction(() => {
+  mainMenu.disable();
+  playerVSPlayerMenu.enable();
+});
+
+cancelPlayerVSPlayer.addClickAction(() => {
+  mainMenu.enable();
+  playerVSPlayerMenu.disable();
+});
+
+buttonPlayerVSAI.addClickAction(() => {
+  mainMenu.disable();
+  playerVSAIMenu.enable();
+});
+
+validatePlayerVSAI.addClickAction(() => {
+  switch(selectAILevel.text) {
+    case "High":
+      aiLevel = AI_LEVEL.HIGH;
+      break;
+    case "Normal":
+      aiLevel = AI_LEVEL.NORMAL;
+      break;
+    case "Low":
+      aiLevel = AI_LEVEL.LOW;
+      break;
+  }
+
+  runGame(GAME_MODE.PLAYER_VS_AI, [isNaN(inputRowAI.text) ? 3 : parseInt(inputRowAI.text), isNaN(inputColAI.text) ? 3 : parseInt(inputColAI.text)]);
+});
+
+cancelPlayerVSAI.addClickAction(() => {
+  mainMenu.enable();
+  playerVSAIMenu.disable();
+});
+
+buttonMenu1.addClickAction(() => runGame());
+buttonMenu3.addClickAction(() => runGame());
+
 // Board col
 const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "center", "verticalAlignement": "center" }));
 
@@ -72,16 +150,22 @@ const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "c
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
 const WIN_SITUATION = { PLAYER_ONE: -10, PLAYER_TWO: 10, DRAW: 0 };
-const MAX_DEPTH_MINIMAX = 10;
+const GAME_MODE = { PLAYER_VS_AI: 1, PLAYER_VS_PLAYER: 2 };
+const AI_LEVEL = { HIGH: 10, NORMAL: 3, LOW: 1 };
+const DEFAULT_MAX_DEPTH_MINIMAX = AI_LEVEL.HIGH;
+
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
-const sizeBoard = [3, 3];
+let aiPlayer = PLAYER_NUM.PLAYER_TWO;
+let currentGameMode = GAME_MODE.PLAYER_VS_AI;
+let aiLevel = AI_LEVEL.HIGH;
+let sizeBoard = [3, 3];
 let buttons = [];
 let buttonsBoard = [];
 let gameBoard = [];
 
 function createBoard() {
   col.clear();
-  col.add(gameTitle);
+  col.add(gameInfos);
   gameBoard = [];
   buttons = [];
   buttonsBoard = [];
@@ -108,8 +192,6 @@ function createBoard() {
     const currentCellPosition = [Math.floor(i / sizeBoard[1]), i % sizeBoard[1]];
     gameAction(gameBoard, currentCellPosition);
   }));
-
-  col.add(gameInfos);
 }
 
 function checkWinHoriz(board) {
@@ -296,7 +378,7 @@ function gameAction(board, position) {
 
     if(mark) buttonsBoard[position[0]][position[1]].set(mark);
   
-    if(currentPlayer == PLAYER_NUM.PLAYER_TWO) {
+    if(currentGameMode == GAME_MODE.PLAYER_VS_AI && currentPlayer == aiPlayer) {
       playAi(board);
     }
   }
@@ -322,7 +404,7 @@ function eval(board, player) {
   const check = checkWin(board);
 
   if(check) {
-    return check * (player == PLAYER_NUM.PLAYER_TWO ? 1 : -1);
+    return check * (player == aiPlayer ? 1 : -1);
   }
 
   return null;
@@ -389,14 +471,14 @@ function ai(board, depth, player) {
       const position = situation.position;
       board[position[0]][position[1]] = player;
 
-      if(player == PLAYER_NUM.PLAYER_TWO) { // ai
-        const maximum = max(ai(board, depth - 1, PLAYER_NUM.PLAYER_ONE));
+      if(player == aiPlayer) { // ai
+        const maximum = max(ai(board, depth - 1, aiPlayer == PLAYER_NUM.PLAYER_TWO ? PLAYER_NUM.PLAYER_ONE : PLAYER_NUM.PLAYER_TWO));
 
         if(maximum) {
           situation.eval = maximum.eval;
         }
       } else {
-        const minimum = min(ai(board, depth - 1, PLAYER_NUM.PLAYER_TWO));
+        const minimum = min(ai(board, depth - 1, aiPlayer == PLAYER_NUM.PLAYER_TWO ? PLAYER_NUM.PLAYER_TWO : PLAYER_NUM.PLAYER_ONE));
 
         if(minimum) {
           situation.eval = minimum.eval;
@@ -411,27 +493,55 @@ function ai(board, depth, player) {
 }
 
 function playAi(board) {
-  const bestMove = ai(copyBoard(board), MAX_DEPTH_MINIMAX, PLAYER_NUM.PLAYER_TWO);
+  const bestMove = ai(copyBoard(board), aiLevel, aiPlayer);
 
   if(bestMove && bestMove.length > 0) {
     gameAction(board, max(bestMove.reverse()).position);
   }
 }
 
-function resetGame() {
-  currentPlayer = PLAYER_NUM.PLAYER_ONE;
-  gameInfos.text = "It's the turn of\nplayer 1";
-  createBoard();
-  menu.disable();
-  menuResult.disable();
+function randRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-buttonMenu1.addClickAction(resetGame);
-buttonMenu3.addClickAction(resetGame);
-resetGame();
+function getRandomPosition(board) {
+  return [randRange(0, board.length - 1), randRange(0, board[0].length - 1)];
+}
+
+function runGame(gameMode, size) {
+  currentPlayer = PLAYER_NUM.PLAYER_ONE;
+  gameInfos.text = "It's the turn of\nplayer 1";
+  aiPlayer = randRange(0, 1) == 1 ? PLAYER_NUM.PLAYER_ONE : PLAYER_NUM.PLAYER_TWO;
+  if(gameMode) currentGameMode = gameMode;
+
+  if(size) {
+    sizeBoard[0] = Math.max(3, size[0]);
+    sizeBoard[1] = Math.max(3, size[1]);
+  }
+  
+  createBoard();
+  closeAllMenus();
+
+  if(aiPlayer == PLAYER_NUM.PLAYER_ONE) {
+    gameAction(gameBoard, getRandomPosition(gameBoard));
+  }
+}
+
+function closeAllMenus() {
+  menu.disable();
+  mainMenu.disable();
+  menuResult.disable();
+  playerVSPlayerMenu.disable();
+  playerVSAIMenu.disable();
+}
+
+function openMainMenu() {
+  closeAllMenus();
+  mainMenu.enable();
+}
 
 // Create scene (containing components) and canvas
-const scene = new JGT.Scene(box, col, rowButtons, menu, menuResult, fpsMeter);
+const scene = new JGT.Scene(box, col, rowButtons, menu, menuResult, mainMenu, playerVSPlayerMenu, playerVSAIMenu, optionsAILevel, fpsMeter);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
 canvas.appendTo(document.body);
 canvas.toggleFullpage();
