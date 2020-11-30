@@ -72,7 +72,7 @@ const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "c
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
 const WIN_SITUATION = { PLAYER_ONE: -10, PLAYER_TWO: 10, DRAW: 0 };
-const MAX_DEPTH_MINIMAX = 100;
+const MAX_DEPTH_MINIMAX = 10;
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
 const sizeBoard = [3, 3];
 let buttons = [];
@@ -325,7 +325,7 @@ function eval(board, player) {
     return check * (player == PLAYER_NUM.PLAYER_TWO ? 1 : -1);
   }
 
-  return 0;
+  return null;
 }
 
 function nextSituations(board, player) {
@@ -339,7 +339,7 @@ function nextSituations(board, player) {
 
         situs.push({
           "position": [i, j],
-          "eval": evaluation
+          "eval": evaluation == null ? 0 : eval
         });
 
         board[i][j] = MARK_TYPE.EMPTY;
@@ -381,7 +381,7 @@ function ai(board, depth, player) {
   if(depth <= 0 || situations.length <= 0) {
     return [{
       "position": null,
-      "eval": evaluation
+      "eval": evaluation == null ? 0 : evaluation
     }];
   } else {
     for(let i = 0; i < situations.length; i++) {
@@ -414,7 +414,7 @@ function playAi(board) {
   const bestMove = ai(copyBoard(board), MAX_DEPTH_MINIMAX, PLAYER_NUM.PLAYER_TWO);
 
   if(bestMove && bestMove.length > 0) {
-    gameAction(board, max(bestMove).position);
+    gameAction(board, max(bestMove.reverse()).position);
   }
 }
 
