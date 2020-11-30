@@ -71,7 +71,8 @@ const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "c
 // Events, game variables and logic
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
-const WIN_SITUATION = { PLAYER_ONE: -1, PLAYER_TWO: 1, DRAW: 0 };
+const WIN_SITUATION = { PLAYER_ONE: -10, PLAYER_TWO: 10, DRAW: 0 };
+const MAX_DEPTH_MINIMAX = 100;
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
 const sizeBoard = [3, 3];
 let buttons = [];
@@ -321,10 +322,10 @@ function eval(board, player) {
   const check = checkWin(board);
 
   if(check) {
-    return checkWin(board) * (player == PLAYER_NUM.PLAYER_TWO ? 1 : -1);
+    return check * (player == PLAYER_NUM.PLAYER_TWO ? 1 : -1);
   }
 
-  return null;
+  return 0;
 }
 
 function nextSituations(board, player) {
@@ -338,7 +339,7 @@ function nextSituations(board, player) {
 
         situs.push({
           "position": [i, j],
-          "eval": evaluation == null ? 0 : evaluation
+          "eval": evaluation
         });
 
         board[i][j] = MARK_TYPE.EMPTY;
@@ -363,7 +364,7 @@ function max(situations) {
 
 function min(situations) {
   let min = situations[0];
-
+  
   situations.forEach(situation => {
     if(situation.eval < min.eval) {
       min = situation;
@@ -374,14 +375,14 @@ function min(situations) {
 }
 
 function ai(board, depth, player) {
-  const evaluation = eval(board, player);
   const situations = nextSituations(board, player);
+  const evaluation = eval(board, player);
 
-  if(depth <= 0 || evaluation != null || situations.length <= 0) {
-    return {
+  if(depth <= 0 || situations.length <= 0) {
+    return [{
       "position": null,
       "eval": evaluation
-    };
+    }];
   } else {
     for(let i = 0; i < situations.length; i++) {
       const situation = situations[i];
@@ -389,25 +390,32 @@ function ai(board, depth, player) {
       board[position[0]][position[1]] = player;
 
       if(player == PLAYER_NUM.PLAYER_TWO) { // ai
-        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_TWO).eval;
-        situation.eval += valueNext;
-      } else {
-        const valueNext = ai(board, depth - 1, PLAYER_NUM.PLAYER_ONE).eval;
-        situation.eval += valueNext;
-      }
-    }
+        const maximum = max(ai(board, depth - 1, PLAYER_NUM.PLAYER_ONE));
 
-    if(player == PLAYER_NUM.PLAYER_TWO) { // ai
-      return max(situations);
-    } else {
-      return min(situations);
+        if(maximum) {
+          situation.eval = maximum.eval;
+        }
+      } else {
+        const minimum = min(ai(board, depth - 1, PLAYER_NUM.PLAYER_TWO));
+
+        if(minimum) {
+          situation.eval = minimum.eval;
+        }
+      }
+
+      board[position[0]][position[1]] = MARK_TYPE.EMPTY;
     }
+      
+    return situations;
   }
 }
 
 function playAi(board) {
-  const bestMove = ai(copyBoard(board), 10, PLAYER_NUM.PLAYER_TWO);
-  gameAction(board, bestMove.position);
+  const bestMove = ai(copyBoard(board), MAX_DEPTH_MINIMAX, PLAYER_NUM.PLAYER_TWO);
+
+  if(bestMove && bestMove.length > 0) {
+    gameAction(board, max(bestMove).position);
+  }
 }
 
 function resetGame() {
