@@ -115,7 +115,7 @@ class Box extends JGT.Component {
 const box = new Box(new JGT.Style({ "backgroundColor": "#888888" }));
 const scene = new JGT.Scene(box, buttonText, buttonText2, buttonImage, buttonTextFullscreen, notification, menu, notification2, row1, link1, tooltip1, tooltip2, fpsMeter, progress, tooltip3, buttonArrow, colScrollable, select, options);
 const canvas = new JGT.Canvas(scene, document.getElementById("canvas"), null, null, true);
-canvas.appendTo(document.body);
+canvas.appendTo(document.getElementById("canvasContainer"));
 
 // Events
 buttonText.addClickAction(() => {

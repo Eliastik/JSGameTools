@@ -58,8 +58,9 @@ const menuResult = new JGT.Menu(null, menuResultLabel, buttonNewGame2, buttonMen
 // Main menu
 const buttonPlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Player VS AI", null, null, labelStyle));
 const buttonPlayerVSPlayer = new JGT.Button(5, 5, null, null, buttonStyle2, new JGT.Label("Player VS Player", null, null, labelStyle));
+const buttonExit = new JGT.Button(5, 5, null, null, buttonStyleRed, new JGT.Label("Exit", null, null, labelStyle));
 const mainMenuLabel = new JGT.Label("JSGameTools\nTic Tac Toe example", null, null, labelStyle);
-const mainMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), mainMenuLabel, buttonPlayerVSAI, buttonPlayerVSPlayer);
+const mainMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), mainMenuLabel, buttonPlayerVSAI, buttonPlayerVSPlayer, buttonExit);
 mainMenu.enable();
 
 // Player VS Player settings
@@ -83,7 +84,7 @@ const optionsAILevel = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreg
 const selectAILevel = new JGT.Select(255, 315, null, null, null, optionsAILevel, 1);
 const labelAIFirstPlayer = new JGT.Label("First player: ", null, null, labelStyleDefault);
 const optionsAIFirstPlayer = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreground": true }), new JGT.SelectOption(new JGT.Label("You")), new JGT.SelectOption(new JGT.Label("AI")));
-const selectAIFirstPlayer = new JGT.Select(255, 315, null, null, null, optionsAIFirstPlayer);
+const selectAIFirstPlayer = new JGT.Select(255, 315, null, null, null, optionsAIFirstPlayer, 1);
 const validatePlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyleDefault, new JGT.Label("Play", null, null, labelStyle));
 const cancelPlayerVSAI = new JGT.Button(5, 5, null, null, buttonStyleRedDefault, new JGT.Label("Cancel", null, null, labelStyle));
 const playerVSAIMenu = new JGT.Menu(new JGT.Style({ "backgroundColor": "rgba(44, 62, 80, 1)" }), labelPlayerVSAIMenu, new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelGridParamPlayerVSAIMenu, inputRowAI, xSignAI, inputColAI), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelAILevel, selectAILevel), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), labelAIFirstPlayer, selectAIFirstPlayer), new JGT.Row(null, null, null, null, new JGT.Style({ "alignement": "center", "padding": 20 }), validatePlayerVSAI, cancelPlayerVSAI));
@@ -98,6 +99,10 @@ fullscreenButton.addClickAction(() => {
 
 buttonMenu2.addClickAction(() => {
   menu.disable();
+});
+
+buttonExit.addClickAction(() => {
+  location.href = "./index.html";
 });
 
 buttonNewGame.addClickAction(openMainMenu);
