@@ -80,7 +80,7 @@ const xSignAI = new JGT.Label("×", null, null, labelStyleDefault);
 const inputColAI = new JGT.Input(null, null, 50, null, null, "3");
 const labelAILevel = new JGT.Label("AI level: ", null, null, labelStyleDefault);
 const optionsAILevel = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreground": true }), new JGT.SelectOption(new JGT.Label("Low")), new JGT.SelectOption(new JGT.Label("Normal")), new JGT.SelectOption(new JGT.Label("High")));
-const selectAILevel = new JGT.Select(255, 315, null, null, null, optionsAILevel, 2);
+const selectAILevel = new JGT.Select(255, 315, null, null, null, optionsAILevel, 1);
 const labelAIFirstPlayer = new JGT.Label("First player: ", null, null, labelStyleDefault);
 const optionsAIFirstPlayer = new JGT.SelectOptionsContainer(75, new JGT.Style({ "foreground": true }), new JGT.SelectOption(new JGT.Label("You")), new JGT.SelectOption(new JGT.Label("AI")));
 const selectAIFirstPlayer = new JGT.Select(255, 315, null, null, null, optionsAIFirstPlayer);
@@ -161,9 +161,10 @@ const col = new JGT.Col(null, null, null, null, new JGT.Style({ "alignement": "c
 // Events, game variables and logic
 const MARK_TYPE = { CROSS: "cross", CIRCLE: "circle", EMPTY: "empty" };
 const PLAYER_NUM = { PLAYER_ONE: MARK_TYPE.CROSS, PLAYER_TWO: MARK_TYPE.CIRCLE };
-const WIN_SITUATION = { PLAYER_ONE: -10, PLAYER_TWO: 10, DRAW: 0 };
+const WIN_SITUATION = { PLAYER_ONE: PLAYER_NUM.PLAYER_ONE, PLAYER_TWO: PLAYER_NUM.PLAYER_TWO, DRAW: 0 };
 const GAME_MODE = { PLAYER_VS_AI: 1, PLAYER_VS_PLAYER: 2 };
-const AI_LEVEL = { HIGH: 8, NORMAL: 5, LOW: 3 };
+const AI_LEVEL = { HIGH: 10, NORMAL: 5, LOW: 3 };
+const AI_WIN_SITUATION_SCORES = { WIN: 10, LOSE: -10, DRAW: 0 };
 const DEFAULT_MAX_DEPTH_MINIMAX = AI_LEVEL.HIGH;
 
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
@@ -277,13 +278,20 @@ function checkWinDiago(board) {
     const currentLine = board[i];
 
     for(let j = 0; j < currentLine.length; j++) {
-        const cellsToCheck = [[j, i], [j - 1, i - 1], [j - 2, i - 2], [j + 1, i + 1], [j + 2, i + 2]];
-        const cellsToCheckAnti = [[j, i], [j - 1, i + 1], [j - 2, i + 2], [j + 1, i - 1], [j + 2, i - 2]];
+        const cellsToCheck = [[j, i], [j - 1, i - 1], [j - 2, i - 2]];
+        const cellsToCheckTwo = [[j, i], [j + 1, i + 1], [j + 2, i + 2]];
+        const cellsToCheckAnti = [[j, i], [j - 1, i + 1], [j - 2, i + 2]];
+        const cellsToCheckAntiTwo = [[j, i], [j + 1, i - 1], [j + 2, i - 2]];
+
         const checkCells = checkCasesDiago(board, currentLine, cellsToCheck);
         const checkCellsAnti = checkCasesDiago(board, currentLine, cellsToCheckAnti);
+        const checkCellsTwo = checkCasesDiago(board, currentLine, cellsToCheckTwo);
+        const checkCellsAntiTwo = checkCasesDiago(board, currentLine, cellsToCheckAntiTwo);
 
         if(checkCells) return checkCells;
         if(checkCellsAnti) return checkCellsAnti;
+        if(checkCellsTwo) return checkCellsAnti;
+        if(checkCellsAntiTwo) return checkCellsAnti;
     }
   }
 
@@ -414,27 +422,47 @@ function eval(board, player) {
   const check = checkWin(board);
 
   if(check) {
-    return check * (player == aiPlayer ? 1 : -1);
+    if(check == WIN_SITUATION.DRAW) {
+      return AI_WIN_SITUATION_SCORES.DRAW;
+    } else if(check == aiPlayer) {
+      return AI_WIN_SITUATION_SCORES.WIN;
+    } else {
+      return AI_WIN_SITUATION_SCORES.LOSE;
+    }
   }
 
   return null;
 }
 
-function nextSituations(board, player) {
+function toStr(board) {
+  let str = "";
+
+  for(let i = 0; i < board.length; i++) {
+    for(let j = 0; j < board[i].length; j++) {
+      if(board[i][j] == MARK_TYPE.EMPTY) {
+        str += "   ";
+      } else if(board[i][j] == MARK_TYPE.CIRCLE) {
+        str += " o ";
+      } else if(board[i][j] == MARK_TYPE.CROSS) {
+        str += " x ";
+      }
+    }
+
+    str += "\n";
+  }
+
+  return str;
+}
+
+function nextSituations(board) {
   const situs = [];
 
   for(let i = 0; i < board.length; i++) {
     for(let j = 0; j < board[i].length; j++) {
       if(board[i][j] == MARK_TYPE.EMPTY) {
-        board[i][j] = player;
-        const evaluation = eval(board, player);
-
         situs.push({
-          "position": [i, j],
-          "eval": evaluation == null ? 0 : eval
+          "position": [i, j]
         });
-
-        board[i][j] = MARK_TYPE.EMPTY;
       }
     }
   }
@@ -467,46 +495,54 @@ function min(situations) {
 }
 
 function ai(board, depth, player) {
-  const situations = nextSituations(board, player);
   const evaluation = eval(board, player);
 
-  if(depth <= 0 || situations.length <= 0) {
-    return [{
-      "position": null,
-      "eval": evaluation == null ? 0 : evaluation
-    }];
-  } else {
-    for(let i = 0; i < situations.length; i++) {
-      const situation = situations[i];
-      const position = situation.position;
-      board[position[0]][position[1]] = player;
+  let bestState = {
+    "position": null,
+    "eval": player == aiPlayer ? -1000 : 1000
+  };
 
-      if(player == aiPlayer) { // ai
-        const maximum = max(ai(board, depth - 1, aiPlayer == PLAYER_NUM.PLAYER_TWO ? PLAYER_NUM.PLAYER_ONE : PLAYER_NUM.PLAYER_TWO));
-
-        if(maximum) {
-          situation.eval = maximum.eval;
-        }
-      } else {
-        const minimum = min(ai(board, depth - 1, aiPlayer));
-
-        if(minimum) {
-          situation.eval = minimum.eval;
-        }
-      }
-
-      board[position[0]][position[1]] = MARK_TYPE.EMPTY;
-    }
-      
-    return situations;
+  if(depth <= 0 || evaluation != null) {
+    bestState.eval = evaluation;
+    return bestState;
   }
+
+  const situations = nextSituations(board, player);
+
+  for(let i = 0; i < situations.length; i++) {
+    const situation = situations[i];
+    const position = situation.position;
+    board[position[0]][position[1]] = player;
+
+    if(player == aiPlayer) { // ai
+      const state = ai(board, depth - 1, aiPlayer == PLAYER_NUM.PLAYER_TWO ? PLAYER_NUM.PLAYER_ONE : PLAYER_NUM.PLAYER_TWO);
+
+      if(state.eval >= bestState.eval) {
+        bestState.eval = state.eval;
+        situation.eval = state.eval;
+        bestState.position = position;
+      }
+    } else {
+      const state = ai(board, depth - 1, aiPlayer);
+
+      if(state.eval <= bestState.eval) {
+        bestState.eval = state.eval;
+        situation.eval = state.eval;
+        bestState.position = position;
+      }
+    }
+
+    board[position[0]][position[1]] = MARK_TYPE.EMPTY;
+  }
+
+  return bestState;
 }
 
 function playAi(board) {
   const bestMove = ai(copyBoard(board), aiLevel, aiPlayer);
 
-  if(bestMove && bestMove.length > 0) {
-    gameAction(board, max(bestMove.reverse()).position);
+  if(bestMove) {
+    gameAction(board, bestMove.position);
   }
 }
 
@@ -534,6 +570,8 @@ function runGame(gameMode, size) {
   if(gameMode == GAME_MODE.PLAYER_VS_AI && aiPlayer == PLAYER_NUM.PLAYER_ONE) {
     gameAction(gameBoard, getRandomPosition(gameBoard));
   }
+
+  col.style.set("hidden", false);
 }
 
 function closeAllMenus() {
@@ -542,6 +580,7 @@ function closeAllMenus() {
   menuResult.disable();
   playerVSPlayerMenu.disable();
   playerVSAIMenu.disable();
+  col.style.set("hidden", true);
 }
 
 function openMainMenu() {
