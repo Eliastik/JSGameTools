@@ -207,6 +207,26 @@ function createBoard() {
   }));
 }
 
+function toStr(board) {
+  let str = "";
+
+  for(let i = 0; i < board.length; i++) {
+    for(let j = 0; j < board[i].length; j++) {
+      if(board[i][j] == MARK_TYPE.EMPTY) {
+        str += "   ";
+      } else if(board[i][j] == MARK_TYPE.CIRCLE) {
+        str += " o ";
+      } else if(board[i][j] == MARK_TYPE.CROSS) {
+        str += " x ";
+      }
+    }
+
+    str += "\n";
+  }
+
+  return str;
+}
+
 function checkWinHoriz(board) {
   let countCross = 0;
   let countCircle = 0;
@@ -290,8 +310,8 @@ function checkWinDiago(board) {
 
         if(checkCells) return checkCells;
         if(checkCellsAnti) return checkCellsAnti;
-        if(checkCellsTwo) return checkCellsAnti;
-        if(checkCellsAntiTwo) return checkCellsAnti;
+        if(checkCellsTwo) return checkCellsTwo;
+        if(checkCellsAntiTwo) return checkCellsAntiTwo;
     }
   }
 
@@ -305,8 +325,8 @@ function checkCasesDiago(board, currentLine, cellsToCheck) {
   for(let k = 0; k < cellsToCheck.length; k++) {
     const c = cellsToCheck[k];
 
-    if(c[0] >= 0 && c[0] < board.length && c[1] >= 0 && c[1] < currentLine.length) {
-      const cell = board[c[0]][c[1]];
+    if(c[1] >= 0 && c[1] < board.length && c[0] >= 0 && c[0] < currentLine.length) {
+      const cell = board[c[1]][c[0]];
 
       if(cell == MARK_TYPE.CROSS) {
         countCross++;
@@ -418,7 +438,7 @@ function copyBoard(boardToCopy) {
   return gameBoard;
 }
 
-function eval(board, player) {
+function eval(board) {
   const check = checkWin(board);
 
   if(check) {
@@ -432,26 +452,6 @@ function eval(board, player) {
   }
 
   return null;
-}
-
-function toStr(board) {
-  let str = "";
-
-  for(let i = 0; i < board.length; i++) {
-    for(let j = 0; j < board[i].length; j++) {
-      if(board[i][j] == MARK_TYPE.EMPTY) {
-        str += "   ";
-      } else if(board[i][j] == MARK_TYPE.CIRCLE) {
-        str += " o ";
-      } else if(board[i][j] == MARK_TYPE.CROSS) {
-        str += " x ";
-      }
-    }
-
-    str += "\n";
-  }
-
-  return str;
 }
 
 function nextSituations(board) {
@@ -470,32 +470,8 @@ function nextSituations(board) {
   return situs;
 }
 
-function max(situations) {
-  let max = situations[0];
-
-  situations.forEach(situation => {
-    if(situation.eval > max.eval) {
-      max = situation;
-    }
-  });
-
-  return max;
-}
-
-function min(situations) {
-  let min = situations[0];
-  
-  situations.forEach(situation => {
-    if(situation.eval < min.eval) {
-      min = situation;
-    }
-  });
-
-  return min;
-}
-
 function ai(board, depth, player) {
-  const evaluation = eval(board, player);
+  const evaluation = eval(board);
 
   let bestState = {
     "position": null,
@@ -507,7 +483,7 @@ function ai(board, depth, player) {
     return bestState;
   }
 
-  const situations = nextSituations(board, player);
+  const situations = nextSituations(board);
 
   for(let i = 0; i < situations.length; i++) {
     const situation = situations[i];
