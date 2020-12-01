@@ -128,6 +128,10 @@ buttonPlayerVSAI.addClickAction(() => {
 });
 
 validatePlayerVSAI.addClickAction(() => {
+  aiPlayer = PLAYER_NUM.PLAYER_TWO;
+  otherPlayer = PLAYER_NUM.PLAYER_ONE;
+  aiLevel = AI_LEVEL.NORMAL;
+
   switch(selectAILevel.text) {
     case "High":
       aiLevel = AI_LEVEL.HIGH;
@@ -143,9 +147,11 @@ validatePlayerVSAI.addClickAction(() => {
   switch(selectAIFirstPlayer.text) {
     case "You":
       aiPlayer = PLAYER_NUM.PLAYER_TWO;
+      otherPlayer = PLAYER_NUM.PLAYER_ONE;
       break;
     case "AI":
       aiPlayer = PLAYER_NUM.PLAYER_ONE;
+      otherPlayer = PLAYER_NUM.PLAYER_TWO;
       break;
   }
 
@@ -174,6 +180,7 @@ const DEFAULT_MAX_DEPTH_MINIMAX = AI_LEVEL.HIGH;
 
 let currentPlayer = PLAYER_NUM.PLAYER_ONE;
 let aiPlayer = PLAYER_NUM.PLAYER_TWO;
+let otherPlayer = PLAYER_NUM.PLAYER_ONE;
 let currentGameMode = GAME_MODE.PLAYER_VS_AI;
 let aiLevel = AI_LEVEL.HIGH;
 let sizeBoard = [3, 3];
@@ -400,10 +407,9 @@ function displayResultGame(board) {
 }
 
 function gameAction(board, position) {
-  let mark = null;
-
   if(position != null) {
     const currentCell = board[position[0]][position[1]];
+    let mark = null;
 
     if(currentCell == MARK_TYPE.EMPTY) {
       if(currentPlayer == PLAYER_NUM.PLAYER_ONE) {
@@ -417,12 +423,12 @@ function gameAction(board, position) {
         gameInfos.text = "It's the turn of\nplayer 1";
         board[position[0]][position[1]] = PLAYER_NUM.PLAYER_TWO;
       }
-    }
 
-    if(mark) buttonsBoard[position[0]][position[1]].set(mark);
-  
-    if(currentGameMode == GAME_MODE.PLAYER_VS_AI && currentPlayer == aiPlayer) {
-      playAi(board);
+      if(mark) buttonsBoard[position[0]][position[1]].set(mark);
+    
+      if(currentGameMode == GAME_MODE.PLAYER_VS_AI && currentPlayer == aiPlayer) {
+        playAi(board);
+      }
     }
   }
 
@@ -466,7 +472,8 @@ function nextSituations(board) {
     for(let j = 0; j < board[i].length; j++) {
       if(board[i][j] == MARK_TYPE.EMPTY) {
         situs.push({
-          "position": [i, j]
+          "position": [i, j],
+          "eval": null
         });
       }
     }
@@ -475,12 +482,12 @@ function nextSituations(board) {
   return situs;
 }
 
-function ai(board, depth, player) {
+function ai(board, depth, isAI) {
   const evaluation = eval(board);
 
   let bestState = {
     "position": null,
-    "eval": player == aiPlayer ? -1000 : 1000
+    "eval": isAI ? -Infinity : Infinity
   };
 
   if(depth <= 0 || evaluation != null) {
@@ -493,10 +500,10 @@ function ai(board, depth, player) {
   for(let i = 0; i < situations.length; i++) {
     const situation = situations[i];
     const position = situation.position;
-    board[position[0]][position[1]] = player;
+    board[position[0]][position[1]] = isAI ? aiPlayer : otherPlayer;
 
-    if(player == aiPlayer) { // ai
-      const state = ai(board, depth - 1, aiPlayer == PLAYER_NUM.PLAYER_TWO ? PLAYER_NUM.PLAYER_ONE : PLAYER_NUM.PLAYER_TWO);
+    if(isAI) {
+      const state = ai(board, depth - 1, false);
 
       if(state.eval >= bestState.eval) {
         bestState.eval = state.eval;
@@ -504,7 +511,7 @@ function ai(board, depth, player) {
         bestState.position = position;
       }
     } else {
-      const state = ai(board, depth - 1, aiPlayer);
+      const state = ai(board, depth - 1, true);
 
       if(state.eval <= bestState.eval) {
         bestState.eval = state.eval;
@@ -520,7 +527,7 @@ function ai(board, depth, player) {
 }
 
 function playAi(board) {
-  const bestMove = ai(copyBoard(board), aiLevel, aiPlayer);
+  const bestMove = ai(copyBoard(board), aiLevel, true);
 
   if(bestMove) {
     gameAction(board, bestMove.position);
