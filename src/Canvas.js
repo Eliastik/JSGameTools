@@ -19,6 +19,7 @@
 import Constants from "./Constants";
 import Utils from "./Utils";
 import Scene from "./Scene";
+import ReactorCanvas from "./ReactorCanvas";
 
 export default class Canvas {
   #lastFrameTime;
@@ -37,15 +38,15 @@ export default class Canvas {
     this.maxFPS = maxFPS || -1;
     this.#lastFrameTime = 0;
     
-    this.triggersClick = [];
-    this.triggersHover = [];
-    this.triggersDown = [];
-    this.triggersWheel = [];
-    this.triggersMove = [];
-    this.triggersUp = [];
-    this.triggersTouchStart = [];
-    this.triggersTouchEnd = [];
-    this.triggersTouchMove = [];
+    this.reactor = new ReactorCanvas();
+    this.reactor.registerEvent("mousemove");
+    this.reactor.registerEvent("click");
+    this.reactor.registerEvent("mousedown");
+    this.reactor.registerEvent("mouseup");
+    this.reactor.registerEvent("wheel");
+    this.reactor.registerEvent("touchstart");
+    this.reactor.registerEvent("touchend");
+    this.reactor.registerEvent("touchmove");
 
     if(autoResize) this.autoResize();
     this.createEvents();
@@ -148,102 +149,33 @@ export default class Canvas {
 
   createEvents() {
     if(!this.init && this.canvas) {
-      this.canvas.addEventListener("mousemove", event => {
-        const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersMove, mousePosition);
-      }, false);
-
-      this.canvas.addEventListener("click", event => {
-        const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersClick, mousePosition);
-      }, false);
-
-      this.canvas.addEventListener("mousedown", event => {
-        const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersDown, mousePosition);
-      }, false);
-
-      this.canvas.addEventListener("mouseup", event => {
-        const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersUp, mousePosition);
-      }, false);
-
-      this.canvas.addEventListener("wheel", event => {
-        const mousePosition = this.getMousePos(event);
-        this.doEvents(event, this.triggersWheel, mousePosition);
+      ["mousemove", "click", "mousedown", "mouseup", "wheel"].forEach(eventName => {
+        this.canvas.addEventListener(eventName, event => {
+          const mousePosition = this.getMousePos(event);
+          this.doEvents(event, eventName, mousePosition);
+        }, false);
       });
 
-      this.canvas.addEventListener("touchstart", event => {
-        const changedTouches = event.changedTouches[0];
-        const position = this.getMousePos(changedTouches);
-        this.doEvents(event, this.triggersTouchStart, position);
-      });
-
-      this.canvas.addEventListener("touchend", event => {
-        const changedTouches = event.changedTouches[0];
-        const position = this.getMousePos(changedTouches);
-        this.doEvents(event, this.triggersTouchEnd, position);
-      });
-
-      this.canvas.addEventListener("touchmove", event => {
-        const changedTouches = event.changedTouches[0];
-        const position = this.getMousePos(changedTouches);
-        this.doEvents(event, this.triggersTouchMove, position);
+      ["touchstart", "touchmove", "touchend"].forEach(eventName => {
+        this.canvas.addEventListener(eventName, event => {
+          const changedTouches = event.changedTouches[0];
+          const position = this.getMousePos(changedTouches);
+          this.doEvents(event, eventName, position);
+        });
       });
 
       this.init = true;
     }
   }
 
-  doEvents(event, triggers, mousePosition) {
-    const components = this.getComponentsAtPosition(mousePosition);
-    const triggersMap = triggers.map(element => element.component);
-
-    triggers.forEach(trigger => {
-      const func = trigger.trigger;
-      func(event, false);
-    });
-
-    [...components].reverse().forEach(component => {
-      if(triggersMap.indexOf(component) != -1) {
-        const func = triggers[triggersMap.indexOf(component)].trigger;
-        func(event, true);
-      }
-    });
+  doEvents(event, eventName, position) {
+    const components = this.getComponentsAtPosition(position); // Get all elements at the current position
+    this.reactor.dispatchEvent(eventName, event, false); // Dispatch to all components to disable them (call with false)
+    [...components].reverse().forEach(component => this.reactor.dispatchEventComponent(eventName, component, event, true)); // Dispatch to component detected to enable them (call with true)
   }
 
-  addEventListener(event, component, trigger) {
-    const o = {
-      "component": component,
-      "trigger": trigger
-    };
-
-    switch(event) {
-      case "mousemove":
-        this.triggersMove.push(o);
-        break;
-      case "click":
-        this.triggersClick.push(o);
-        break;
-      case "mousedown":
-        this.triggersDown.push(o);
-        break;
-      case "mouseup":
-        this.triggersUp.push(o);
-        break;
-      case "wheel":
-        this.triggersWheel.push(o);
-        break;
-      case "touchstart":
-        this.triggersTouchStart.push(o);
-        break;
-      case "touchend":
-        this.triggersTouchEnd.push(o);
-        break;
-      case "touchmove":
-        this.triggersTouchMove.push(o);
-        break;
-    }
+  addEventListener(event, component, callback) {
+    this.reactor.addEventListener(event, component, callback);
   }
   
   getMousePos(event) {

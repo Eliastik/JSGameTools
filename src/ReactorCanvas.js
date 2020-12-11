@@ -16,31 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Event from "./Event";
+import Reactor from "./Reactor";
 
-export default class Reactor {
-  constructor() {
-    this.events = {};
-  }
-
+export default class ReactorCanvas extends Reactor {
   registerEvent(eventName) {
-    this.events[eventName] = new Event(eventName);
+    if(!this.events[eventName]) this.events[eventName] = [];
   }
 
   dispatchEvent(eventName, ...eventArgs) {
-    const callbacks = this.events[eventName].callbacks;
-    callbacks.forEach(callback => callback && callback(...eventArgs));
+    const events = this.events[eventName];
+    events.forEach(event => event && event.callback && event.callback(...eventArgs));
   }
 
-  addEventListener(eventName, callback) {
-    this.events[eventName].registerCallback(callback);
+  dispatchEventComponent(eventName, component, ...eventArgs) {
+    const events = this.events[eventName];
+    events.forEach(event => event && event.callback && event.component == component && event.callback(...eventArgs));
+  }
+
+  addEventListener(eventName, component, callback) {
+    this.events[eventName].push({
+      "component": component,
+      "callback": callback
+    });
   }
 
   removeEventListener(eventName, callback) {
-    this.events[eventName].removeCallback(callback);
+    this.events[eventName].filter(event => event && event.callback != callback);
+  }
+
+  removeEventListenerComponent(eventName, component) {
+    this.events[eventName].filter(event => event && event.component != component);
   }
 
   removeAllEventListener(eventName) {
-    this.events[eventName].removeAllCallbacks();
+    this.events = [];
   }
 }
