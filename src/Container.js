@@ -96,7 +96,7 @@ export default class Container extends Box {
     this.#components.push(component);
     component.parent = this;
     if(this.canvas) component.canvas = this.canvas;
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   addAll(...components) {
@@ -105,12 +105,12 @@ export default class Container extends Box {
 
   remove(component) {
     this.#components = this.#components.filter(current => component != current);
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   clear() {
     this.#components = [];
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   get components() {
@@ -175,12 +175,12 @@ export default class Container extends Box {
 
   set maxWidth(maxWidth) {
     this.#_maxWidth = maxWidth;
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   set maxHeight(maxHeight) {
     this.#_maxHeight = maxHeight;
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   get minWidth() {
@@ -193,12 +193,12 @@ export default class Container extends Box {
 
   set minWidth(minWidth) {
     this.#_minWidth = minWidth;
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   set minHeight(minHeight) {
     this.#_minHeight = minHeight;
-    this.triggersOnChange.forEach(func => func());
+    this.reactor.dispatchEvent("onChange");
   }
 
   updateInnerHeight() { }

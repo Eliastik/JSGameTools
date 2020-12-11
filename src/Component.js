@@ -18,7 +18,7 @@
  */
 import Constants from "./Constants";
 import Style from "./Style";
-import Utils from "./Utils";
+import Reactor from "./Reactor";
 
 export default class Component {
   selectable = true;
@@ -42,13 +42,14 @@ export default class Component {
     this.style = style;
     
     // Functions triggered by events
-    this.triggersClick = [];
-    this.triggersHover = [];
-    this.triggersDown = [];
-    this.triggersScroll = [];
-    this.triggersMove = [];
-    this.triggersUp = [];
-    this.triggersOnChange = [];
+    this.reactor = new Reactor();
+    this.reactor.registerEvent("onClick");
+    this.reactor.registerEvent("onHover");
+    this.reactor.registerEvent("onDown");
+    this.reactor.registerEvent("onScroll");
+    this.reactor.registerEvent("onMove");
+    this.reactor.registerEvent("onUp");
+    this.reactor.registerEvent("onChange");
 
     // State
     this.init = false;
@@ -90,8 +91,8 @@ export default class Component {
             this.offsetMoveX += deltaX;
             this.offsetMoveY += deltaY;
 
-            if(this.triggersMove != null) {
-              this.triggersMove.forEach(trigger => trigger(deltaX, deltaY, mousePosition));
+            if(this.reactor) {
+              this.reactor.dispatchEvent("onMove", deltaX, deltaY, mousePosition);
             }
             
             this.moveEventStartX = mousePosition.x;
@@ -99,8 +100,8 @@ export default class Component {
           }
 
           if(result) {
-            if(this.triggersHover != null && !this.disabled) {
-              this.triggersHover.forEach(trigger => trigger(mousePosition));
+            if(this.reactor && !this.disabled) {
+              this.reactor.dispatchEvent("onHover", mousePosition);
             }
 
             if(this.tooltip) {
@@ -126,8 +127,8 @@ export default class Component {
           const mousePosition = this.getMousePos(event);
 
           if(result && this.hovered) {
-            if(this.triggersClick != null) {
-              this.triggersClick.forEach(trigger => trigger(mousePosition));
+            if(this.reactor) {
+              this.reactor.dispatchEvent("onClick", mousePosition);
             }
 
             this.selected = true;
@@ -146,8 +147,8 @@ export default class Component {
           const mousePosition = this.getMousePos(event);
 
           if(result) {
-            if(this.triggersDown != null) {
-              this.triggersDown.forEach(trigger => trigger(mousePosition));
+            if(this.reactor) {
+              this.reactor.dispatchEvent("onDown", mousePosition);
             }
             
             this.clicked = true;
@@ -164,8 +165,8 @@ export default class Component {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(event);
 
-          if(this.triggersUp != null) {
-            this.triggersUp.forEach(trigger => trigger(mousePosition));
+          if(this.reactor) {
+            this.reactor.dispatchEvent("onUp", mousePosition);
           }
           
           this.clicked = false;
@@ -177,8 +178,8 @@ export default class Component {
           this.offsetScrollX += event.deltaX;
           this.offsetScrollY += event.deltaY;
 
-          if(this.triggersScroll != null) {
-            this.triggersScroll.forEach(trigger => trigger(event.deltaX, event.deltaY));
+          if(this.reactor) {
+            this.reactor.dispatchEvent("onScroll", event.deltaX, event.deltaY);
           }
         }
       });
@@ -194,8 +195,8 @@ export default class Component {
           this.offsetScrollX += deltaX;
           this.offsetScrollY += deltaY;
 
-          if(this.triggersScroll != null) {
-            this.triggersScroll.forEach(trigger => trigger(deltaX, deltaY, position));
+          if(this.reactor) {
+            this.reactor.dispatchEvent("onScroll", deltaX, deltaY, position);
           }
           
           this.touchEventStartX = position.x;
@@ -271,107 +272,122 @@ export default class Component {
   }
 
   setClickAction(trigger) {
-    this.triggersClick = [trigger];
+    this.removeAllClickActions();
+    this.addClickAction(trigger);
   }
   
   addClickAction(trigger) {
-    this.triggersClick.push(trigger);
+    this.reactor.addEventListener("onClick", trigger);
   }
   
   removeClickAction(trigger) {
-    this.triggersClick = this.triggersClick.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onClick", trigger);
   }
 
   removeAllClickActions() {
-    this.triggersClick = [];
+    this.reactor.removeAllEventListener("onClick");
   }
 
   setHoverAction(trigger) {
-    this.triggersHover = [trigger];
+    this.removeAllHoverActions();
+    this.addHoverAction(trigger);
   }
   
   addHoverAction(trigger) {
-    this.triggersHover.push(trigger);
+    this.reactor.addEventListener("onHover", trigger);
   }
   
   removeHoverAction(trigger) {
-    this.triggersHover = this.triggersHover.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onHover", trigger);
   }
 
   removeAllHoverActions() {
-    this.triggersHover = [];
+    this.reactor.removeAllEventListener("onHover");
   }
 
   setDownAction(trigger) {
-    this.triggersDown = [trigger];
+    this.removeAllDownActions();
+    this.addDownAction(trigger);
   }
   
   addDownAction(trigger) {
-    this.triggersDown.push(trigger);
+    this.reactor.addEventListener("onDown", trigger);
   }
   
   removeDownAction(trigger) {
-    this.triggersDown = this.triggersDown.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onDown", trigger);
   }
 
   removeAllDownActions() {
-    this.triggersDown = [];
+    this.reactor.removeAllEventListener("onDown");
   }
 
   setScrollAction(trigger) {
-    this.triggersScroll = [trigger];
+    this.removeAllScrollActions();
+    this.addScrollAction(trigger);
   }
   
   addScrollAction(trigger) {
-    this.triggersScroll.push(trigger);
+    this.reactor.addEventListener("onScroll", trigger);
   }
   
   removeScrollAction(trigger) {
-    this.triggersScroll = this.triggersScroll.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onScroll", trigger);
   }
 
   removeAllScrollActions() {
-    this.triggersScroll = [];
+    this.reactor.removeAllEventListener("onScroll");
   }
 
   setMoveAction(trigger) {
-    this.triggersMove = [trigger];
+    this.removeAllMoveActions();
+    this.addMoveAction(trigger);
   }
   
   addMoveAction(trigger) {
-    this.triggersMove.push(trigger);
+    this.reactor.addEventListener("onMove", trigger);
   }
   
   removeMoveAction(trigger) {
-    this.triggersMove = this.triggersMove.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onMove", trigger);
   }
 
   removeAllMoveActions() {
-    this.triggersMove = [];
+    this.reactor.removeAllEventListener("onMove");
+  }
+  
+  setChangeAction(trigger) {
+    this.removeAllChangeActions();
+    this.addChangeAction(trigger);
   }
   
   addChangeAction(trigger) {
-    this.triggersOnChange.push(trigger);
+    this.reactor.addEventListener("onChange", trigger);
   }
   
   removeChangeAction(trigger) {
-    this.triggersOnChange = this.triggersOnChange.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onChange", trigger);
   }
 
   removeAllChangeActions() {
-    this.triggersOnChange = [];
+    this.reactor.removeAllEventListener("onChange");
+  }
+
+  setUpAction(trigger) {
+    this.removeAllUpActions();
+    this.addUpAction(trigger);
   }
   
   addUpAction(trigger) {
-    this.triggersUp.push(trigger);
+    this.reactor.addEventListener("onUp", trigger);
   }
   
   removeUpAction(trigger) {
-    this.triggersUp = this.triggersUp.filter(elem => elem != trigger);
+    this.reactor.removeEventListener("onUp", trigger);
   }
 
   removeAllUpActions() {
-    this.triggersUp = [];
+    this.reactor.removeAllEventListener("onUp");
   }
 
   get height() {

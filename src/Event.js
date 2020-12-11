@@ -25,4 +25,12 @@ export default class Event {
   registerCallback(callback) {
     this.callbacks.push(callback);
   }
+
+  removeCallback(callback) {
+    this.callbacks.filter(current => current != callback);
+  }
+
+  removeAllCallbacks() {
+    this.callbacks = [];
+  }
 }

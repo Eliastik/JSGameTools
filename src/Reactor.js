@@ -27,15 +27,23 @@ export default class Reactor {
     this.events[eventName] = new Event(eventName);
   }
 
-  dispatchEvent(eventName, eventArgs) {
+  dispatchEvent(eventName, ...eventArgs) {
     const callbacks = this.events[eventName].callbacks;
     
     for(let i = 0, l = callbacks.length; i < l; i++) {
-      callbacks[i](eventArgs);
+      callbacks[i](...eventArgs);
     }
   }
 
   addEventListener(eventName, callback) {
     this.events[eventName].registerCallback(callback);
+  }
+
+  removeEventListener(eventName, callback) {
+    this.events[eventName].removeCallback(callback);
+  }
+
+  removeAllEventListener(eventName) {
+    this.events[eventName].removeAllCallbacks();
   }
 }
