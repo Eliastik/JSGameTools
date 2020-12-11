@@ -23,11 +23,17 @@ import Style from "./Style";
 
 export default class Label extends Component {
   selectable = false;
+  #_text = "";
 
   constructor(text, x, y, style) {
     super(x, y, null, null, style);
     this.text = text;
     this.sizesCache = null;
+
+    this.addChangeAction(componentChanged => {
+      this.updateSizes();
+      componentChanged != this.parent && this.parent && this.parent.reactor && this.parent.reactor.dispatchEvent("onChange", this);
+    });
   }
 
   draw(context) {
@@ -43,7 +49,16 @@ export default class Label extends Component {
     ctx.restore();
   }
 
-  get sizes() {
+  set text(text) {
+    this.#_text = text;
+    this.reactor.dispatchEvent("onChange", this);
+  }
+
+  get text() {
+    return this.#_text;
+  }
+
+  updateSizes() {
     const ctx = this.canvas ? this.canvas.getContext("2d") : null;
     const parent = (this.canvas && this.canvas.scene) || this.canvas || (ctx && ctx.canvas);
     
@@ -55,6 +70,11 @@ export default class Label extends Component {
       }
     }
 
+    return this.sizesCache && this.sizesCache.value;
+  }
+
+  get sizes() {
+    if(Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) this.updateSizes();
     return this.sizesCache && this.sizesCache.value;
   }
 

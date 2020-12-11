@@ -170,7 +170,7 @@ export default class Menu extends Col {
   }
 
   get minWidth() {
-    return this.parent.width;
+    return this.parent ? this.parent.width : 0;
   }
 
   get defaultStyle() {

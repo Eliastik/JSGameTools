@@ -17,9 +17,9 @@
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
 import Component from "./Component";
-import Constants from "./Constants";
 import Container from "./Container";
 import Utils from "./Utils";
+import Constants from "./Constants";
 
 export default class Col extends Container {
   selectable = false;
@@ -28,11 +28,11 @@ export default class Col extends Container {
 
   constructor(x, y, maxWidth, maxHeight, style, ...components) {
     super(x, y, maxWidth, maxHeight, style, ...components);
-    
+
     if(!Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) {
       this.updateInnerWidth();
       this.updateInnerHeight();
-
+  
       this.addChangeAction(() => {
         this.updateInnerWidth();
         this.updateInnerHeight();

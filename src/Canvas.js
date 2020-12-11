@@ -136,11 +136,13 @@ export default class Canvas {
   set width(width) {
     this.#_width = width;
     this.canvas.width = width;
+    this.scene && this.scene.reactor.dispatchEvent("onChange", this);
   }
 
   set height(height) {
     this.#_height = height;
     this.canvas.height = height;
+    this.scene && this.scene.reactor.dispatchEvent("onChange", this);
   }
 
   getContext(context) {

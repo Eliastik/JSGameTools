@@ -20,6 +20,7 @@ import Constants from "./Constants";
 
 export default class Style {
   #styles = {};
+  component;
 
   constructor(styles) {
     this.setAll(styles);
@@ -167,6 +168,7 @@ export default class Style {
 
   set(style, value) {
     this.#styles[style] = value;
+    if(this.component && this.component.reactor) this.component.reactor.dispatchEvent("onChange", this);
   }
 
   setAll(styles) {
