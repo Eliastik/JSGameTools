@@ -70,9 +70,8 @@ export default class Canvas {
     if(this.scene) {
       this.scene.parent = this;
       this.scene.canvas = this;
+      this.scene.draw(ctx);
     }
-
-    scene.draw(ctx);
   }
 
   drawClear(ctx) {

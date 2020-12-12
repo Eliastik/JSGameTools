@@ -85,8 +85,8 @@ const tooltip3 = new JGT.Tooltip(null, new JGT.Label("Current: " + (Math.round(p
 progress.tooltip = tooltip3;
 const buttonArrow = new JGT.Button(5, 150, null, null, buttonStyle, new JGT.Arrow(null, null, 100, 200, new JGT.Style({ "color": "white" })));
 const colScrollable = new JGT.Col(255, 250, 250, 42, new JGT.Style({ "backgroundColor": "#fff"}), new JGT.Row(null, null, null, null, null, new JGT.Label("Test1"), new JGT.Label("Test2"), new JGT.Label("Test3"), new JGT.Label("Test4")), new JGT.Row(null, null, null, null, null, new JGT.Label("Test5"), new JGT.Label("Test6"), new JGT.Label("Test7"), new JGT.Label("Test8")), new JGT.Row(null, null, null, null, null, new JGT.Label("Test9"), new JGT.Label("Test10"), new JGT.Label("Test11"), new JGT.Label("Test12"), new JGT.Label("Test")));
-colScrollable.style.padding = 10;
-colScrollable.style.spaceBetweenComponents = 0;
+colScrollable.style.set("padding", 10);
+colScrollable.style.set("spaceBetweenComponents", 0);
 const optionLast = new JGT.SelectOption(new JGT.Label("Removed in 5s"));
 const options = new JGT.SelectOptionsContainer(75, null, new JGT.SelectOption(new JGT.Label("First choice")), new JGT.SelectOption(new JGT.Label("Second choice")), new JGT.SelectOption(new JGT.Label("Third choice")), optionLast);
 const select = new JGT.Select(255, 315, null, null, new JGT.Style({ "verticalAlignement": "bottom" }), options);

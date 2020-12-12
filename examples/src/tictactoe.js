@@ -449,7 +449,7 @@ function copyBoard(boardToCopy) {
   return gameBoard;
 }
 
-function eval(board) {
+function evalBoard(board) {
   const check = checkWin(board);
 
   if(check) {
@@ -483,7 +483,7 @@ function nextSituations(board) {
 }
 
 function ai(board, depth, isAI) {
-  const evaluation = eval(board);
+  const evaluation = evalBoard(board);
 
   let bestState = {
     "position": null,

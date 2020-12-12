@@ -30,10 +30,14 @@ export default class Label extends Component {
     this.text = text;
     this.sizesCache = null;
 
-    this.addChangeAction(componentChanged => {
+    if(!Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) {
       this.updateSizes();
-      componentChanged != this.parent && this.parent && this.parent.reactor && this.parent.reactor.dispatchEvent("onChange", this);
-    });
+
+      this.addChangeAction(componentChanged => {
+        this.updateSizes();
+        componentChanged != this.parent && this.parent && this.parent.reactor && this.parent.reactor.dispatchEvent("onChange", this);
+      });
+    }
   }
 
   draw(context) {
