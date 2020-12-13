@@ -166,6 +166,10 @@ export default class Style {
     return this.#styles.color;
   }
 
+  get movable() {
+    return this.#styles.movable || false;
+  }
+
   set(style, value) {
     this.#styles[style] = value;
     if(this.component && this.component.reactor) this.component.reactor.dispatchEvent("onChange", this);
