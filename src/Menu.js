@@ -51,6 +51,7 @@ export default class Menu extends Col {
       document.addEventListener("keydown", event => {
         if(!this.disabled) {
           this.lastKey = event.keyCode;
+          event.preventDefault();
         }
       });
 

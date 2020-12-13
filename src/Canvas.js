@@ -154,6 +154,7 @@ export default class Canvas {
         this.canvas.addEventListener(eventName, event => {
           const mousePosition = this.getMousePos(event);
           this.doEvents(event, eventName, mousePosition);
+          event.preventDefault();
         }, false);
       });
 
@@ -162,6 +163,7 @@ export default class Canvas {
           const changedTouches = event.changedTouches[0];
           const position = this.getMousePos(changedTouches);
           this.doEvents(event, eventName, position);
+          event.preventDefault();
         });
       });
 
