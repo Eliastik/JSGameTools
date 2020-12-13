@@ -46,12 +46,12 @@ export default class Menu extends Col {
     ctx.save();
 
     this.drawComponents(ctx);
-
+    
     if(!this.init) {
       document.addEventListener("keydown", event => {
         if(!this.disabled) {
           this.lastKey = event.keyCode;
-          event.preventDefault();
+          if(this.lastKey == Constants.Key.UP || this.lastKey == Constants.Key.BOTTOM) event.preventDefault();
         }
       });
 
