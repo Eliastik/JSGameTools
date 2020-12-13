@@ -24,31 +24,37 @@ export default class ReactorCanvas extends Reactor {
   }
 
   dispatchEvent(eventName, ...eventArgs) {
-    const events = this.events[eventName];
-    events.forEach(event => event && event.callback && event.callback(...eventArgs));
+    if(this.events[eventName]) {
+      const events = this.events[eventName];
+      events.forEach(event => event && event.callback && event.callback(...eventArgs));
+    }
   }
 
   dispatchEventComponent(eventName, component, ...eventArgs) {
-    const events = this.events[eventName];
-    events.forEach(event => event && event.callback && event.component == component && event.callback(...eventArgs));
+    if(this.events[eventName]) {
+      const events = this.events[eventName];
+      events.forEach(event => event && event.callback && event.component == component && event.callback(...eventArgs));
+    }
   }
 
   addEventListener(eventName, component, callback) {
-    this.events[eventName].push({
-      "component": component,
-      "callback": callback
-    });
+    if(this.events[eventName]) {
+      this.events[eventName].push({
+        "component": component,
+        "callback": callback
+      });
+    }
   }
 
   removeEventListener(eventName, callback) {
-    this.events[eventName].filter(event => event && event.callback != callback);
+    if(this.events[eventName]) this.events[eventName].filter(event => event && event.callback != callback);
   }
 
   removeEventListenerComponent(eventName, component) {
-    this.events[eventName].filter(event => event && event.component != component);
+    if(this.events[eventName]) this.events[eventName].filter(event => event && event.component != component);
   }
 
-  removeAllEventListener(eventName) {
+  removeAllEventListener() {
     this.events = [];
   }
 }

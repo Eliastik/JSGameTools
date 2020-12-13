@@ -23,6 +23,8 @@ import Style from "./Style";
 import Constants from "./Constants";
 
 export default class Select extends Button {
+  #_width = 0;
+
   constructor(x, y, maxWidth, maxHeight, style, optionContainer, defaultOption) {
     super(x, y, maxWidth, maxHeight, style);
 
@@ -35,11 +37,17 @@ export default class Select extends Button {
     this.triangle.style.setAll({ "alignement": Constants.Alignement.RIGHT, "verticalAlignement": Constants.VerticalAlignement.CENTER });
 
     this.addAll(this.label, this.triangle);
+
     this.addClickAction(() => {
       if(this.optionContainer) {
         this.optionContainer.hidden = false;
       }
     });
+
+    if(!Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) {
+      this.updateWidth();
+      this.addChangeAction(() => this.updateWidth());
+    }
   }
 
   draw(context) {
@@ -68,7 +76,7 @@ export default class Select extends Button {
     return this.selectedOption && this.selectedOption.label ? this.selectedOption.label.text : null;
   }
 
-  get width() {
+  updateWidth() {
     let maxWidth = this.label.width;
 
     if(this.optionContainer) {
@@ -76,12 +84,18 @@ export default class Select extends Button {
         const label = component.label;
 
         if(label) {
+          if(label.updateSizes) label.updateSizes();
           if(label.width > maxWidth) maxWidth = label.width;
         }
       });
     }
 
-    return maxWidth + this.style.padding + this.triangle.width + 15;
+    this.#_width = maxWidth + this.style.padding + this.triangle.width + 15;
+  }
+
+  get width() {
+    if(Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) this.updateWidth();
+    return this.#_width;
   }
 
   get allComponents() {

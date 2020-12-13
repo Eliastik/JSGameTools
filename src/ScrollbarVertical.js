@@ -28,8 +28,8 @@ export default class ScrollbarVertical extends Scrollbar {
       if(this.parent) {
         this.parent.offsetScrollY -= deltaY;
 
-        if(this.parent.triggersScroll != null) {
-          this.parent.triggersScroll.forEach(trigger => trigger(0, -deltaY));
+        if(this.parent.reactor) {
+          this.parent.reactor.dispatchEvent("onScroll", 0, -deltaY);
         }
       }
     });

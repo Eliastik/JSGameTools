@@ -28,8 +28,8 @@ export default class ScrollbarHorizontal extends Scrollbar {
       if(this.parent) {
         this.parent.offsetScrollX -= deltaX;
 
-        if(this.parent.triggersScroll != null) {
-          this.parent.triggersScroll.forEach(trigger => trigger(-deltaX, 0));
+        if(this.parent.reactor) {
+          this.parent.reactor.dispatchEvent("onScroll", -deltaX, 0);
         }
       }
     });

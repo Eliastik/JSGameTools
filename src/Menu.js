@@ -95,10 +95,10 @@ export default class Menu extends Col {
             }
           }
     
-          if(this.selectedComponent == i && this.lastKey == Constants.Key.ENTER && component.triggersClick != null && component.triggersClick.length > 0 && !component.disabled) {
+          if(this.selectedComponent == i && this.lastKey == Constants.Key.ENTER && component.reactor && !component.disabled) {
             this.lastKey = -1;
             this.selectedComponent = 0;
-            component.triggersClick.forEach(trigger => trigger());
+            component.reactor.dispatchEvent("onClick");
             return;
           }
         }
