@@ -28,3 +28,7 @@ This will compile the JavaScript code into the sub-directory *lib*.
 ## Usage
 
 See the *examples* folder.
+
+## Compatibility
+
+All recent browsers. IE11 is also supported.

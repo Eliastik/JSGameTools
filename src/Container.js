@@ -31,6 +31,7 @@ export default class Container extends Box {
   #_maxHeight = 0;
   #_minWidth = 0;
   #_minHeight = 0;
+  eventChangeCallback = () => this.reactor.dispatchEvent("onChange", this);
 
   constructor(x, y, maxWidth, maxHeight, style, ...components) {
     super(x, y, null, null, style);
@@ -102,6 +103,7 @@ export default class Container extends Box {
     this.#components.push(component);
     component.parent = this;
     if(this.canvas) component.canvas = this.canvas;
+    component.addChangeAction(this.eventChangeCallback);
     this.reactor.dispatchEvent("onChange", this);
   }
 
@@ -110,12 +112,13 @@ export default class Container extends Box {
   }
 
   remove(component) {
+    if(this.#components.indexOf(component) != -1) component.removeChangeAction(this.eventChangeCallback);
     this.#components = this.#components.filter(current => component != current);
     this.reactor.dispatchEvent("onChange", this);
   }
 
   clear() {
-    this.#components = [];
+    this.#components.forEach(component => this.remove(component));
     this.reactor.dispatchEvent("onChange", this);
   }
 
