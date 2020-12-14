@@ -163,7 +163,6 @@ export default class Canvas {
           const changedTouches = event.changedTouches[0];
           const position = this.getMousePos(changedTouches);
           this.doEvents(event, eventName, position);
-          event.preventDefault();
         });
       });
 
