@@ -28,8 +28,9 @@ export default {
     DEFAULT_PADDING: 6,
     DEFAULT_SPACING: 6,
     BUTTON_DEFAULT_BACKGROUND: "rgba(0, 0, 0, 0)",
-    BUTTON_DEFAULT_HOVER_BACKGROUND: "#95a5a6",
+    BUTTON_DEFAULT_HOVER_BACKGROUND: "#95A5A6",
     BUTTON_DEFAULT_CLICK_BACKGROUND: "#727F80",
+    BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND: "#ACBEBF",
     INPUT_DEFAULT_FONT_COLOR: "#000",
     INPUT_DEFAULT_BACKGROUND_COLOR: "#fff",
     INPUT_DEFAULT_BORDER_COLOR: "#000",
@@ -95,5 +96,16 @@ export default {
     CENTER: "center",
     BOTTOM: "bottom",
     DEFAULT: "default"
+  },
+  String: {
+    ERROR_MESSAGE_CANVAS: "A fatal error has occurred at the JSGameTools level.",
+    ERROR_MESSAGE_CANVAS_LABEL : ":'(\nA fatal error has occurred at the JSGameTools level.",
+    NOTICE_MESSAGE: "Notice:",
+    WARNING_MESSAGE: "Warning:",
+    ERROR_MESSAGE: "Error:",
+    OPTIMIZATION_DISABLED: "Optimizations are disabled. You may notice low performance.",
+    CONTAINER_CUTTING_DISABLED: "Containers cutting is disabled.",
+    BUTTON_IMAGE_DEPRECATED: "JSGameTools.ButtonImage is deprecated. Please use a Button with an ImageContainer instead.",
+    INPUT_FULLSCREEN: "The use of JSGameTools.Canvas is needed for Input components to properly work in fullscreen mode."
   }
 };

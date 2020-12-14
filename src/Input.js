@@ -108,7 +108,7 @@ export default class Input extends Box {
       this.canvas.container.appendChild(this.input);
       this.appendToCanvas = true;
     } else if(!this.canvas && !this.noticeLogged) {
-      console && console.warn && console.warn("Notice: the use of JSGameTools.Canvas is needed for Input components to properly work in fullscreen mode.");
+      console && console.warn && console.warn(Constants.String.WARNING_MESSAGE + " " + Constants.String.INPUT_FULLSCREEN);
       this.noticeLogged = true;
     }
 

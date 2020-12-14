@@ -19,6 +19,7 @@
 import ImageContainer from "./ImageContainer";
 import Button from "./Button";
 import Style from "./Style";
+import Constants from "./Constants";
 
 export default class ButtonImage extends Button {
   constructor(imgSrc, x, y, alignement, verticalAlignement, width, height, backgroundColor, backgroundColorHover, imageLoader) {
@@ -30,7 +31,7 @@ export default class ButtonImage extends Button {
     });
 
     super(x, y, width, height, style, new ImageContainer(imgSrc, x, y, width, height, style, imageLoader));
-    console && console.warn && console.warn("Notice: JSGameTools.ButtonImage is deprecated. Please use a Button with an ImageContainer instead.");
+    console && console.warn && console.warn(Constants.String.NOTICE_MESSAGE + " " + Constants.String.BUTTON_IMAGE_DEPRECATED);
   }
 
   loadImage(imageLoader) {

@@ -20,6 +20,10 @@ import Constants from "./Constants";
 import Utils from "./Utils";
 import Scene from "./Scene";
 import ReactorCanvas from "./ReactorCanvas";
+import Menu from "./Menu";
+import Label from "./Label";
+import Style from "./Style";
+import Button from "./Button";
 
 export default class Canvas {
   #lastFrameTime;
@@ -37,7 +41,22 @@ export default class Canvas {
     this.init = false;
     this.maxFPS = maxFPS || -1;
     this.#lastFrameTime = 0;
+    this.hasError = false;
+
+    // Error message screen
+    const buttonSceneError = new Button(null, null, null, null, new Style({ "alignement": "center", "backgroundColor": Constants.Setting.BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND }), new Label("Retry", null, null, new Style({ "fontColor": "white", "alignement": "center" })));
+    const menuSceneError = new Menu(new Style({ "spaceBetweenComponents": 15 }), new Label(Constants.String.ERROR_MESSAGE_CANVAS_LABEL, null, null, new Style({ "fontColor": "white", "alignement": "center" })), buttonSceneError);
+    menuSceneError.enable();
+
+    this.sceneError = new Scene(menuSceneError);
+    this.scenePrevious = this.scene;
+
+    buttonSceneError.addClickAction(() => {
+      this.hasError = false;
+      this.scene = this.scenePrevious
+    });
     
+    // Reactors/events
     this.reactor = new ReactorCanvas();
     this.reactor.registerEvent("mousemove");
     this.reactor.registerEvent("click");
@@ -52,11 +71,11 @@ export default class Canvas {
     this.createEvents();
 
     if(Constants.Setting.DISABLE_OPTIMIZATIONS) {
-      console && console.warn("Notice: Optimizations are disabled. You may notice low performance.");
+      console && console.info(Constants.String.NOTICE_MESSAGE + " " + Constants.String.OPTIMIZATION_DISABLED);
     }
 
     if(Constants.Setting.DISABLE_CONTAINERS_CUTTING) {
-      console && console.warn("Notice: Containers cutting is disabled.");
+      console && console.info(Constants.String.NOTICE_MESSAGE + " " + Constants.String.CONTAINER_CUTTING_DISABLED);
     }
   }
 
@@ -70,7 +89,14 @@ export default class Canvas {
     if(this.scene) {
       this.scene.parent = this;
       this.scene.canvas = this;
-      this.scene.draw(ctx);
+
+      try {
+        this.scene.draw(ctx);
+      } catch(e) {
+        this.hasError = true;
+        this.scene = this.sceneError;
+        console.error(Constants.String.ERROR_MESSAGE + " " + Constants.String.ERROR_MESSAGE_CANVAS + "\n", e);
+      }
     }
   }
 
