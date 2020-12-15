@@ -130,6 +130,11 @@ export default class Canvas {
     element.appendChild(this.container);
   }
 
+  remove(element) {
+    element.removeChild(this.container);
+    this.container.removeChild(this.canvas);
+  }
+
   toggleFullscreen() {
     Utils.toggleFullscreen(this.canvas, this.container);
   }
