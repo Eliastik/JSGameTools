@@ -44,7 +44,7 @@ export default class Canvas {
     this.hasError = false;
 
     // Error message screen
-    const buttonSceneError = new Button(null, null, null, null, new Style({ "alignement": "center", "backgroundColor": Constants.Setting.BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND }), new Label("Retry", null, null, new Style({ "fontColor": "white", "alignement": "center" })));
+    const buttonSceneError = new Button(null, null, null, null, new Style({ "alignement": "center", "backgroundColor": Constants.Setting.BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND }), new Label(Constants.String.RETRY, null, null, new Style({ "fontColor": "white", "alignement": "center" })));
     const menuSceneError = new Menu(new Style({ "spaceBetweenComponents": 15 }), new Label(Constants.String.ERROR_MESSAGE_CANVAS_LABEL, null, null, new Style({ "fontColor": "white", "alignement": "center" })), buttonSceneError);
     menuSceneError.enable();
 

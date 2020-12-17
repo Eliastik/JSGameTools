@@ -26,15 +26,72 @@ export default class ButtonImage extends Button {
     const style = new Style({
       "alignement": alignement,
       "verticalAlignement": verticalAlignement,
-      "backgroundColor": backgroundColor,
-      "backgroundColorHover": backgroundColorHover
+      "backgroundColor": backgroundColor || Constants.Setting.BUTTON_DEFAULT_BACKGROUND,
+      "backgroundColorHover": backgroundColorHover || Constants.Setting.BUTTON_DEFAULT_HOVER_BACKGROUND
     });
 
-    super(x, y, width, height, style, new ImageContainer(imgSrc, x, y, width, height, new Style({ "alignement": "center", "verticalAlignement": "center" }), imageLoader));
+    super(x, y, width, height, style);
+    this.image = new ImageContainer(imgSrc, x, y, width, height, new Style({ "alignement": "center", "verticalAlignement": "center" }), imageLoader);
+    this.add(this.image);
+
     console && console.warn && console.warn(Constants.String.NOTICE_MESSAGE + " " + Constants.String.BUTTON_IMAGE_DEPRECATED);
   }
 
   loadImage(imageLoader) {
     if(this.components[0] instanceof ImageContainer) this.components[0].loadImage(imageLoader);
+  }
+
+  set minWidth(width) {
+    this.image.width = width;
+    super.minWidth = width;
+  }
+
+  set minHeight(height) {
+    this.image.height = height;
+    super.minHeight = height;
+  }
+
+  get minWidth() {
+    return super.minWidth;
+  }
+
+  get minHeight() {
+    return super.minHeight;
+  }
+
+  set maxWidth(width) {
+    this.image.width = width;
+    super.maxWidth = width;
+  }
+
+  set maxHeight(height) {
+    this.image.height = height;
+    super.maxHeight = height;
+  }
+
+  get maxWidth() {
+    return super.maxWidth;
+  }
+
+  get maxHeight() {
+    return super.maxHeight;
+  }
+
+  set width(width) {
+    this.minWidth = width;
+    this.maxWidth = width;
+  }
+
+  get width() {
+    return super.width;
+  }
+
+  set height(height) {
+    this.minHeight = height;
+    this.maxHeight = height;
+  }
+
+  get height() {
+    return super.height;
   }
 }

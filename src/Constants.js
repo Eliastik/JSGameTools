@@ -100,6 +100,7 @@ export default {
   String: {
     ERROR_MESSAGE_CANVAS: "A fatal error has occurred at the JSGameTools level.",
     ERROR_MESSAGE_CANVAS_LABEL : ":'(\nA fatal error has occurred at the JSGameTools level.",
+    RETRY: "Retry",
     NOTICE_MESSAGE: "Notice:",
     WARNING_MESSAGE: "Warning:",
     ERROR_MESSAGE: "Error:",
