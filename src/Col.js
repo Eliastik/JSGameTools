@@ -79,11 +79,10 @@ export default class Col extends Container {
       if(this.isComponentVisible(component)) {
         component.enable();
         component.draw(ctx);
+        currentY += component.height + this.style.spaceBetweenComponents;
       } else {
         component.disable();
       }
-      
-      currentY += component.height + this.style.spaceBetweenComponents;
     }
     
     return currentY;
