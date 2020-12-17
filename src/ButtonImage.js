@@ -30,7 +30,7 @@ export default class ButtonImage extends Button {
       "backgroundColorHover": backgroundColorHover
     });
 
-    super(x, y, width, height, style, new ImageContainer(imgSrc, x, y, width, height, style, imageLoader));
+    super(x, y, width, height, style, new ImageContainer(imgSrc, x, y, width, height, new Style({ "alignement": "center", "verticalAlignement": "center" }), imageLoader));
     console && console.warn && console.warn(Constants.String.NOTICE_MESSAGE + " " + Constants.String.BUTTON_IMAGE_DEPRECATED);
   }
 
