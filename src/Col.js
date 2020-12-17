@@ -91,13 +91,13 @@ export default class Col extends Container {
 
   updateInnerHeight() {
     let totalHeight = 0;
-    super.components.forEach(component => totalHeight += component.height);
+    super.components.forEach(component => { if(!component.hidden) totalHeight += component.height });
     this.#_innerHeight = totalHeight + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
   }
 
   updateInnerWidth() {
     let maxWidth = 0;
-    super.components.forEach(component => { if(component.width > maxWidth) maxWidth = component.width; });
+    super.components.forEach(component => { if(component.width > maxWidth && !component.hidden) maxWidth = component.width; });
     this.#_innerWidth = maxWidth + this.style.padding;
   }
 

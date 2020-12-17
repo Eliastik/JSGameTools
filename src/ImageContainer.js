@@ -62,6 +62,10 @@ export default class ImageContainer extends Component {
   get sizes() {
     let imgWidth = super.width;
     let imgHeight = super.height;
+
+    if(this.imageLoader) {
+      this.loadImage(this.imageLoader);
+    }
     
     if(this.image && (this.image.width > super.width || this.image.height > super.height)) {
       const aspectRatio = this.image.width / this.image.height;

@@ -91,13 +91,13 @@ export default class Row extends Container {
 
   updateInnerHeight() {
     let maxHeight = 0;
-    super.components.forEach(component => { if(component.height > maxHeight) maxHeight = component.height; });
+    super.components.forEach(component => { if(component.height > maxHeight && !component.hidden) maxHeight = component.height; });
     this.#_innerHeight = maxHeight + this.style.padding;
   }
 
   updateInnerWidth() {
     let totalWidth = 0;
-    super.components.forEach(component => totalWidth += component.width);
+    super.components.forEach(component => { if(!component.hidden) totalWidth += component.width });
     this.#_innerWidth = totalWidth + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
   }
 
