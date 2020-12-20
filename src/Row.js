@@ -78,10 +78,7 @@ export default class Row extends Container {
       
       if(!component.hidden) {
         if(this.isComponentVisible(component)) {
-          component.enable();
           component.draw(ctx);
-        } else {
-          component.disable();
         }
         
         currentX += component.width + this.style.spaceBetweenComponents;
