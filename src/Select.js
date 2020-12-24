@@ -68,8 +68,10 @@ export default class Select extends Button {
   }
 
   set selectedOption(id) {
-    this.optionContainer.selectedOption = id;
-    this.reactor.dispatchEvent("onChange", this);
+    if(id != this.optionContainer.selectedOption) {
+      this.optionContainer.selectedOption = id;
+      this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   get text() {

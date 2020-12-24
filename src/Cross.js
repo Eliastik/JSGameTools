@@ -50,12 +50,10 @@ export default class Cross extends Component {
 
   set width(width) {
     super.width = width;
-    this.reactor.dispatchEvent("onChange", this);
   }
 
   set height(height) {
     super.height = height;
-    this.reactor.dispatchEvent("onChange", this);
   }
 
   get defaultStyle() {

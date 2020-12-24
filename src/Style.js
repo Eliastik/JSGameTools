@@ -171,8 +171,10 @@ export default class Style {
   }
 
   set(style, value) {
-    this.#styles[style] = value;
-    if(this.component && this.component.reactor) this.component.reactor.dispatchEvent("onChange", this);
+    if(this.#styles[style] != value) {
+      this.#styles[style] = value;
+      if(this.component && this.component.reactor) this.component.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   setAll(styles) {

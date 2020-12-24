@@ -54,8 +54,10 @@ export default class Label extends Component {
   }
 
   set text(text) {
-    this.#_text = text;
-    this.reactor.dispatchEvent("onChange", this);
+    if(text != this.#_text) {
+      this.#_text = text;
+      this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   get text() {

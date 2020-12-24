@@ -256,11 +256,21 @@ export default class Component {
   }
   
   disable() {
-    this.disabled = true;
+    if(!this.disabled) {
+      this.disabled = true;
+      return true;
+    }
+
+    return false;
   }
   
   enable() {
-    this.disabled = false;
+    if(this.disabled) {
+      this.disabled = false;
+      return true;
+    }
+
+    return false;
   }
 
   get disabled() {
@@ -268,8 +278,10 @@ export default class Component {
   }
 
   set disabled(disabled) {
-    this.#_disabled = disabled;
-    this.reactor && this.reactor.dispatchEvent("onChange", this);
+    if(disabled != this.#_disabled) {
+      this.#_disabled = disabled;
+      this.reactor && this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   setClickAction(trigger) {
@@ -400,13 +412,17 @@ export default class Component {
   }
 
   set width(width) {
-    this.#_width = width;
-    this.reactor && this.reactor.dispatchEvent("onChange", this);
+    if(width != this.#_width) {
+      this.#_width = width;
+      this.reactor && this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   set height(height) {
-    this.#_height = height;
-    this.reactor && this.reactor.dispatchEvent("onChange", this);
+    if(height != this.#_height) {
+      this.#_height = height;
+      this.reactor && this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   get maxWidth() {
@@ -513,9 +529,11 @@ export default class Component {
   }
 
   set hidden(hidden) {
-    this.disabled = hidden;
-    if(this.style) this.style.set("hidden", hidden);
-    this.reactor && this.reactor.dispatchEvent("onChange", this);
+    if(hidden != this.disabled || hidden != this.style.hidden) {
+      this.disabled = hidden;
+      if(this.style) this.style.set("hidden", hidden);
+      this.reactor && this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   get selected() {
@@ -523,8 +541,10 @@ export default class Component {
   }
 
   set selected(selected) {
-    this.#_selected = selected;
-    this.reactor && this.reactor.dispatchEvent("onChange", this);
+    if(selected != this.#_selected) {
+      this.#_selected = selected;
+      this.reactor && this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   getAllParents() {

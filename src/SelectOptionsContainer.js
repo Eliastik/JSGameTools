@@ -62,8 +62,10 @@ export default class SelectDropdown extends Col {
   }
 
   set selectedOption(id) {
-    this.#_selectedOption = id;
-    this.reactor.dispatchEvent("onChange", this);
+    if(id != this.#_selectedOption) {
+      this.#_selectedOption = id;
+      this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   add(component) {
