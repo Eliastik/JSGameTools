@@ -96,8 +96,6 @@ export default class Label extends Component {
 
   get defaultStyle() {
     return new Style({
-      "fontSize": Constants.Setting.FONT_SIZE,
-      "fontFamily": Constants.Setting.FONT_FAMILY,
       "fontColor": Constants.Setting.LABEL_DEFAULT_FONT_COLOR,
       "wrap": true,
       "bold": false,
