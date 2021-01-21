@@ -66,7 +66,7 @@ export default class Label extends Component {
 
   updateSizes() {
     const ctx = this.canvas ? this.canvas.getContext("2d") : null;
-    const parent = (this.canvas && this.canvas.scene) || this.canvas || (ctx && ctx.canvas);
+    const parent = (this.canvas && this.canvas.scene) || this.canvas || (ctx && ctx.canvas) || this.parent;
     
     if(ctx && (Constants.Setting.DISABLE_OPTIMIZATIONS || !this.sizesCache || this.sizesCache.fontSize != this.style.fontSize || this.sizesCache.fontFamily != this.style.fontFamily || this.sizesCache.wrap != this.style.wrap || this.text != this.sizesCache.text || (parent && parent.width != this.sizesCache.parentWidth) || this.sizesCache.value == null)) {
       const sizes = Utils.wrapTextLines(ctx, this.text, null, this.style.fontSize, this.style.fontFamily, !this.style.wrap);
@@ -81,7 +81,7 @@ export default class Label extends Component {
 
   get sizes() {
     if(Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS) this.updateSizes();
-    return this.sizesCache && this.sizesCache.value;
+    return this.sizesCache ? this.sizesCache.value : null;
   }
 
   get height() {

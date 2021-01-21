@@ -43,8 +43,6 @@ export default class Scene extends Container {
     let ctxTemp = ctx;
     if(this.maxWidth || this.maxHeight) ctxTemp = this.canvasTmp.getContext("2d");
 
-    const inputs = super.components.filter(component => component && component instanceof Input);
-    inputs && inputs.forEach(input => input.canvas = this.canvas); // Set inputs canvas
     this.drawComponents(ctxTemp); // Draw sorted components
     
     if(this.maxWidth || this.maxHeight) Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x, this.y, this.width, this.height);

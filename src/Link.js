@@ -19,6 +19,7 @@
 import Constants from "./Constants";
 import Label from "./Label";
 import Style from "./Style";
+import Utils from "./Utils";
 
 export default class Link extends Label {
   selectable = true;
@@ -41,7 +42,6 @@ export default class Link extends Label {
       this.style.set("fontColor", this.style.fontColorDown);
       canvas.style.cursor = "pointer";
     } else if(this.hovered || this.selected) {
-      console.log("ok", this);
       this.style.set("underline", false);
       this.style.set("fontColor", this.style.fontColorHover);
       if(this.hovered) canvas.style.cursor = "pointer";
@@ -55,8 +55,6 @@ export default class Link extends Label {
 
   get defaultStyle() {
     return new Style({
-      "fontSize": Constants.Setting.FONT_SIZE,
-      "fontFamily": Constants.Setting.FONT_FAMILY,
       "fontColor": Constants.Setting.LINK_DEFAULT_COLOR,
       "fontColorHover": Constants.Setting.LINK_DEFAULT_HOVER_COLOR,
       "fontColorDown": Constants.Setting.LINK_DEFAULT_CLICK_COLOR,

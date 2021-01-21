@@ -242,11 +242,16 @@ export default class Container extends Box {
   updateInnerWidth() { }
 
   set canvas(canvas) {
-    super.canvas = canvas;
-
-    this.#components.forEach(component => {
-      component.canvas = canvas;
-    });
+    if(canvas != this.canvas) {
+      super.canvas = canvas;
+  
+      this.#components.forEach(component => {
+        component.canvas = canvas;
+        if(component.reactor) component.reactor.dispatchEvent("onChange", this);
+      });
+  
+      this.reactor.dispatchEvent("onChange", this);
+    }
   }
 
   get canvas() {
