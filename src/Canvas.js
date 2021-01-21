@@ -183,6 +183,10 @@ export default class Canvas {
     return this.canvas ? Utils.getCanvasHeight(this.canvas) : this.#_height;
   }
 
+  get style() {
+    return this.canvas ? this.canvas.style : null;
+  }
+
   set width(width) {
     if(width != this.#_width) {
       this.#_width = width;

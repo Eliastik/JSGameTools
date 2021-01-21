@@ -72,10 +72,12 @@ export default {
     }
   
     if(ctx != undefined && image != undefined) {
-      if(sx != undefined && sy != undefined && sWidth != undefined && sHeight != undefined) {
-        ctx.drawImage(image, sx, sy, sWidth, sHeight, x, y, width, height);
-      } else {
-        ctx.drawImage(image, x, y, width, height);
+      if(image.width > 0 && image.height > 0) {
+        if(sx != undefined && sy != undefined && sWidth != undefined && sHeight != undefined) {
+          ctx.drawImage(image, sx, sy, sWidth, sHeight, x, y, width, height);
+        } else {
+          ctx.drawImage(image, x, y, width, height);
+        }
       }
     }
   
@@ -363,19 +365,28 @@ export default {
         var ratio = initialWidth / initialHeight;
         canvas.width = document.documentElement.clientWidth * 0.85;
         canvas.height = canvas.width / ratio;
-        canvas.style.width = canvas.width;
-        canvas.style.height = canvas.height;
+
+        if(canvas.style) {
+          canvas.style.width = canvas.width;
+          canvas.style.height = canvas.height;
+        }
       } else {
         canvas.width = initialWidth;
         canvas.height = initialHeight;
-        canvas.style.width = initialWidth;
-        canvas.style.height = initialHeight;
+
+        if(canvas.style) {
+          canvas.style.width = initialWidth;
+          canvas.style.height = initialHeight;
+        }
       }
     } else if(document.fullscreenElement == canvas || document.fullscreenElement == container) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      canvas.style.width = window.innerWidth;
-      canvas.style.height = window.innerHeight;
+
+      if(canvas.style) {
+        canvas.style.width = window.innerWidth;
+        canvas.style.height = window.innerHeight;
+      }
 
       if(container) {
         container.width = window.innerWidth;
@@ -384,8 +395,11 @@ export default {
     } else {
       canvas.width = initialWidth;
       canvas.height = initialHeight;
-      canvas.style.width = initialWidth;
-      canvas.style.height = initialHeight;
+
+      if(canvas.style) {
+        canvas.style.width = initialWidth;
+        canvas.style.height = initialHeight;
+      }
     }
   },
   enableAutoResizeCanvas: function(canvas, container, initialWidth, initialHeight) {
@@ -402,8 +416,11 @@ export default {
     if(document.fullscreenElement == canvas || document.fullscreenElement == container) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      canvas.style.width = window.innerWidth;
-      canvas.style.height = window.innerHeight;
+
+      if(canvas.style) {
+        canvas.style.width = window.innerWidth;
+        canvas.style.height = window.innerHeight;
+      }
       
       if(container) {
         container.width = window.innerWidth;
@@ -425,8 +442,11 @@ export default {
     if(canvas && canvas.getAttribute("fullpage-canvas-enable") == "true") {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      canvas.style.width = window.innerWidth;
-      canvas.style.height = window.innerHeight;
+      
+      if(canvas.style) {
+        canvas.style.width = window.innerWidth;
+        canvas.style.height = window.innerHeight;
+      }
       
       if(container) {
         container.width = window.innerWidth;

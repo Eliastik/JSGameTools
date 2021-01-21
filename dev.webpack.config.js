@@ -15,7 +15,7 @@ const config = {
   ],
   output: {
     path: path.resolve(__dirname, "lib"),
-    filename: "JSGameTools.js",
+    filename: "JSGameTools.dev.js",
     library: "JSGameTools",
     libraryTarget: "umd",
     globalObject: "typeof self !== \"undefined\" ? self : this"
