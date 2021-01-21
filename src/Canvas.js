@@ -42,6 +42,8 @@ export default class Canvas {
     this.maxFPS = maxFPS || -1;
     this.#lastFrameTime = 0;
     this.hasError = false;
+    this.fullscreen = false;
+    this.fullpage = false;
 
     // Error message screen
     const buttonSceneError = new Button(null, null, null, null, new Style({ "alignement": "center", "backgroundColor": Constants.Setting.BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND }), new Label(Constants.String.RETRY, null, null, new Style({ "fontColor": "white", "alignement": "center" })));
@@ -91,6 +93,7 @@ export default class Canvas {
       this.scene.canvas = this;
 
       try {
+        ctx.scale(Constants.Setting.PIXEL_RATIO, Constants.Setting.PIXEL_RATIO);
         this.scene.draw(ctx);
       } catch(e) {
         this.hasError = true;
@@ -110,6 +113,22 @@ export default class Canvas {
     requestAnimationFrame(time => {
       if(this.started) {
         const offsetFrame = time - this.#lastFrameTime;
+
+        this.fullscreen = document.fullscreenElement == this.canvas || document.fullscreenElement == this.container;
+
+        if(Constants.Setting.ENABLE_PIXEL_RATIO_RESIZING) {
+          Constants.Setting.PIXEL_RATIO = window.devicePixelRatio; // Update the device pixel ratio, only in fullscreen mode/fullpage mode
+        } else {
+          Constants.Setting.PIXEL_RATIO = 1;
+        }
+
+        const rect = this.canvas.getBoundingClientRect();
+
+        this.canvas.width = rect.width * Constants.Setting.PIXEL_RATIO;
+        this.canvas.height = rect.height * Constants.Setting.PIXEL_RATIO;
+        
+        this.canvas.style.width = rect.width + "px";
+        this.canvas.style.height =  rect.height + "px";
 
         if(this.maxFPS < 1 || offsetFrame > 1000 / this.maxFPS) {
           this.#lastFrameTime = time;
@@ -141,10 +160,11 @@ export default class Canvas {
 
   toggleFullpage() {
     Utils.toggleFullpage(this.canvas, this.container);
+    this.fullpage = !this.fullpage;
   }
 
   autoResize() {
-    Utils.enableAutoResizeCanvas(this.canvas, this.width, this.height);
+    Utils.enableAutoResizeCanvas(this.canvas, this.container, this.width, this.height);
   }
 
   get x() {
@@ -156,11 +176,11 @@ export default class Canvas {
   }
 
   get width() {
-    return this.canvas ? this.canvas.width : this.#_width;
+    return this.canvas ? Utils.getCanvasWidth(this.canvas) : this.#_width;
   }
 
   get height() {
-    return this.canvas ? this.canvas.height : this.#_height;
+    return this.canvas ? Utils.getCanvasHeight(this.canvas) : this.#_height;
   }
 
   set width(width) {

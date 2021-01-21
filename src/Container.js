@@ -59,8 +59,8 @@ export default class Container extends Box {
     ctx.save();
 
     if(this.isCutting) {
-      this.canvasTmp.width = canvas.width;
-      this.canvasTmp.height = canvas.height;
+      this.canvasTmp.width = Utils.getCanvasWidth(canvas);
+      this.canvasTmp.height = Utils.getCanvasHeight(canvas);
       Utils.clear(this.canvasTmp.getContext("2d"));
     }
     

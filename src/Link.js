@@ -41,6 +41,7 @@ export default class Link extends Label {
       this.style.set("fontColor", this.style.fontColorDown);
       canvas.style.cursor = "pointer";
     } else if(this.hovered || this.selected) {
+      console.log("ok", this);
       this.style.set("underline", false);
       this.style.set("fontColor", this.style.fontColorHover);
       if(this.hovered) canvas.style.cursor = "pointer";

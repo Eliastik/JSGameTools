@@ -108,9 +108,9 @@ export default {
 
       if(!y) {
         if(verticalAlignement == Constants.VerticalAlignement.CENTER) {
-          yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height) / 2) - (size * lines.length / 2));
+          yCurrent += Math.round(((parent && parent.height ? parent.height : this.getCanvasHeight(ctx.canvas)) / 2) - (size * lines.length / 2));
         } else if(verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-          yCurrent += Math.round(((parent && parent.height ? parent.height : ctx.canvas.height)) - (size * lines.length) / 2 - size / 5);
+          yCurrent += Math.round(((parent && parent.height ? parent.height : this.getCanvasHeight(ctx.canvas))) - (size * lines.length) / 2 - size / 5);
         }
       }
   
@@ -130,9 +130,9 @@ export default {
         }
   
         if(alignement == Constants.Alignement.CENTER) {
-          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round(((parent && parent.width ? parent.width : ctx.canvas.width) / 2) - (ctx.measureText(currentText).width / 2));
+          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round(((parent && parent.width ? parent.width : this.getCanvasWidth(ctx.canvas)) / 2) - (ctx.measureText(currentText).width / 2));
         } else if(alignement == Constants.Alignement.RIGHT) {
-          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round((parent && parent.width ? parent.width : ctx.canvas.width) - (ctx.measureText(currentText).width) - (parent && parent.spaceBetweenComponents ? parent.spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING));
+          xCurrent = Math.round((parent && parent.x ? parent.x : 0)) + Math.round((parent && parent.width ? parent.width : this.getCanvasWidth(ctx.canvas)) - (ctx.measureText(currentText).width) - (parent && parent.spaceBetweenComponents ? parent.spaceBetweenComponents : Constants.Setting.DEFAULT_SPACING));
         }
 
         ctx.fillText(currentText, xCurrent, yCurrent);
@@ -185,7 +185,7 @@ export default {
       const lines = text.split("\n");
       let newText = "";
       const widthCar = width || ctx.measureText("A").width;
-      const nbCarLine = Math.round(ctx.canvas.width / widthCar);
+      const nbCarLine = Math.round(this.getCanvasWidth(ctx.canvas) / widthCar);
   
       let heightTotal = 0;
       let maxWidth = 0;
@@ -318,7 +318,7 @@ export default {
     ctx.restore();
   },
   clear: function(ctx) {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.clearRect(0, 0, this.getCanvasWidth(ctx.canvas), this.getCanvasHeight(ctx.canvas));
   },
   isFilterHueAvailable: function() {
     const canvas = document.createElement("canvas");
@@ -342,44 +342,68 @@ export default {
   blurCanvas: function(ctx, length) {
     ctx.save();
     ctx.filter = "blur(" + length  + "px)";
-    this.drawImageData(ctx, ctx.canvas, 0, 0, ctx.canvas.width, ctx.canvas.height);
+    this.drawImageData(ctx, ctx.canvas, 0, 0, this.getCanvasWidth(ctx.canvas), this.getCanvasHeight(ctx.canvas));
     ctx.restore();
   },
-  getFontSize: function(ctx) {
-    return Math.floor(parseInt(ctx.font.match(/\d+/), 10) / 1.25);
+  parseNumber: function(str) {
+    return str ? parseInt(str.match(/\d+/), 10) : 0;
   },
-  autoResizeCanvas: function(canvas, initialWidth, initialHeight) {
+  getFontSize: function(ctx) {
+    return Math.floor(parseNumber(ctx.font) / 1.25);
+  },
+  getCanvasWidth(canvas) {
+    return this.parseNumber(canvas.style.width) || canvas.width;
+  },
+  getCanvasHeight(canvas) {
+    return this.parseNumber(canvas.style.height) || canvas.height;
+  },
+  autoResizeCanvas: function(canvas, container, initialWidth, initialHeight) {
     if(!document.fullscreenElement) {
       if(initialWidth >= document.documentElement.clientWidth * 0.85) {
         var ratio = initialWidth / initialHeight;
         canvas.width = document.documentElement.clientWidth * 0.85;
         canvas.height = canvas.width / ratio;
+        canvas.style.width = canvas.width;
+        canvas.style.height = canvas.height;
       } else {
         canvas.width = initialWidth;
         canvas.height = initialHeight;
+        canvas.style.width = initialWidth;
+        canvas.style.height = initialHeight;
       }
-    } else if(document.fullscreenElement == canvas) {
+    } else if(document.fullscreenElement == canvas || document.fullscreenElement == container) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      canvas.style.width = window.innerWidth;
+      canvas.style.height = window.innerHeight;
+
+      if(container) {
+        container.width = window.innerWidth;
+        container.height = window.innerHeight;
+      }
     } else {
       canvas.width = initialWidth;
       canvas.height = initialHeight;
+      canvas.style.width = initialWidth;
+      canvas.style.height = initialHeight;
     }
   },
-  enableAutoResizeCanvas: function(canvas, initialWidth, initialHeight) {
+  enableAutoResizeCanvas: function(canvas, container, initialWidth, initialHeight) {
     if(canvas && canvas.getAttribute("autoresize-canvas-event") != "true") {
-      this.autoResizeCanvas(canvas, initialWidth, initialHeight);
+      this.autoResizeCanvas(canvas, container, initialWidth, initialHeight);
   
       window.addEventListener("resize", () => {
         canvas.setAttribute("autoresize-canvas-event", "true");
-        this.autoResizeCanvas(canvas, initialWidth, initialHeight);
+        this.autoResizeCanvas(canvas, container, initialWidth, initialHeight);
       });
     }
   },
   autoResizeCanvasFullscreen: function(canvas, container) {
-    if(document.fullscreenElement == (container || canvas)) {
+    if(document.fullscreenElement == canvas || document.fullscreenElement == container) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      canvas.style.width = window.innerWidth;
+      canvas.style.height = window.innerHeight;
       
       if(container) {
         container.width = window.innerWidth;
@@ -401,6 +425,8 @@ export default {
     if(canvas && canvas.getAttribute("fullpage-canvas-enable") == "true") {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      canvas.style.width = window.innerWidth;
+      canvas.style.height = window.innerHeight;
       
       if(container) {
         container.width = window.innerWidth;

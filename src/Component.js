@@ -256,21 +256,13 @@ export default class Component {
   }
   
   disable() {
-    if(!this.disabled) {
-      this.disabled = true;
-      return true;
-    }
-
-    return false;
+    this.disabled = true;
+    return true;
   }
   
   enable() {
-    if(this.disabled) {
-      this.disabled = false;
-      return true;
-    }
-
-    return false;
+    this.disabled = false;
+    return true;
   }
 
   get disabled() {
