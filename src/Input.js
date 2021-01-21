@@ -132,16 +132,19 @@ export default class Input extends Box {
     this.drawBackground(ctx);
     this.drawBorder(ctx);
 
-    this.canvasTmp.width = canvas.width;
-    this.canvasTmp.height = canvas.height;
+    this.canvasTmp.width = Utils.getCanvasWidth(canvas) * Constants.Setting.PIXEL_RATIO;
+    this.canvasTmp.height = Utils.getCanvasHeight(canvas) * Constants.Setting.PIXEL_RATIO;
+    this.canvasTmp.style.width = Utils.getCanvasWidth(canvas);
+    this.canvasTmp.style.height = Utils.getCanvasHeight(canvas);
     const ctxText = this.canvasTmp.getContext("2d");
     Utils.clear(ctxText);
+    ctxText.scale(Constants.Setting.PIXEL_RATIO, Constants.Setting.PIXEL_RATIO);
 
     this.updateTextCache(this.x + 5);
     this.autoScroll();
     this.drawText(ctxText, this.x + 5);
 
-    Utils.drawImageData(ctx, this.canvasTmp, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2);
+    Utils.drawImageData(ctx, this.canvasTmp, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2, (this.x + this.style.borderSize) * Constants.Setting.PIXEL_RATIO, (this.y + this.style.borderSize) * Constants.Setting.PIXEL_RATIO, (this.width - this.style.borderSize * 2)  * Constants.Setting.PIXEL_RATIO, (this.height - this.style.borderSize * 2) * Constants.Setting.PIXEL_RATIO);
 
     if(this.hovered || this.clicked) {
       if(this.canvas && this.canvas.canvas) {

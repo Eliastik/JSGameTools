@@ -65,9 +65,11 @@ const buttonMenu3 = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label(
 buttonMenu3.style.set("alignement", "right");
 const buttonMenu4 = new JGT.Button(5, 5, null, null, buttonStyleRed, new JGT.Label("Close (centered)", null, null, labelStyle));
 buttonMenu4.style.set("alignement", "center");
+const buttonMenu6 = new JGT.Button(5, 5, null, null, buttonStyle, new JGT.Label("Disable/enable high DPI", null, null, labelStyle));
+buttonMenu6.style.set("alignement", "center");
 const menuLabel = new JGT.Label("Pause menu\nYou can use the arrow keys, press enter to select", null, null, labelStyle, "center");
 menuLabel.style.set("alignement", "center");
-const menu = new JGT.Menu(null, menuLabel, buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu4, new JGT.Input(null, null, 150, null, new JGT.Style({"alignement": JGT.Constants.Alignement.CENTER })), new JGT.Input(null, null, 150, null, new JGT.Style({"alignement": JGT.Constants.Alignement.CENTER })));
+const menu = new JGT.Menu(null, menuLabel, buttonMenu1, buttonMenu5, buttonMenu2, buttonMenu3, buttonMenu6, buttonMenu4, new JGT.Input(null, null, 150, null, new JGT.Style({"alignement": JGT.Constants.Alignement.CENTER })), new JGT.Input(null, null, 150, null, new JGT.Style({"alignement": JGT.Constants.Alignement.CENTER })));
 
 const notification2 = new JGT.NotificationMessage(new JGT.Style({ "backgroundColor": "rgba(46, 204, 225, 0.85)", "foreground": true }), null, null, new JGT.Label("Hi!", null, null, labelStyleCenter));
 const textField = new JGT.Input(5, 250, 150);
@@ -136,6 +138,10 @@ buttonMenu4.addClickAction(() => {
 
 buttonMenu5.addClickAction(() => {
   notification2.open();
+});
+
+buttonMenu6.addClickAction(() => {
+  JGT.Constants.Setting.ENABLE_PIXEL_RATIO_RESIZING = !JGT.Constants.Setting.ENABLE_PIXEL_RATIO_RESIZING;
 });
 
 link1.addClickAction(() => {

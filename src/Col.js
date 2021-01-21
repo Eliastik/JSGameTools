@@ -52,6 +52,7 @@ export default class Col extends Container {
 
     if(this.isCutting) {
       ctxTemp = this.canvasTmp.getContext("2d");
+      ctxTemp.scale(Constants.Setting.PIXEL_RATIO, Constants.Setting.PIXEL_RATIO);
     }
   
     if(super.components != null) {
@@ -63,7 +64,7 @@ export default class Col extends Container {
     }
     
     if(this.isCutting) {
-      Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x, this.y, this.width, this.height);
+      Utils.drawImageData(ctx, this.canvasTmp, this.x, this.y, this.width, this.height, this.x * Constants.Setting.PIXEL_RATIO, this.y * Constants.Setting.PIXEL_RATIO, this.width * Constants.Setting.PIXEL_RATIO, this.height * Constants.Setting.PIXEL_RATIO);
     }
     
     super.drawScrollbars(ctx);

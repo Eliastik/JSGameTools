@@ -359,6 +359,15 @@ export default {
   getCanvasHeight(canvas) {
     return this.parseNumber(canvas.style.height) || canvas.height;
   },
+  autoDPI(canvas) {
+    const rect = canvas.getBoundingClientRect();
+
+    canvas.width = rect.width * Constants.Setting.PIXEL_RATIO;
+    canvas.height = rect.height * Constants.Setting.PIXEL_RATIO;
+    
+    canvas.style.width = rect.width + "px";
+    canvas.style.height =  rect.height + "px";
+  },
   autoResizeCanvas: function(canvas, container, initialWidth, initialHeight) {
     if(!document.fullscreenElement) {
       if(initialWidth >= document.documentElement.clientWidth * 0.85) {

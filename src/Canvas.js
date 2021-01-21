@@ -122,13 +122,7 @@ export default class Canvas {
           Constants.Setting.PIXEL_RATIO = 1;
         }
 
-        const rect = this.canvas.getBoundingClientRect();
-
-        this.canvas.width = rect.width * Constants.Setting.PIXEL_RATIO;
-        this.canvas.height = rect.height * Constants.Setting.PIXEL_RATIO;
-        
-        this.canvas.style.width = rect.width + "px";
-        this.canvas.style.height =  rect.height + "px";
+        Utils.autoDPI(this.canvas);
 
         if(this.maxFPS < 1 || offsetFrame > 1000 / this.maxFPS) {
           this.#lastFrameTime = time;

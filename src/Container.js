@@ -59,9 +59,12 @@ export default class Container extends Box {
     ctx.save();
 
     if(this.isCutting) {
-      this.canvasTmp.width = Utils.getCanvasWidth(canvas);
-      this.canvasTmp.height = Utils.getCanvasHeight(canvas);
-      Utils.clear(this.canvasTmp.getContext("2d"));
+      const ctxTemp = this.canvasTmp.getContext("2d");
+      this.canvasTmp.width = Utils.getCanvasWidth(canvas) * Constants.Setting.PIXEL_RATIO;
+      this.canvasTmp.height = Utils.getCanvasHeight(canvas) * Constants.Setting.PIXEL_RATIO;
+      this.canvasTmp.style.width = Utils.getCanvasWidth(canvas);
+      this.canvasTmp.style.height = Utils.getCanvasHeight(canvas);
+      Utils.clear(ctxTemp);
     }
     
     this.components.forEach(component => {
