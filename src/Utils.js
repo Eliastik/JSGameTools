@@ -367,16 +367,16 @@ export default {
         canvas.height = canvas.width / ratio;
 
         if(canvas.style) {
-          canvas.style.width = canvas.width;
-          canvas.style.height = canvas.height;
+          canvas.style.width = canvas.width + "px";
+          canvas.style.height = canvas.height + "px";
         }
       } else {
         canvas.width = initialWidth;
         canvas.height = initialHeight;
 
         if(canvas.style) {
-          canvas.style.width = initialWidth;
-          canvas.style.height = initialHeight;
+          canvas.style.width = initialWidth + "px";
+          canvas.style.height = initialHeight + "px";
         }
       }
     } else if(document.fullscreenElement == canvas || document.fullscreenElement == container) {
@@ -384,8 +384,8 @@ export default {
       canvas.height = window.innerHeight;
 
       if(canvas.style) {
-        canvas.style.width = window.innerWidth;
-        canvas.style.height = window.innerHeight;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
       }
 
       if(container) {
@@ -397,8 +397,8 @@ export default {
       canvas.height = initialHeight;
 
       if(canvas.style) {
-        canvas.style.width = initialWidth;
-        canvas.style.height = initialHeight;
+        canvas.style.width = initialWidth + "px";
+        canvas.style.height = initialHeight + "px";
       }
     }
   },
@@ -418,8 +418,8 @@ export default {
       canvas.height = window.innerHeight;
 
       if(canvas.style) {
-        canvas.style.width = window.innerWidth;
-        canvas.style.height = window.innerHeight;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
       }
       
       if(container) {
@@ -444,8 +444,8 @@ export default {
       canvas.height = window.innerHeight;
       
       if(canvas.style) {
-        canvas.style.width = window.innerWidth;
-        canvas.style.height = window.innerHeight;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
       }
       
       if(container) {
