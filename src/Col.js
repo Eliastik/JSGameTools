@@ -79,10 +79,7 @@ export default class Col extends Container {
       
       if(!component.hidden) {
         if(this.isComponentVisible(component)) {
-          component.enable();
           component.draw(ctx);
-        } else {
-          component.disable();
         }
         
         currentY += component.height + this.style.spaceBetweenComponents;

@@ -314,7 +314,7 @@ export default class Container extends Box {
     if(Constants.Setting.DISABLE_OPTIMIZATIONS) return true;
     
     if(component instanceof Component && !component.hidden) {
-      if(!Constants.Setting.DISABLE_EXPERIMENTAL_OPTIMIZATIONS && this.parent && this.parent.isComponentVisible && !this.parent.isComponentVisible(component)) {
+      if(!Constants.Setting.DISABLE_IS_COMPONENT_VISIBLE_OPTIMIZATIONS && this.parent && this.parent.isComponentVisible && !this.parent.isComponentVisible(component)) {
         return false;
       }
 

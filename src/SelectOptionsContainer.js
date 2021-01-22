@@ -22,6 +22,7 @@ import Constants from "./Constants";
 
 export default class SelectDropdown extends Col {
   #_selectedOption;
+  selectable = false;
 
   constructor(maxHeightDropdown, style, ...options) {
     super(null, null, null, maxHeightDropdown, style, ...options);
@@ -31,10 +32,6 @@ export default class SelectDropdown extends Col {
 
   draw(context) {
     super.draw(context);
-
-    if(this.selected && this.selected) {
-      this.select.selected = true;
-    }
   }
 
   get x() {
@@ -97,13 +94,5 @@ export default class SelectDropdown extends Col {
 
   set hidden(hidden) {
     return super.hidden = hidden;
-  }
-
-  get selected() {
-    return super.selected || (this.select && this.select.selected);
-  }
-
-  set selected(selected) {
-    super.selected = selected;
   }
 }

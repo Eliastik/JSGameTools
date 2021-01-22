@@ -20,6 +20,7 @@ export default {
   Setting: {
     DISABLE_OPTIMIZATIONS: false, // true to disable optimizations, can fix some problems, disabling optimization reduces performance
     DISABLE_EXPERIMENTAL_OPTIMIZATIONS: false, // true to disable optimizations that are considered experimental
+    DISABLE_IS_COMPONENT_VISIBLE_OPTIMIZATIONS: true, // true to disable optimizations of the Container.isComponentVisible method
     DISABLE_CONTAINERS_CUTTING: false, // disabling containers cutting allow to view the components of a container that are not totally visible, you can also disable optimizations to displays elements that are not drawn for optimization purposes
     ENABLE_PIXEL_RATIO_RESIZING: true, // enabling this allow resizing the canvas to match the screen pixel ratio
     PIXEL_RATIO: 1, // the current pixel ratio, automatically updated

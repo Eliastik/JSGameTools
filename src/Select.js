@@ -114,4 +114,12 @@ export default class Select extends Button {
       "padding": Constants.Setting.DEFAULT_PADDING
     });
   }
+
+  get selected() {
+    return super.selected || this.optionContainer.selected;
+  }
+
+  set selected(selected) {
+    super.selected = selected;
+  }
 }

@@ -73,6 +73,7 @@ export default class Label extends Component {
       
       if(parent) {
         this.sizesCache = { "fontSize": this.style.fontSize, "fontFamily": this.style.fontFamily, "wrap": this.style.wrap, "text": this.text, "parentWidth": parent.width, "value": sizes };
+        this.reactor.dispatchEvent("onChange", this);
       }
     }
 
