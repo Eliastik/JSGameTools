@@ -97,9 +97,20 @@ export default class Container extends Box {
   }
 
   set(...components) {
-    this.clear();
-    this.addAll(...components);
-    this.enable();
+    let hasChanged = false;
+
+    if(components.length == this.components.length) {
+      components.forEach((component, i) => {
+        if(this.components[i] != component) hasChanged = true;
+      });
+    } else {
+      hasChanged = true;
+    }
+
+    if(hasChanged) {
+      this.clear();
+      this.addAll(...components);
+    }
   }
 
   add(component) {
