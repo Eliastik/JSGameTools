@@ -79,6 +79,7 @@ export default {
     CIRCLE_DEFAULT_FILL_COLOR: "#000",
     CIRCLE_DEFAULT_LINE_SIZE: 3,
     CIRCLE_DEFAULT_FILL: true,
+    ERROR_MENU_BACKGROUND_COLOR: "#3498db"
   },
   Key: {
     UP: 38,
