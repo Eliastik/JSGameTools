@@ -24,6 +24,7 @@ export default {
     DISABLE_CONTAINERS_CUTTING: false, // disabling containers cutting allow to view the components of a container that are not totally visible, you can also disable optimizations to displays elements that are not drawn for optimization purposes
     ENABLE_PIXEL_RATIO_RESIZING: true, // enabling this allow resizing the canvas to match the screen pixel ratio
     PIXEL_RATIO: 1, // the current pixel ratio, automatically updated
+    RESOLUTION_SCALE: 1, // the resolution scale
     FONT_FAMILY: "sans-serif",
     FONT_SIZE: 28,
     CANVAS_WIDTH: 600,

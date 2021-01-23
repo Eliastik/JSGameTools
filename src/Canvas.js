@@ -117,9 +117,9 @@ export default class Canvas {
         this.fullscreen = document.fullscreenElement == this.canvas || document.fullscreenElement == this.container;
 
         if(Constants.Setting.ENABLE_PIXEL_RATIO_RESIZING) {
-          Constants.Setting.PIXEL_RATIO = window.devicePixelRatio; // Update the device pixel ratio, only in fullscreen mode/fullpage mode
+          Constants.Setting.PIXEL_RATIO = window.devicePixelRatio * Constants.Setting.RESOLUTION_SCALE; // Update the device pixel ratio, only in fullscreen mode/fullpage mode
         } else {
-          Constants.Setting.PIXEL_RATIO = 1;
+          Constants.Setting.PIXEL_RATIO = 1 * Constants.Setting.RESOLUTION_SCALE;
         }
 
         Utils.autoDPI(this.canvas);
