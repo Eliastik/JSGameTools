@@ -113,14 +113,14 @@ export default class Row extends Container {
 
   get width() {
     const width = this.innerWidth || (this.parent && this.parent.width);
-    const min = this.maxWidth ? Math.min(this.maxWidth, width) : null;
-    return this.minWidth ? Math.max(this.minWidth, min || width) : min || width;
+    const min = this.maxWidth != null ? Math.min(this.maxWidth, width) : null;
+    return this.minWidth != null ? Math.max(this.minWidth, min != null ? min : width) : min != null ? min : width;
   }
 
   get height() {
     const height = this.innerHeight || (this.parent && this.parent.height);
-    const min = this.maxHeight ? Math.min(this.maxHeight, height) : null;
-    return this.minHeight ? Math.max(this.minHeight, min || height) : min || height;
+    const min = this.maxHeight != null ? Math.min(this.maxHeight, height) : null;
+    return this.minHeight != null ? Math.max(this.minHeight, min != null ? min : height) : min != null ? min : height;
   }
 
   get defaultStyle() {

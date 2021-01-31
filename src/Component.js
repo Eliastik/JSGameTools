@@ -33,6 +33,8 @@ export default class Component {
   constructor(x, y, width, height, style) {
     this.#_x = x || 0;
     this.#_y = y || 0;
+    this.deltaX = 0;
+    this.deltaY = 0;
     this.#_width = width;
     this.#_height = height;
     this.canvas;
@@ -58,6 +60,7 @@ export default class Component {
     this.clicked = false;
     this.hovered = false;
     this.#_disabled = false;
+    this.movable = false;
 
     // Scroll state
     this.offsetScrollX = 0;
@@ -76,6 +79,13 @@ export default class Component {
 
     this.tooltip;
     this.initEvents();
+
+    this.addMoveAction((deltaX, deltaY) => {
+      if(this.movable && !this.disabled && this.clicked) {
+        this.deltaX -= deltaX;
+        this.deltaY -= deltaY;
+      }
+    });
   }
 
   initEvents() {
@@ -449,17 +459,17 @@ export default class Component {
       const parentPadding = (parent.style && parent.style.padding) || 0;
 
       if(this.style.alignement == Constants.Alignement.CENTER) {
-        return parent.x + (parentWidth / 2) - (this.width / 2);
+        return parent.x + (parentWidth / 2) - (this.width / 2) + this.deltaX;
       } else if(this.style.alignement == Constants.Alignement.RIGHT) {
-        return parent.x + (parentWidth) - (this.width) - parentPadding;
+        return parent.x + (parentWidth) - (this.width) - parentPadding + this.deltaX;
       } else if(this.style.alignement == Constants.Alignement.LEFT) {
-        return parent.x + parentPadding;
+        return parent.x + parentPadding + this.deltaX;
       }
     } else if(parent) {
-      return parent.x + this.#_x;
+      return parent.x + this.#_x + this.deltaX;
     }
     
-    return this.#_x;
+    return this.#_x + this.deltaX;
   }
 
   set x(x) {
@@ -475,17 +485,17 @@ export default class Component {
       const parentPadding = (parent.style && parent.style.padding) || 0;
 
       if(this.style.verticalAlignement == Constants.VerticalAlignement.BOTTOM) {
-        return parent.y + (parentHeight) - (this.height) - parentPadding;
+        return parent.y + (parentHeight) - (this.height) - parentPadding + this.deltaY;
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.CENTER) {
-        return parent.y + (parentHeight / 2) - (this.height / 2);
+        return parent.y + (parentHeight / 2) - (this.height / 2) + this.deltaY;
       } else if(this.style.verticalAlignement == Constants.VerticalAlignement.TOP) {
-        return parent.y + parentPadding;
+        return parent.y + parentPadding + this.deltaY;
       }
     } else if(parent) {
-      return parent.y + this.#_y;
+      return parent.y + this.#_y + this.deltaY;
     }
     
-    return this.#_y;
+    return this.#_y + this.deltaY;
   }
 
   set y(y) {

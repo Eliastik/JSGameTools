@@ -76,6 +76,7 @@ const textField = new JGT.Input(5, 250, 150);
 const label1 = new JGT.Label("A label", 5, 325);
 const row1 = new JGT.Row(5, 250, null, null, null, label1, textField);
 const link1 = new JGT.Link("A long link", 5, 300);
+link1.movable = true;
 const tooltip1 = new JGT.Tooltip(null, new JGT.Label("A tooltip\nSecond line", null, null, labelStyle), new JGT.Row(null, null, null, null, null, new JGT.Label("Label : ", null, null, labelStyleVerticalCenter), new JGT.Button(5, 150, null, null, buttonStyleRed, new JGT.Label("Button", null, null, labelStyle))));
 label1.tooltip = tooltip1;
 const tooltip2 = new JGT.Tooltip(null, new JGT.Label("A tooltip .... .. .. ...... Autowrap\nNew line", null, null, labelStyle));

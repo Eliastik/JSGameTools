@@ -112,6 +112,7 @@ export default {
     OPTIMIZATION_DISABLED: "Optimizations are disabled. You may notice low performance.",
     CONTAINER_CUTTING_DISABLED: "Containers cutting is disabled.",
     BUTTON_IMAGE_DEPRECATED: "JSGameTools.ButtonImage is deprecated. Please use a Button with an ImageContainer instead.",
-    INPUT_FULLSCREEN: "The use of JSGameTools.Canvas is needed for Input components to properly work in fullscreen mode."
+    INPUT_FULLSCREEN: "The use of JSGameTools.Canvas is needed for Input components to properly work in fullscreen mode.",
+    DETAILS: "Details"
   }
 };

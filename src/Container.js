@@ -194,14 +194,14 @@ export default class Container extends Box {
 
   get width() {
     const width = (this.parent && this.parent.width);
-    const min = this.maxWidth ? Math.min(this.maxWidth, width) : null;
-    return this.minWidth ? Math.max(this.minWidth, min || width) : width;
+    const min = this.maxWidth != null ? Math.min(this.maxWidth, width) : null;
+    return this.minWidth != null ? Math.max(this.minWidth, min != null ? min : width) : width;
   }
 
   get height() {
     const height = (this.parent && this.parent.height);
-    const min = this.maxWidth ? Math.min(this.maxHeight, height) : null;
-    return this.minHeight ? Math.max(this.minHeight, min || height) : height;
+    const min = this.maxWidth != null ? Math.min(this.maxHeight, height) : null;
+    return this.minHeight != null ? Math.max(this.minHeight, min != null ? min : height) : height;
   }
 
   get maxWidth() {
