@@ -20,11 +20,7 @@ import Constants from "./Constants";
 import Utils from "./Utils";
 import Scene from "./Scene";
 import ReactorCanvas from "./ReactorCanvas";
-import Menu from "./Menu";
-import Label from "./Label";
-import Style from "./Style";
-import Button from "./Button";
-import Row from "./Row";
+import ErrorScreen from "./ErrorScreen";
 
 export default class Canvas {
   #lastFrameTime;
@@ -47,27 +43,8 @@ export default class Canvas {
     this.fullpage = false;
 
     // Error message screen
-    const buttonSceneError = new Button(null, null, null, null, new Style({ "backgroundColor": Constants.Setting.BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND }), new Label(Constants.String.RETRY, null, null, new Style({ "fontColor": "white", "alignement": "center" })));
-    const buttonDetailsSceneError = new Button(null, null, null, null, new Style({ "backgroundColor": Constants.Setting.BUTTON_DEFAULT_ALTERNATIVE_BACKGROUND }), new Label(Constants.String.DETAILS, null, null, new Style({ "fontColor": "white", "alignement": "center" })));
-    this.labelDetailsSceneError = new Label("", null, null, new Style({ "fontColor": "white", "alignement": "center", "fontSize": Constants.Setting.FONT_SIZE / 1.75 }));
-    this.labelDetailsSceneError.hidden = true;
-    const colDetailsSceneError = new Row(null, null, null, 0, new Style({ "alignement": "center" }), this.labelDetailsSceneError);
-
-    const menuSceneError = new Menu(new Style({ "spaceBetweenComponents": 15, "backgroundColor": Constants.Setting.ERROR_MENU_BACKGROUND_COLOR }), new Label(Constants.String.ERROR_MESSAGE_CANVAS_LABEL, null, null, new Style({ "fontColor": "white", "alignement": "center" })), colDetailsSceneError, new Row(null, null, null, null, new Style({ "alignement": "center" }), buttonSceneError, buttonDetailsSceneError));
-    menuSceneError.enable();
-
-    this.sceneError = new Scene(menuSceneError);
+    this.sceneError = new ErrorScreen(this);
     this.scenePrevious = this.scene;
-
-    buttonSceneError.addClickAction(() => {
-      this.hasError = false;
-      this.scene = this.scenePrevious
-    });
-
-    buttonDetailsSceneError.addClickAction(() => {
-      this.labelDetailsSceneError.hidden = !this.labelDetailsSceneError.hidden;
-      colDetailsSceneError.maxHeight = !this.labelDetailsSceneError.hidden ? 100 : 0;
-    });
     
     // Reactors/events
     this.reactor = new ReactorCanvas();
@@ -109,7 +86,7 @@ export default class Canvas {
       } catch(e) {
         this.hasError = true;
         this.scene = this.sceneError;
-        this.labelDetailsSceneError.text = "" + e.stack;
+        this.sceneError.errorText = "" + e.stack;
         console.error(Constants.String.ERROR_MESSAGE + " " + Constants.String.ERROR_MESSAGE_CANVAS + "\n", e);
       }
     }
