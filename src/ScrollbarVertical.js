@@ -26,10 +26,12 @@ export default class ScrollbarVertical extends Scrollbar {
     
     this.addMoveAction((deltaX, deltaY) => {
       if(this.parent) {
-        this.parent.offsetScrollY -= deltaY;
+        const percentScrollbarNext = Math.abs((this.parent.y - Math.max(this.parent.y, this.y + -deltaY)) / (this.parent.height - this.height));
+        const newDeltaY = (this.windowScrollSizeY * percentScrollbarNext) - this.parent.offsetScrollY;
+        this.parent.offsetScrollY += newDeltaY;
 
         if(this.parent.reactor) {
-          this.parent.reactor.dispatchEvent("onScroll", 0, -deltaY);
+          this.parent.reactor.dispatchEvent("onScroll", 0, newDeltaY);
         }
       }
     });

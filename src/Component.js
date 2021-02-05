@@ -95,8 +95,8 @@ export default class Component {
           const mousePosition = this.getMousePos(event);
 
           if(this.clicked) {
-            const deltaX = -event.movementX;
-            const deltaY = -event.movementY;
+            const deltaX = this.moveEventStartX - mousePosition.x;
+            const deltaY = this.moveEventStartY - mousePosition.y;
 
             this.offsetMoveX += deltaX;
             this.offsetMoveY += deltaY;

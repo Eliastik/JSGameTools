@@ -93,6 +93,7 @@ colScrollable.style.set("spaceBetweenComponents", 0);
 const optionLast = new JGT.SelectOption(new JGT.Label("Removed in 5s"));
 const options = new JGT.SelectOptionsContainer(75, null, new JGT.SelectOption(new JGT.Label("First choice")), new JGT.SelectOption(new JGT.Label("Second choice")), new JGT.SelectOption(new JGT.Label("Third choice")), optionLast);
 const select = new JGT.Select(255, 315, null, null, new JGT.Style({ "verticalAlignement": "bottom" }), options);
+select.movable = true;
 
 // Custom component
 class Box extends JGT.Component {

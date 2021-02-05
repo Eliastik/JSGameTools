@@ -26,10 +26,12 @@ export default class ScrollbarHorizontal extends Scrollbar {
 
     this.addMoveAction((deltaX) => {
       if(this.parent) {
-        this.parent.offsetScrollX -= deltaX;
+        const percentScrollbarNext = Math.abs((this.parent.x - Math.max(this.parent.x, this.x + -deltaX)) / (this.parent.width - this.width));
+        const newDeltaX = (this.windowScrollSizeX * percentScrollbarNext) - this.parent.offsetScrollX;
+        this.parent.offsetScrollX += newDeltaX;
 
         if(this.parent.reactor) {
-          this.parent.reactor.dispatchEvent("onScroll", -deltaX, 0);
+          this.parent.reactor.dispatchEvent("onScroll", newDeltaX, 0);
         }
       }
     });
