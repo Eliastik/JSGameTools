@@ -254,6 +254,8 @@ export default class Component {
       this.clicked = false;
       this.hovered = false;
       if(this.tooltip) this.tooltip.disabled = true;
+    } else if(this.movable && this.hovered) {
+      this.canvas.cursor = "grab";
     }
   }
   

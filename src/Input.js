@@ -146,13 +146,7 @@ export default class Input extends Box {
 
     Utils.drawImageData(ctx, this.canvasTmp, this.x + this.style.borderSize, this.y + this.style.borderSize, this.width - this.style.borderSize * 2, this.height - this.style.borderSize * 2, (this.x + this.style.borderSize) * Constants.Setting.PIXEL_RATIO, (this.y + this.style.borderSize) * Constants.Setting.PIXEL_RATIO, (this.width - this.style.borderSize * 2)  * Constants.Setting.PIXEL_RATIO, (this.height - this.style.borderSize * 2) * Constants.Setting.PIXEL_RATIO);
 
-    if(this.hovered || this.clicked) {
-      if(this.canvas && this.canvas.canvas) {
-        this.canvas.canvas.style.cursor = "text";
-      } else {
-        canvas.style.cursor = "default";
-      }
-    }
+    if((this.hovered || this.clicked) && this.canvas) this.canvas.cursor = "text";
 
     if(!this.selected) {
       this.totalTime = 0;

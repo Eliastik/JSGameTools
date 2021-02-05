@@ -186,6 +186,14 @@ export default class Canvas {
     }
   }
 
+  set cursor(cursor) {
+   if(this.canvas) this.canvas.style.cursor = cursor;
+  }
+
+  get cursor() {
+    return this.canvas ? this.canvas.style.cursor : "";
+  }
+
   getContext(context) {
     return this.canvas ? this.canvas.getContext(context ? context : "2d") : null;
   }

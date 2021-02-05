@@ -35,16 +35,14 @@ export default class Link extends Label {
     if(this.hidden) return;
     super.draw(context);
 
-    const canvas = context.canvas;
-
     if(this.clicked) {
       this.style.set("underline", false);
       this.style.set("fontColor", this.style.fontColorDown);
-      canvas.style.cursor = "pointer";
+      if(!this.movable) this.canvas.cursor = "pointer";
     } else if(this.hovered || this.selected) {
       this.style.set("underline", false);
       this.style.set("fontColor", this.style.fontColorHover);
-      if(this.hovered) canvas.style.cursor = "pointer";
+      if(this.hovered && !this.movable) this.canvas.cursor = "pointer";
     } else {
       this.style.set("underline", this.initialUnderline);
       this.style.set("fontColor", this.initialColor);

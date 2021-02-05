@@ -38,7 +38,7 @@ export default class Scene extends Container {
     const canvas = context.canvas;
     const ctx = canvas.getContext("2d");
     ctx.save();
-    canvas.style.cursor = "default";
+    this.canvas.cursor = "default";
 
     let ctxTemp = ctx;
     if(this.maxWidth || this.maxHeight) ctxTemp = this.canvasTmp.getContext("2d");

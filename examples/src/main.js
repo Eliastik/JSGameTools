@@ -52,6 +52,7 @@ const buttonText2 = new JGT.Button(5, 150, null, null, buttonStyle, new JGT.Labe
 buttonText2.style.set("alignement", "right");
 const pauseImage = new JGT.ImageContainer("pause.png", null, null, 64, 64, new JGT.Style({ "verticalAlignement": "center", "alignement": "left" }));
 const buttonImage = new JGT.Button(null, 50, null, null, new JGT.Style({ "alignement": "left" }), new JGT.Row(5, 250, null, null, null, pauseImage, new JGT.Label("Pause", null, null, labelStyleVerticalCenter)));
+buttonImage.movable = true;
 const buttonTextFullscreen = new JGT.Button(5, 75, null, null, buttonStyle, new JGT.Label("Toggle fullscreen", null, null, labelStyle));
 buttonTextFullscreen.style.set("alignement", "center");
 const notification = new JGT.NotificationMessage(null, null, null, new JGT.Label("A notification", null, null, labelStyleCenter), new JGT.Row(null, null, null, null, null, new JGT.Label("Label : ", null, null, labelStyleVerticalCenter), new JGT.Button(null, null, null, null, null, new JGT.Label("Button", null, null, labelStyle))));
@@ -74,16 +75,18 @@ const menu = new JGT.Menu(null, menuLabel, buttonMenu1, buttonMenu5, buttonMenu2
 const notification2 = new JGT.NotificationMessage(new JGT.Style({ "backgroundColor": "rgba(46, 204, 225, 0.85)", "foreground": true }), null, null, new JGT.Label("Hi!", null, null, labelStyleCenter));
 const textField = new JGT.Input(5, 250, 150);
 const label1 = new JGT.Label("A label", 5, 325);
+label1.movable = true;
 const row1 = new JGT.Row(5, 250, null, null, null, label1, textField);
 const link1 = new JGT.Link("A long link", 5, 300);
-link1.movable = true;
 const tooltip1 = new JGT.Tooltip(null, new JGT.Label("A tooltip\nSecond line", null, null, labelStyle), new JGT.Row(null, null, null, null, null, new JGT.Label("Label : ", null, null, labelStyleVerticalCenter), new JGT.Button(5, 150, null, null, buttonStyleRed, new JGT.Label("Button", null, null, labelStyle))));
 label1.tooltip = tooltip1;
 const tooltip2 = new JGT.Tooltip(null, new JGT.Label("A tooltip .... .. .. ...... Autowrap\nNew line", null, null, labelStyle));
 buttonText2.tooltip = tooltip2;
 const fpsMeter = new JGT.FPSMeter(false, null, null, new JGT.Style({ "alignement": "right", "verticalAlignement": "bottom"}));
+fpsMeter.movable = true;
 const progress = new JGT.ProgressBar(300, 5, 200, 25, null, null, JGT.EasingFunctions.easeInOutCubic);
 progress.percent = 1;
+progress.movable = true;
 const tooltip3 = new JGT.Tooltip(null, new JGT.Label("Current: " + (Math.round(progress.percent * 100) / 100) * 100 + "%", null, null, labelStyle));
 progress.tooltip = tooltip3;
 const buttonArrow = new JGT.Button(5, 150, null, null, buttonStyle, new JGT.Arrow(null, null, 100, 200, new JGT.Style({ "color": "white" })));
