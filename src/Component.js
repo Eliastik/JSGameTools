@@ -61,6 +61,7 @@ export default class Component {
     this.hovered = false;
     this.#_disabled = false;
     this.movable = false;
+    this.moving = false;
 
     // Scroll state
     this.offsetScrollX = 0;
@@ -93,6 +94,7 @@ export default class Component {
       this.canvas.addEventListener("mousemove", this, (event, result) => {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(event);
+          this.moving = false;
 
           if(this.clicked) {
             const deltaX = this.moveEventStartX - mousePosition.x;
@@ -107,6 +109,7 @@ export default class Component {
             
             this.moveEventStartX = mousePosition.x;
             this.moveEventStartY = mousePosition.y;
+            this.moving = true;
           }
 
           if(result) {
@@ -137,11 +140,15 @@ export default class Component {
           const mousePosition = this.getMousePos(event);
 
           if(result && this.hovered) {
-            if(this.reactor) {
-              this.reactor.dispatchEvent("onClick", mousePosition);
+            if(!this.moving) {
+              if(this.reactor) {
+                this.reactor.dispatchEvent("onClick", mousePosition);
+              }
+  
+              this.selected = true;
+            } else {
+              this.moving = false;
             }
-
-            this.selected = true;
           } else {
             this.clicked = false;
             this.selected = false;
@@ -156,7 +163,7 @@ export default class Component {
         if(!this.disabled) {
           const mousePosition = this.getMousePos(event);
 
-          if(result) {
+          if(result && !this.moving) {
             if(this.reactor) {
               this.reactor.dispatchEvent("onDown", mousePosition);
             }
