@@ -20,6 +20,7 @@ npm install
 ````
 Then to compile:
 
+* Prod mode + dev mode (default): `npm run build-all`
 * Dev mode (without minification): `npm run build-dev`
 * Prod mode: `npm run build`
 

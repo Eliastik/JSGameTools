@@ -111,9 +111,8 @@ export default class Canvas {
           Constants.Setting.PIXEL_RATIO = 1 * Constants.Setting.RESOLUTION_SCALE;
         }
 
-        Utils.autoDPI(this.canvas);
-
         if(this.maxFPS < 1 || offsetFrame > 1000 / this.maxFPS) {
+          Utils.autoDPI(this.canvas);
           this.#lastFrameTime = time;
           this.draw();
         }
