@@ -109,7 +109,7 @@ export default class Component {
             
             this.moveEventStartX = mousePosition.x;
             this.moveEventStartY = mousePosition.y;
-            this.moving = true;
+            if(this.movable) this.moving = true;
           }
 
           if(result) {
