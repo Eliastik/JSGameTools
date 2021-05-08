@@ -186,7 +186,7 @@ export default class Canvas {
   }
 
   set cursor(cursor) {
-   if(this.canvas) this.canvas.style.cursor = cursor;
+    if(this.canvas) this.canvas.style.cursor = cursor;
   }
 
   get cursor() {
