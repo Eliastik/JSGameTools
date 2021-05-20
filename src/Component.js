@@ -536,7 +536,7 @@ export default class Component {
   }
 
   get hidden() {
-    return (this.style && this.style.hidden) || (this.parent && this.parent.hidden);
+    return (this.style && this.style.hidden);
   }
 
   set hidden(hidden) {
