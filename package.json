@@ -1,6 +1,6 @@
 {
   "name": "jsgametools",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A work-in-progress toolkit for JavaScript games.",
   "main": "lib/JSGameTools.js",
   "scripts": {
