@@ -76,7 +76,7 @@ export default class ImageContainer extends Component {
     return {
       width: imgWidth,
       height: imgHeight
-    }
+    };
   }
 
   get height() {

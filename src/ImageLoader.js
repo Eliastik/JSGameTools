@@ -79,11 +79,11 @@ export default class ImageLoader {
       setTimeout(() => {
         this.loadImage(src, func);
       }, 250);
-    }
+    };
   }
 
   get(src, width, height) {
-    if(this.images != null && this.images.hasOwnProperty(src)) {
+    if(this.images != null && Object.prototype.hasOwnProperty.call(this.images, src)) {
       const image = this.images[src];
 
       if((width || height) && (image.width != width || image.height != height)) {
@@ -91,7 +91,7 @@ export default class ImageLoader {
         const h = Math.round(height);
         const id = src + "@" + w + "-" + h;
 
-        if(!this.imagesResized.hasOwnProperty(id)) {
+        if(!Object.prototype.hasOwnProperty.call(this.imagesResized, id)) {
           const canvasTmp = document.createElement("canvas");
           const ctx = canvasTmp.getContext("2d");
           canvasTmp.width = w;

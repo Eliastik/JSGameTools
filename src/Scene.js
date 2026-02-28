@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with "JSGameTools".  If not, see <http://www.gnu.org/licenses/>.
  */
-import Input from "./Input";
 import Container from "./Container";
 import Utils from "./Utils";
 import Style from "./Style";

@@ -73,14 +73,17 @@ export default class Tooltip extends Col {
     return otherComponent.compareToTooltip(this);
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToMenu(otherComponent) {
     return 1;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToTooltip(otherComponent) {
     return 0;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToNotification(otherComponent) {
     return 1;
   }

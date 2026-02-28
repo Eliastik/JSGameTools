@@ -91,7 +91,7 @@ export default class Col extends Container {
 
   updateInnerHeight() {
     let totalHeight = 0;
-    super.components.forEach(component => { if(!component.hidden) totalHeight += component.height });
+    super.components.forEach(component => { if(!component.hidden) totalHeight += component.height; });
     this.#_innerHeight = totalHeight + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
   }
 

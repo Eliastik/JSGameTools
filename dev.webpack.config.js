@@ -1,5 +1,11 @@
 const path = require("path");
 const CircularDependencyPlugin = require("circular-dependency-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
+
+const estlintOptions = {
+  overrideConfigFile: "eslint.config.mjs",
+  configType: "flat"
+};
 
 const config = {
   entry: "./src/index.js",
@@ -11,7 +17,8 @@ const config = {
       failOnError: true,
       allowAsyncCycles: false,
       cwd: process.cwd(),
-    })
+    }),
+    new ESLintPlugin(estlintOptions)
   ],
   output: {
     path: path.resolve(__dirname, "lib"),

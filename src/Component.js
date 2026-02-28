@@ -126,7 +126,7 @@ export default class Component {
             this.hovered = true;
           } else {
             this.hovered = false;
-            if(this.tooltip) this.tooltip.disable()
+            if(this.tooltip) this.tooltip.disable();
           }
         } else {
           this.hovered = false;
@@ -252,6 +252,7 @@ export default class Component {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   draw(context) {
     if(this.hidden) return;
     this.initEvents();
@@ -585,7 +586,7 @@ export default class Component {
     } else if(otherComponent.parent == this) {
       return -1;
     } else if(isForeground && !otherIsForeground) {
-      return 1
+      return 1;
     } else if(!isForeground && otherIsForeground) {
       return -1;
     } else if(zIndex > otherzIndex) {
@@ -597,22 +598,27 @@ export default class Component {
     return otherComponent.compareToComponent(this) || -this.compareToComponent(otherComponent);
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToComponent(otherComponent) {
     return 0;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToMenu(otherComponent) {
     return -1;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToTooltip(otherComponent) {
     return -1;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToNotification(otherComponent) {
     return -1;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToScrollbar(otherComponent) {
     return -1;
   }

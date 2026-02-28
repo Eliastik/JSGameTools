@@ -351,7 +351,7 @@ export default {
     return str ? parseInt(str.match(/\d+/), 10) : 0;
   },
   getFontSize: function(ctx) {
-    return Math.floor(parseNumber(ctx.font) / 1.25);
+    return Math.floor(this.parseNumber(ctx.font) / 1.25);
   },
   getCanvasWidth(canvas) {
     return this.parseNumber(canvas.style.width) || canvas.width;

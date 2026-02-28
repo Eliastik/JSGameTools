@@ -93,6 +93,6 @@ export default class SelectDropdown extends Col {
   }
 
   set hidden(hidden) {
-    return super.hidden = hidden;
+    super.hidden = hidden;
   }
 }

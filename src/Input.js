@@ -50,7 +50,7 @@ export default class Input extends Box {
     this.input.addEventListener("blur", () => this.selected = false);
     this.input.addEventListener("focus", () => this.selected = true);
     this.input.addEventListener("input", () => {
-      this.totalTime = 0
+      this.totalTime = 0;
       this.lastInputText = true;
       this.positionStart = this.input.selectionStart;
       this.positionEnd = this.input.selectionEnd;
@@ -257,7 +257,7 @@ export default class Input extends Box {
         return {
           "currentLetter": this.textCache.letters[0],
           "x": this.x + this.style.borderSize
-        }
+        };
       }
 
       const currentLetter = this.textCache.letters[position];
@@ -269,6 +269,8 @@ export default class Input extends Box {
         };
       }
     }
+
+    return null;
   }
 
   isLetterVisible(letterId) {

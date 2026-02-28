@@ -187,14 +187,17 @@ export default class Menu extends Col {
     return otherComponent.compareToMenu(this);
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToMenu(otherComponent) {
     return 0;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToTooltip(otherComponent) {
     return -1;
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToNotification(otherComponent) {
     return 1;
   }
@@ -208,6 +211,7 @@ export default class Menu extends Col {
     this.disabled = hidden;
   }
 
+  // eslint-disable-next-line no-unused-vars
   isInside(pos) {
     return !this.hidden;
   }

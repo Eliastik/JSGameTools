@@ -180,7 +180,7 @@ export default class Style {
   setAll(styles) {
     if(styles) {
       for(const style in styles) {
-        if(styles.hasOwnProperty(style)) {
+        if(Object.prototype.hasOwnProperty.call(styles, style)) {
           this.set(style, styles[style]);
         }
       }
@@ -195,7 +195,7 @@ export default class Style {
     const styles = {};
 
     for(const style in this.#styles) {
-      if(this.#styles.hasOwnProperty(style)) {
+      if(Object.prototype.hasOwnProperty.call(this.#styles, style)) {
         styles[style] = this.#styles[style];
       }
     }

@@ -123,6 +123,7 @@ export default class Scrollbar extends Box {
     return otherComponent.compareToScrollbar(this);
   }
 
+  // eslint-disable-next-line no-unused-vars
   compareToScrollbar(otherComponent) {
     return 0;
   }

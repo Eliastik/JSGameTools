@@ -19,7 +19,6 @@
 import Constants from "./Constants";
 import Label from "./Label";
 import Style from "./Style";
-import Utils from "./Utils";
 
 export default class Link extends Label {
   selectable = true;

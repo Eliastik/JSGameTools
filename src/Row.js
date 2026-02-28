@@ -97,7 +97,7 @@ export default class Row extends Container {
 
   updateInnerWidth() {
     let totalWidth = 0;
-    super.components.forEach(component => { if(!component.hidden) totalWidth += component.width });
+    super.components.forEach(component => { if(!component.hidden) totalWidth += component.width; });
     this.#_innerWidth = totalWidth + this.style.spaceBetweenComponents * (super.components.length - 1) + this.style.padding;
   }
 

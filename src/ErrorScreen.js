@@ -38,15 +38,15 @@ export default class ErrorScreen extends Scene {
     menuSceneError.enable();
 
     buttonSceneError.addClickAction(() => {
-        this.canvas.hasError = false;
-        this.canvas.scene = this.canvas.scenePrevious;
-        this.labelDetailsSceneError.hidden = true;
-        colDetailsSceneError.maxHeight = 0;
+      this.canvas.hasError = false;
+      this.canvas.scene = this.canvas.scenePrevious;
+      this.labelDetailsSceneError.hidden = true;
+      colDetailsSceneError.maxHeight = 0;
     });
 
     buttonDetailsSceneError.addClickAction(() => {
-        this.labelDetailsSceneError.hidden = !this.labelDetailsSceneError.hidden;
-        colDetailsSceneError.maxHeight = !this.labelDetailsSceneError.hidden ? 100 : 0;
+      this.labelDetailsSceneError.hidden = !this.labelDetailsSceneError.hidden;
+      colDetailsSceneError.maxHeight = !this.labelDetailsSceneError.hidden ? 100 : 0;
     });
 
     this.add(menuSceneError);
